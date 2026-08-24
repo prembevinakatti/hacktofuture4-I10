@@ -11,8 +11,12 @@ import Home from './pages/Home';
 import AuthorityHome from './pages/AuthorityHome';
 import ReportIssue from './pages/ReportIssue';
 import Rewards from './pages/Rewards';
-import ExecutiveView from './pages/ExecutiveView';
-import { CitizenDashboard, AuthorityDashboard } from './pages/Dashboards';
+import CitizenPage from './pages/CitizenPage';
+import DepartmentPage from './pages/DepartmentPage';
+import AdminPage from './pages/AdminPage';
+import AdminLogin from './pages/AdminLogin';
+import DepartmentLogin from './pages/DepartmentLogin';
+import DepartmentRegister from './pages/DepartmentRegister';
 import Navbar from './components/Navbar';
 import Chatbot from './components/Chatbot';
 
@@ -27,6 +31,8 @@ function App() {
     );
   }
 
+  const isOfficerOrAdmin = user && (user.role === 'authority' || user.role === 'admin');
+
   return (
     <Router>
       <Toaster position="top-center" />
@@ -34,25 +40,58 @@ function App() {
       <Routes>
         <Route path="/" element={!user ? <LandingPage /> : <Navigate to="/home" />} />
         
+        {/* Citizen Auth Routes */}
         <Route path="/login" element={!user ? <Login /> : <Navigate to="/home" />} />
         <Route path="/register" element={!user ? <Register /> : <Navigate to="/home" />} />
+
+        {/* 🏢 Dedicated Department Official Auth Routes */}
+        <Route 
+          path="/department/login" 
+          element={!user ? <DepartmentLogin /> : (user.role === 'authority' ? <Navigate to="/department" /> : (user.role === 'admin' ? <Navigate to="/admin" /> : <Navigate to="/citizen" />))} 
+        />
+        <Route 
+          path="/department-login" 
+          element={!user ? <DepartmentLogin /> : (user.role === 'authority' ? <Navigate to="/department" /> : (user.role === 'admin' ? <Navigate to="/admin" /> : <Navigate to="/citizen" />))} 
+        />
+        <Route 
+          path="/department/register" 
+          element={!user ? <DepartmentRegister /> : (user.role === 'authority' ? <Navigate to="/department" /> : (user.role === 'admin' ? <Navigate to="/admin" /> : <Navigate to="/citizen" />))} 
+        />
+        <Route 
+          path="/department-register" 
+          element={!user ? <DepartmentRegister /> : (user.role === 'authority' ? <Navigate to="/department" /> : (user.role === 'admin' ? <Navigate to="/admin" /> : <Navigate to="/citizen" />))} 
+        />
+
+        {/* 🏛️ Dedicated Super Admin / Executive Login Route */}
+        <Route 
+          path="/admin/login" 
+          element={!user ? <AdminLogin /> : (user.role === 'admin' ? <Navigate to="/admin" /> : (user.role === 'authority' ? <Navigate to="/department" /> : <Navigate to="/citizen" />))} 
+        />
+        <Route 
+          path="/admin-login" 
+          element={!user ? <AdminLogin /> : (user.role === 'admin' ? <Navigate to="/admin" /> : (user.role === 'authority' ? <Navigate to="/department" /> : <Navigate to="/citizen" />))} 
+        />
         
         {/* Role-Based Direct Home Route */}
         <Route 
           path="/home" 
           element={
             user ? (
-              user.role === 'citizen' ? <Home /> : <AuthorityHome />
+              user.role === 'citizen' ? <CitizenPage /> : <AuthorityHome />
             ) : (
               <Navigate to="/login" />
             )
           } 
         />
 
-        {/* Citizen Specific Routes */}
+        {/* 👤 Citizen Portal Routes */}
+        <Route 
+          path="/citizen" 
+          element={user?.role === 'citizen' ? <CitizenPage /> : <Navigate to="/login" />} 
+        />
         <Route 
           path="/dashboard" 
-          element={user?.role === 'citizen' ? <CitizenDashboard /> : <Navigate to="/login" />} 
+          element={user?.role === 'citizen' ? <CitizenPage /> : <Navigate to="/login" />} 
         />
         <Route 
           path="/report" 
@@ -63,14 +102,20 @@ function App() {
           element={user?.role === 'citizen' ? <Rewards /> : <Navigate to="/login" />} 
         />
 
-        {/* Authority Specific Routes */}
+        {/* 🏢 Department Official Portal Routes */}
         <Route 
           path="/department" 
-          element={user?.role === 'authority' ? <AuthorityDashboard /> : <Navigate to="/login" />} 
+          element={isOfficerOrAdmin ? <DepartmentPage /> : <Navigate to="/admin/login" />} 
+        />
+
+        {/* 🏛️ Admin / City Executive Portal Routes (Admin Only) */}
+        <Route 
+          path="/admin" 
+          element={isOfficerOrAdmin ? <AdminPage /> : <Navigate to="/admin/login" />} 
         />
         <Route 
           path="/executive" 
-          element={user?.role === 'authority' ? <ExecutiveView /> : <Navigate to="/login" />} 
+          element={isOfficerOrAdmin ? <AdminPage /> : <Navigate to="/admin/login" />} 
         />
 
         <Route path="*" element={<Navigate to="/" />} />

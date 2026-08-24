@@ -17,11 +17,23 @@ import {
     AlertCircle,
     ChevronUp,
     ChevronDown,
-    Flame
+    Flame,
+    Sparkles,
+    ShieldAlert
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import BeforeAfterSlider from '../components/BeforeAfterSlider';
+import ResolveModal from '../components/ResolveModal';
 
-const StatusBadge = ({ status }) => {
+const StatusBadge = ({ status, isAuditFlagged }) => {
+    if (isAuditFlagged) {
+        return (
+            <span className="px-3 py-1 rounded-full text-xs font-black uppercase tracking-widest bg-red-100 text-red-700 border border-red-200 flex items-center gap-1">
+                <ShieldAlert size={12} /> Audit Flagged
+            </span>
+        );
+    }
+
     const styles = {
         'Pending': 'bg-slate-100 text-slate-500',
         'Assigned': 'bg-blue-50 text-brand-blue border-blue-100',
@@ -29,14 +41,22 @@ const StatusBadge = ({ status }) => {
         'Resolved': 'bg-green-50 text-emerald-600 border-green-200'
     };
     return (
-        <span className={`px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest border ${styles[status]}`}>
+        <span className={`px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest border ${styles[status] || styles['Pending']}`}>
             {status}
         </span>
     );
 };
 
-const ComplaintCard = ({ c, isAuthority = false, onUpdateStatus, index }) => {
+const ComplaintCard = ({ c, isAuthority = false, onUpdateStatus, onOpenResolve, index }) => {
     const [selectedStatus, setSelectedStatus] = useState(c.status);
+
+    const handleActionClick = () => {
+        if (selectedStatus === 'Resolved') {
+            onOpenResolve(c);
+        } else {
+            onUpdateStatus(c._id, selectedStatus);
+        }
+    };
 
     return (
         <motion.div 
@@ -46,22 +66,40 @@ const ComplaintCard = ({ c, isAuthority = false, onUpdateStatus, index }) => {
             className="card-premium p-8 group flex flex-col h-full bg-white shadow-lg hover:shadow-xl transition-all"
         >
             <div className="flex justify-between items-start mb-6">
-                <StatusBadge status={c.status} />
+                <StatusBadge status={c.status} isAuditFlagged={c.fraudAuditFlag} />
                 <div className={`px-3 py-1 rounded-lg text-[10px] font-black border uppercase tracking-widest ${c.priority === 'High' ? 'text-red-500 border-red-100 bg-red-50' : 'text-slate-400 bg-slate-50 border-slate-100'}`}>
                     {c.priority} Priority
                 </div>
             </div>
 
-            <div className="flex-1 mb-8">
+            <div className="flex-1 mb-6">
                 <h3 className="text-xl font-bold text-slate-900 mb-3 group-hover:text-brand-blue transition-colors leading-tight">
                     {c.title}
                 </h3>
-                {c.imageUrl && (
+
+                {/* Render Before/After Slider for Resolved or Evidence Photo for Pending */}
+                {c.status === 'Resolved' || c.resolutionImageUrl ? (
+                    <BeforeAfterSlider 
+                        beforeImage={c.imageUrl}
+                        afterImage={c.resolutionImageUrl}
+                        verificationStatus={c.verificationStatus}
+                        verificationScore={c.verificationScore}
+                        verificationVerdict={c.verificationVerdict}
+                        fraudAuditFlag={c.fraudAuditFlag}
+                    />
+                ) : c.imageUrl ? (
                     <div className="w-full h-40 rounded-2xl mb-4 overflow-hidden shadow-inner bg-slate-100">
                         <img src={c.imageUrl} alt="Evidence" className="w-full h-full object-cover" />
                     </div>
+                ) : null}
+
+                {c.fraudAuditFlag && c.status !== 'Resolved' && (
+                    <div className="p-3 mb-4 rounded-xl bg-red-50 border border-red-200 text-xs text-red-800 font-medium">
+                        ⚠️ <strong>AI Warning:</strong> Previous closure was rejected due to incomplete resolution.
+                    </div>
                 )}
-                <div className="flex items-center gap-2 text-slate-400 text-xs font-bold uppercase tracking-widest whitespace-nowrap overflow-hidden text-ellipsis">
+
+                <div className="flex items-center gap-2 text-slate-400 text-xs font-bold uppercase tracking-widest whitespace-nowrap overflow-hidden text-ellipsis mt-2">
                     <MapPin size={14} className="flex-shrink-0" /> {c.location || 'Local Territory'}
                 </div>
             </div>
@@ -83,21 +121,31 @@ const ComplaintCard = ({ c, isAuthority = false, onUpdateStatus, index }) => {
                 </div>
 
                 {isAuthority && c.status !== 'Resolved' && (
-                    <div className="flex gap-2">
-                        <select 
-                            value={selectedStatus} 
-                            onChange={(e) => setSelectedStatus(e.target.value)}
-                            className="flex-1 p-3 bg-slate-50 border-none rounded-xl text-xs font-bold outline-none ring-1 ring-slate-200 focus:ring-brand-blue"
+                    <div className="space-y-3">
+                        <div className="flex gap-2">
+                            <select 
+                                value={selectedStatus} 
+                                onChange={(e) => setSelectedStatus(e.target.value)}
+                                className="flex-1 p-3 bg-slate-50 border-none rounded-xl text-xs font-bold outline-none ring-1 ring-slate-200 focus:ring-brand-blue"
+                            >
+                                <option value="Assigned">Assigned</option>
+                                <option value="In Progress">In Progress</option>
+                                <option value="Resolved">Resolved (AI Verification)</option>
+                            </select>
+                            <button 
+                                onClick={handleActionClick}
+                                className="p-3 bg-brand-blue text-white rounded-xl hover:bg-blue-600 transition-colors shadow-lg shadow-blue-500/20"
+                                title="Update Status"
+                            >
+                                <CheckCircle size={18} />
+                            </button>
+                        </div>
+
+                        <button
+                            onClick={() => onOpenResolve(c)}
+                            className="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 shadow-md shadow-emerald-600/20 transition-all"
                         >
-                            <option value="Assigned">Assigned</option>
-                            <option value="In Progress">In Progress</option>
-                            <option value="Resolved">Resolved</option>
-                        </select>
-                        <button 
-                            onClick={() => onUpdateStatus(c._id, selectedStatus)}
-                            className="p-3 bg-brand-blue text-white rounded-xl hover:bg-blue-600 transition-colors shadow-lg shadow-blue-500/20"
-                        >
-                            <CheckCircle size={18} />
+                            <Sparkles size={14} /> Resolve with AI Proof
                         </button>
                     </div>
                 )}
@@ -106,7 +154,7 @@ const ComplaintCard = ({ c, isAuthority = false, onUpdateStatus, index }) => {
     );
 };
 
-const ClusterTrend = ({ clusterId, complaints, isAuthority, onUpdateStatus }) => {
+const ClusterTrend = ({ clusterId, complaints, isAuthority, onUpdateStatus, onOpenResolve }) => {
     const [isOpen, setIsOpen] = useState(false);
     return (
         <div className="card-premium border-2 border-slate-100 mb-8 overflow-hidden bg-white">
@@ -138,7 +186,14 @@ const ClusterTrend = ({ clusterId, complaints, isAuthority, onUpdateStatus }) =>
                     >
                         <div className="grid lg:grid-cols-2 xl:grid-cols-3 gap-8">
                             {complaints.map((c, i) => (
-                                <ComplaintCard key={c._id} c={c} isAuthority={isAuthority} onUpdateStatus={onUpdateStatus} index={i} />
+                                <ComplaintCard 
+                                    key={c._id} 
+                                    c={c} 
+                                    isAuthority={isAuthority} 
+                                    onUpdateStatus={onUpdateStatus} 
+                                    onOpenResolve={onOpenResolve}
+                                    index={i} 
+                                />
                             ))}
                         </div>
                     </motion.div>
@@ -197,6 +252,7 @@ export const AuthorityDashboard = () => {
     const [expandedEscalation, setExpandedEscalation] = useState(false);
     const [viewMode, setViewMode] = useState('list'); // 'list' or 'trend'
     const [userLoc, setUserLoc] = useState(null);
+    const [resolveModalComplaint, setResolveModalComplaint] = useState(null);
     const { user } = useAuth();
 
     const fetchData = async () => {
@@ -300,7 +356,14 @@ export const AuthorityDashboard = () => {
                                         <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: 'auto', opacity: 1 }} exit={{ height: 0, opacity: 0 }} className="border-t border-red-50 p-8 bg-red-50/20">
                                             <div className="grid lg:grid-cols-3 gap-8">
                                                 {overdueComplaints.map((c, i) => (
-                                                    <ComplaintCard key={`overdue-${c._id}`} c={c} isAuthority={true} onUpdateStatus={handleUpdateStatus} index={i} />
+                                                    <ComplaintCard 
+                                                        key={`overdue-${c._id}`} 
+                                                        c={c} 
+                                                        isAuthority={true} 
+                                                        onUpdateStatus={handleUpdateStatus} 
+                                                        onOpenResolve={setResolveModalComplaint}
+                                                        index={i} 
+                                                    />
                                                 ))}
                                             </div>
                                         </motion.div>
@@ -315,7 +378,14 @@ export const AuthorityDashboard = () => {
                 <div className="grid lg:grid-cols-3 gap-8">
                     {complaints.length > 0 ? (
                         complaints.map((c, i) => (
-                            <ComplaintCard key={c._id} c={c} isAuthority={true} onUpdateStatus={handleUpdateStatus} index={i} />
+                            <ComplaintCard 
+                                key={c._id} 
+                                c={c} 
+                                isAuthority={true} 
+                                onUpdateStatus={handleUpdateStatus} 
+                                onOpenResolve={setResolveModalComplaint}
+                                index={i} 
+                            />
                         ))
                     ) : (
                         <div className="lg:col-span-3 py-32 text-center card-premium bg-slate-50 border-dashed border-2 border-slate-200">
@@ -335,6 +405,7 @@ export const AuthorityDashboard = () => {
                                 complaints={clusters[cid]} 
                                 isAuthority={true} 
                                 onUpdateStatus={handleUpdateStatus} 
+                                onOpenResolve={setResolveModalComplaint}
                             />
                         ))
                     ) : (
@@ -346,6 +417,15 @@ export const AuthorityDashboard = () => {
                 )}
                 </div>
             </div>
+
+            {/* AI Resolution Modal */}
+            <ResolveModal 
+                complaint={resolveModalComplaint}
+                isOpen={!!resolveModalComplaint}
+                onClose={() => setResolveModalComplaint(null)}
+                onSuccess={fetchData}
+                token={user.token}
+            />
         </div>
     );
 };

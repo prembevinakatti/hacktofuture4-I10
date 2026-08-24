@@ -62,8 +62,19 @@ const Login = () => {
                     </button>
                 </form>
 
-                <div className="mt-10 text-center text-slate-500 font-medium">
-                    New to JanSetu? <Link to="/register" className="text-brand-blue font-black hover:underline">Create account</Link>
+                <div className="mt-8 pt-6 border-t border-slate-100 text-center space-y-3">
+                    <p className="text-slate-500 font-medium text-sm">
+                        New citizen? <Link to="/register" className="text-brand-blue font-black hover:underline">Create account</Link>
+                    </p>
+                    <div className="flex justify-center gap-4 text-xs text-slate-400 font-bold pt-1">
+                        <Link to="/department/login" className="hover:text-amber-600 transition-colors">
+                            🏢 Department Login
+                        </Link>
+                        <span>•</span>
+                        <Link to="/admin/login" className="hover:text-slate-900 transition-colors">
+                            🏛️ Admin Portal
+                        </Link>
+                    </div>
                 </div>
             </motion.div>
         </div>

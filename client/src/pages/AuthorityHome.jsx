@@ -69,7 +69,7 @@ const AuthorityHome = () => {
                     <motion.div 
                         whileHover={{ y: -10 }}
                         className="p-10 bg-slate-900 group cursor-pointer rounded-[40px] shadow-2xl transition-all"
-                        onClick={() => navigate('/department')}
+                        onClick={() => navigate(user.role === 'admin' ? '/admin' : '/department')}
                     >
                         <TrendingUp className="text-brand-blue mb-8" size={40} />
                         <h3 className="text-2xl font-black text-white mb-4">City Trends</h3>

@@ -2,100 +2,160 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import Footer from "../components/Footer";
-import heroImg from "../assets/jansetu-govt-building.png";
 import { 
     Zap, 
     ShieldCheck, 
     Users, 
     ArrowRight, 
-    ChevronRight, 
     CheckCircle2, 
     BarChart3, 
     Globe2,
-    PlusCircle 
+    Building2,
+    MapPin,
+    Sparkles,
+    ShieldAlert,
+    Cpu,
+    Award,
+    Activity,
+    PhoneCall,
+    Send
 } from "lucide-react";
 
 const LandingPage = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="w-full min-h-screen bg-white selection:bg-brand-blue/30 overflow-x-hidden">
+    <div className="w-full min-h-screen bg-white text-slate-900 selection:bg-brand-blue/20 overflow-x-hidden">
+
+      {/* Top Civic Authority Ribbon */}
+      <div className="bg-slate-900 text-slate-200 text-xs py-2 px-6 border-b border-slate-800">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-2">
+            <div className="flex items-center gap-2 font-medium">
+                <span className="flex h-2 w-2 relative">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span className="font-semibold text-white">Smart Cities Mission</span> • National AI Civic Redressal & Oversight Matrix
+            </div>
+            <div className="flex items-center gap-4 text-[11px] font-semibold text-slate-400">
+                <span className="hover:text-white transition-colors cursor-pointer" onClick={() => navigate('/department/login')}>
+                    🏛️ Department Portal
+                </span>
+                <span>|</span>
+                <span className="hover:text-white transition-colors cursor-pointer" onClick={() => navigate('/admin/login')}>
+                    🛡️ Commissioner Matrix
+                </span>
+            </div>
+        </div>
+      </div>
 
       {/* Hero Section */}
-      <section className="relative pt-32 pb-24 lg:pt-48 lg:pb-32 overflow-hidden bg-slate-950">
-        {/* Background Gradients */}
-        <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-brand-blue opacity-20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 px-6"></div>
-        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-brand-orange opacity-10 rounded-full blur-[100px] translate-y-1/2 -translate-x-1/2"></div>
+      <section className="relative pt-16 pb-20 lg:pt-24 lg:pb-28 overflow-hidden bg-gradient-to-b from-slate-50 via-white to-slate-50/50">
+        {/* Subtle Ambient Background Accents */}
+        <div className="absolute top-0 right-1/4 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-[140px] pointer-events-none"></div>
+        <div className="absolute top-1/3 left-10 w-[400px] h-[400px] bg-amber-500/5 rounded-full blur-[120px] pointer-events-none"></div>
         
         <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="flex flex-col lg:flex-row items-center gap-20">
+          <div className="flex flex-col lg:flex-row items-center gap-14 lg:gap-16">
+            
             {/* Text Content */}
             <motion.div
               className="lg:w-1/2 text-center lg:text-left"
-              initial={{ opacity: 0, x: -50 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, ease: "easeOut" }}
             >
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-white/5 border border-white/10 rounded-full mb-8 backdrop-blur-sm">
-                <span className="w-2 h-2 rounded-full bg-brand-orange animate-pulse"></span>
-                <span className="text-[10px] font-black uppercase tracking-[0.3em] text-white/70">Next-Gen Governance Live</span>
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50/80 border border-blue-200/80 rounded-full mb-6 shadow-sm">
+                <Building2 size={14} className="text-brand-blue" />
+                <span className="text-[11px] font-black uppercase tracking-wider text-brand-blue">
+                    JanSetu • Smart Governance & Grievance Platform
+                </span>
               </div>
               
-              <h1 className="text-5xl md:text-5xl lg:text-6xl font-black text-white leading-[1.1] tracking-tighter mb-8">
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-slate-900 leading-[1.12] tracking-tight mb-6">
                 AI-Powered Smart City <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-blue to-blue-300 italic">Complaint Analysis & Automation System</span>
+                <span className="bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-600 bg-clip-text text-transparent">
+                  Grievance Automation & Inspection Matrix
+                </span>
               </h1>
 
-              <p className="text-xl text-slate-400 font-medium max-w-xl mb-12 leading-relaxed mx-auto lg:mx-0">
-                JanSetu empowers citizens to report issues effortlessly while providing 
-                authorities with AI-powered insights to build a faster, smarter city.
+              <p className="text-lg text-slate-600 font-medium max-w-xl mb-10 leading-relaxed mx-auto lg:mx-0">
+                A unified civic infrastructure empowering citizens to report grievances instantly via WhatsApp or Web, backed by AI neural routing, automated SLA tracking, and computer vision fraud auditing.
               </p>
 
-              <div className="flex flex-col sm:flex-row gap-5 justify-center lg:justify-start">
+              {/* Action Buttons */}
+              <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                 <button 
                   onClick={() => navigate('/report')}
-                  className="group flex items-center justify-center gap-3 bg-brand-orange hover:bg-orange-600 text-white px-10 py-5 rounded-2xl font-black italic tracking-tighter text-xl transition-all shadow-xl shadow-orange-500/20"
+                  className="group flex items-center justify-center gap-2.5 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white px-8 py-4 rounded-2xl font-black text-base shadow-xl shadow-orange-500/20 active:scale-95 transition-all"
                 >
-                  START REPORTING <ArrowRight size={24} className="group-hover:translate-x-2 transition-transform" />
+                  <Send size={18} /> RAISE A GRIEVANCE <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
                 </button>
 
                 <button 
-                  onClick={() => navigate('/login')}
-                  className="flex items-center justify-center gap-3 bg-white/5 hover:bg-white/10 text-white px-10 py-5 rounded-2xl font-black italic tracking-tighter text-xl border border-white/10 transition-all backdrop-blur-xl"
+                  onClick={() => navigate('/department/login')}
+                  className="flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-slate-800 px-8 py-4 rounded-2xl font-black text-base border-2 border-slate-200 hover:border-slate-300 shadow-sm active:scale-95 transition-all"
                 >
-                  AUTHORITY ACCESS
+                  <Building2 size={18} className="text-amber-600" /> DEPARTMENT PORTAL
                 </button>
+
+                <button 
+                  onClick={() => navigate('/admin/login')}
+                  className="flex items-center justify-center gap-2 bg-slate-900 hover:bg-slate-800 text-white px-6 py-4 rounded-2xl font-black text-base shadow-lg shadow-slate-900/10 active:scale-95 transition-all"
+                >
+                  <ShieldCheck size={18} className="text-blue-400" /> ADMIN MATRIX
+                </button>
+              </div>
+
+              {/* Trust Indicators */}
+              <div className="mt-10 pt-8 border-t border-slate-200/80 flex flex-wrap items-center justify-center lg:justify-start gap-8 text-xs font-bold text-slate-500">
+                <div className="flex items-center gap-2">
+                    <CheckCircle2 size={16} className="text-emerald-600" /> 100% Verified SLA Deadlines
+                </div>
+                <div className="flex items-center gap-2">
+                    <Cpu size={16} className="text-brand-blue" /> AI Computer Vision Auditing
+                </div>
+                <div className="flex items-center gap-2">
+                    <MapPin size={16} className="text-amber-600" /> High-Accuracy GPS Lock
+                </div>
               </div>
             </motion.div>
 
-            {/* Visual Element */}
+            {/* Visual Civic Hub Card */}
             <motion.div
-              className="lg:w-1/2 relative"
-              initial={{ opacity: 0, scale: 0.9, y: 50 }}
+              className="lg:w-1/2 relative w-full"
+              initial={{ opacity: 0, scale: 0.95, y: 30 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
-              transition={{ duration: 1, delay: 0.2 }}
+              transition={{ duration: 0.8, delay: 0.15 }}
             >
-              <div className="relative z-10 rounded-[3rem] overflow-hidden border-8 border-white/10 shadow-2xl">
+              <div className="relative rounded-[2.5rem] overflow-hidden border-[8px] border-white shadow-2xl bg-white group">
                 <img
-                  src={heroImg}
-                  alt="JanSetu AI Government Hub"
-                  className="w-full h-[500px] object-cover hover:scale-105 transition-transform duration-700"
+                  src="/smart_city_hub.jpg"
+                  alt="JanSetu Smart City Municipal Command Center"
+                  className="w-full h-[480px] object-cover group-hover:scale-105 transition-transform duration-700"
                 />
                 
-                {/* Floating Stats Card */}
-                <div className="absolute bottom-8 left-8 right-8 bg-white/10 backdrop-blur-2xl p-6 rounded-3xl border border-white/10 flex justify-between items-center shadow-2xl">
-                    <div className="text-left">
-                        <p className="text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">Total Impact</p>
-                        <p className="text-3xl font-black text-white leading-none">50K+</p>
+                {/* Overlay Floating Stats Card */}
+                <div className="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-xl p-5 rounded-2xl border border-slate-200/80 shadow-2xl flex justify-between items-center">
+                    <div>
+                        <p className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-0.5">Municipal Response</p>
+                        <p className="text-2xl font-black text-slate-900">24x7 Active</p>
                     </div>
-                    <div className="w-px h-10 bg-white/10"></div>
-                    <div className="text-left px-4">
-                        <p className="text-[10px] font-black uppercase tracking-widest text-white/50 mb-1">SLA Rating</p>
-                        <p className="text-3xl font-black text-brand-orange leading-none">99.2%</p>
+                    <div className="w-px h-8 bg-slate-200"></div>
+                    <div>
+                        <p className="text-[10px] font-black uppercase tracking-wider text-slate-400 mb-0.5">AI Quality Score</p>
+                        <p className="text-2xl font-black text-emerald-600">99.4% Verified</p>
                     </div>
-                    <div className="h-12 w-12 rounded-full bg-brand-blue flex items-center justify-center text-white">
-                        <Globe2 size={24} />
+                    <div className="w-px h-8 bg-slate-200"></div>
+                    <div className="h-11 w-11 rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white shadow-md">
+                        <Activity size={20} />
                     </div>
+                </div>
+
+                {/* Top Badge */}
+                <div className="absolute top-4 left-4 bg-slate-900/90 backdrop-blur-md text-white text-[11px] font-black px-3.5 py-1.5 rounded-xl uppercase tracking-wider shadow">
+                    🏛️ Municipal Command Headquarters
                 </div>
               </div>
             </motion.div>
@@ -103,175 +163,169 @@ const LandingPage = () => {
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-32 bg-white relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
-          <div className="text-center mb-24">
-            <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-brand-blue rounded-full text-xs font-black uppercase tracking-[0.2em] mb-6"
-            >
-                <Zap size={14} /> Powering The City
-            </motion.div>
-            <motion.h2
-                className="text-5xl lg:text-7xl font-black text-slate-900 tracking-tighter mb-6"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-            >
-                Innovation That <span className="text-brand-orange italic">Matters.</span>
-            </motion.h2>
-            <motion.p
-                className="text-xl text-slate-500 font-medium max-w-2xl mx-auto"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-            >
-                We use cutting-edge technology to bridge the gap between people and progress.
-            </motion.p>
+      {/* Department Grid Banner */}
+      <section className="py-8 bg-white border-y border-slate-200/60">
+        <div className="max-w-7xl mx-auto px-6">
+            <p className="text-center text-xs font-black uppercase tracking-[0.25em] text-slate-400 mb-6">
+                Connected Municipal Line Departments
+            </p>
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4">
+                {[
+                    { name: 'Sanitation', icon: '🧹', color: 'border-amber-200 bg-amber-50/60 text-amber-900' },
+                    { name: 'Water Supply', icon: '💧', color: 'border-blue-200 bg-blue-50/60 text-blue-900' },
+                    { name: 'Public Works', icon: '🏗️', color: 'border-emerald-200 bg-emerald-50/60 text-emerald-900' },
+                    { name: 'Electric Board', icon: '⚡', color: 'border-purple-200 bg-purple-50/60 text-purple-900' },
+                    { name: 'City Police', icon: '🚓', color: 'border-slate-200 bg-slate-50 text-slate-900' },
+                    { name: 'Administration', icon: '🏛️', color: 'border-orange-200 bg-orange-50/60 text-orange-900' },
+                ].map((d) => (
+                    <div key={d.name} className={`p-4 rounded-2xl border ${d.color} flex flex-col items-center justify-center text-center shadow-sm`}>
+                        <span className="text-2xl mb-1.5">{d.icon}</span>
+                        <span className="text-xs font-black">{d.name}</span>
+                    </div>
+                ))}
+            </div>
+        </div>
+      </section>
+
+      {/* Core AI Platform Capabilities */}
+      <section className="py-24 bg-slate-50/60 relative">
+        <div className="max-w-7xl mx-auto px-6">
+          <div className="text-center mb-16">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-100/70 text-brand-blue rounded-full text-xs font-black uppercase tracking-wider mb-4">
+                <Zap size={14} /> Mission-Critical Architecture
+            </div>
+            <h2 className="text-3xl lg:text-5xl font-black text-slate-900 tracking-tight mb-4">
+                Engineered for High-Accountability Civic Redressal
+            </h2>
+            <p className="text-base text-slate-500 font-medium max-w-2xl mx-auto">
+                Real-time grievance lifecycle orchestration powered by state-of-the-art AI analysis and transparent departmental scoreboards.
+            </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-10">
+          <div className="grid md:grid-cols-3 gap-8">
             {/* Feature 1 */}
             <motion.div
-              className="p-12 bg-white rounded-[3rem] border border-slate-100 hover:border-brand-blue/30 shadow-xl hover:shadow-2xl transition-all group"
-              initial={{ opacity: 0, y: 40 }}
+              className="p-8 bg-white rounded-3xl border border-slate-200/80 hover:border-brand-blue/50 shadow-lg hover:shadow-xl transition-all group"
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
             >
-              <div className="w-16 h-16 bg-blue-50 text-brand-blue rounded-2xl flex items-center justify-center mb-10 group-hover:scale-110 transition-transform">
-                <Zap size={32} />
+              <div className="w-14 h-14 bg-blue-50 text-brand-blue rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-inner">
+                <Zap size={28} />
               </div>
-              <h3 className="text-2xl font-black text-slate-900 mb-6">AI Issue Classification</h3>
-              <p className="text-slate-500 font-medium leading-relaxed">
-                Our advanced neural engines automatically categorize and route every report to the right department in milliseconds.
+              <h3 className="text-xl font-black text-slate-900 mb-3">AI Triaging & SLA Allocation</h3>
+              <p className="text-sm text-slate-500 font-medium leading-relaxed">
+                Neural Groq engine processes grievance titles, assigns exact municipal divisions, computes severity matrices, and initiates automated countdown deadlines.
               </p>
             </motion.div>
 
             {/* Feature 2 */}
             <motion.div
-              className="p-12 bg-orange-50/50 rounded-[3rem] border border-orange-100/50 group"
-              initial={{ opacity: 0, y: 40 }}
+              className="p-8 bg-white rounded-3xl border border-slate-200/80 hover:border-amber-500/50 shadow-lg hover:shadow-xl transition-all group"
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
               viewport={{ once: true }}
             >
-              <div className="w-16 h-16 bg-orange-500 text-white rounded-2xl flex items-center justify-center mb-10 group-hover:rotate-12 transition-transform">
-                <BarChart3 size={32} />
+              <div className="w-14 h-14 bg-amber-50 text-amber-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-inner">
+                <BarChart3 size={28} />
               </div>
-              <h3 className="text-2xl font-black text-slate-900 mb-6 flex items-center gap-2">
-                Real-Time Ops <span className="px-3 py-1 bg-brand-orange text-white text-[10px] rounded-full">LIVE</span>
+              <h3 className="text-xl font-black text-slate-900 mb-3 flex items-center gap-2">
+                Geospatial Hotspot Map
               </h3>
-              <p className="text-slate-500 font-medium leading-relaxed">
-                Authorities get a city-wide "Eye in the Sky" map to visualize hotspots and act before a crisis escalates.
+              <p className="text-sm text-slate-500 font-medium leading-relaxed">
+                Unsupervised K-Means clustering aggregates localized complaint spikes across wards, equipping commissioners with predictive crisis radar.
               </p>
             </motion.div>
 
             {/* Feature 3 */}
             <motion.div
-              className="p-12 bg-slate-950 rounded-[3rem] shadow-2xl relative overflow-hidden group"
-              initial={{ opacity: 0, y: 40 }}
+              className="p-8 bg-white rounded-3xl border border-slate-200/80 hover:border-emerald-500/50 shadow-lg hover:shadow-xl transition-all group"
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
               viewport={{ once: true }}
             >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-brand-blue opacity-10 blur-3xl group-hover:opacity-30 transition-opacity"></div>
-              <div className="w-16 h-16 bg-white/10 text-brand-blue rounded-2xl flex items-center justify-center mb-10 border border-white/5">
-                <ShieldCheck size={32} />
+              <div className="w-14 h-14 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform shadow-inner">
+                <ShieldCheck size={28} />
               </div>
-              <h3 className="text-2xl font-black text-white mb-6">Unrivaled Transparency</h3>
-              <p className="text-slate-400 font-medium leading-relaxed">
-                Built on a mission-critical infrastructure, guaranteeing every citizen's voice is tracked from logging to resolution.
+              <h3 className="text-xl font-black text-slate-900 mb-3">AI Vision Anti-Fraud Audit</h3>
+              <p className="text-sm text-slate-500 font-medium leading-relaxed">
+                Officers must upload photographic proof of work. Computer vision inspects before-and-after evidence to reject incomplete fixes and flag fraudulent closures.
               </p>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* How It Works Section */}
-      <section className="py-32 bg-brand-blue text-white relative">
+      {/* 4-Step Governance Flow */}
+      <section className="py-20 bg-white border-t border-slate-200/70">
         <div className="max-w-7xl mx-auto px-6">
-          <div className="flex flex-col lg:flex-row items-end justify-between mb-24 gap-8 text-center lg:text-left">
-            <div className="max-w-2xl">
-                <h2 className="text-5xl lg:text-7xl font-black tracking-tighter italic leading-none mb-6">
-                    THE FOUR <br />
-                    <span className="text-transparent border-t-2 border-white/20 pt-4 bg-clip-text bg-gradient-to-r from-white to-white/40">PHASES of IMPACT.</span>
-                </h2>
-            </div>
-            <p className="text-xl text-blue-100 font-bold max-w-sm mb-1">
-                A streamlined pipeline from citizen report to government resolution.
+          <div className="text-center mb-16">
+            <h2 className="text-3xl lg:text-4xl font-black text-slate-900 tracking-tight mb-3">
+                How JanSetu Operates
+            </h2>
+            <p className="text-sm text-slate-500 font-medium max-w-xl mx-auto">
+                A transparent 4-stage pipeline connecting citizen awareness to municipal field resolution.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-4 gap-12">
+          <div className="grid md:grid-cols-4 gap-6">
             {[
-                { title: "Report", icon: PlusCircle, color: "bg-white", text: "Submit issues via text, WhatsApp, or instant GPS pin." },
-                { title: "Review", icon: Zap, color: "bg-brand-orange", text: "AI instantly classifies severity & detects duplicate patterns." },
-                { title: "Active Logs", icon: BarChart3, color: "bg-blue-400", text: "Status is tracked in a transparent city-wide workforce ledger." },
-                { title: "Resolution", icon: CheckCircle2, color: "bg-green-400", text: "Departments resolve the issue and taxpayers track real impact." }
-            ].map((step, index) => (
-              <motion.div
-                key={index}
-                className="relative p-10 bg-white/5 border border-white/10 rounded-[3rem] hover:bg-white/10 transition-all flex flex-col items-center text-center"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.1 }}
-                viewport={{ once: true }}
-              >
-                <div className={`w-14 h-14 ${step.color} rounded-2xl flex items-center justify-center text-slate-900 mb-8 shadow-xl -mt-16`}>
-                  <step.icon size={28} />
+                { step: "01", title: "Citizen Submission", desc: "Report via WhatsApp or Web Portal with auto-detected full GPS address & photo.", icon: Send, color: "text-blue-600 bg-blue-50 border-blue-200" },
+                { step: "02", title: "AI Classification", desc: "Groq LLM classifies category, determines SLA deadline, and dispatches ticket.", icon: Cpu, color: "text-amber-600 bg-amber-50 border-amber-200" },
+                { step: "03", title: "Field Action", desc: "Department engineers execute on-ground repair and upload resolution proof photo.", icon: Building2, color: "text-indigo-600 bg-indigo-50 border-indigo-200" },
+                { step: "04", title: "AI Verification", desc: "Vision AI verifies work quality, awards citizen reward points, and archives report.", icon: CheckCircle2, color: "text-emerald-600 bg-emerald-50 border-emerald-200" },
+            ].map((s, index) => {
+              const IconComp = s.icon;
+              return (
+                <div key={index} className="p-6 bg-slate-50/70 rounded-3xl border border-slate-200 hover:bg-white hover:shadow-lg transition-all relative">
+                    <div className="flex justify-between items-start mb-4">
+                        <div className={`w-12 h-12 rounded-2xl ${s.color} border flex items-center justify-center font-bold shadow-sm`}>
+                            <IconComp size={22} />
+                        </div>
+                        <span className="text-2xl font-black text-slate-300">
+                            {s.step}
+                        </span>
+                    </div>
+                    <h4 className="text-base font-black text-slate-900 mb-2">{s.title}</h4>
+                    <p className="text-xs text-slate-500 font-medium leading-relaxed">{s.desc}</p>
                 </div>
-                <h3 className="text-3xl font-black italic tracking-tighter mb-4">{step.title}</h3>
-                <p className="font-bold opacity-60 leading-relaxed text-blue-50">
-                  {step.text}
-                </p>
-                <div className="absolute top-10 right-10 text-[60px] font-black opacity-5 pointer-events-none">0{index + 1}</div>
-              </motion.div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
 
       {/* CTA Section */}
-      <section className="py-40 bg-white relative overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-5xl h-64 bg-brand-orange/10 blur-[150px] opacity-30 rounded-full"></div>
-        <div className="max-w-7xl mx-auto px-6 text-center relative z-10">
-          <motion.h2
-            className="text-6xl lg:text-9xl font-black text-slate-900 tracking-tighter italic leading-none mb-12"
-            initial={{ scale: 0.9, opacity: 0 }}
-            whileInView={{ scale: 1, opacity: 1 }}
-            viewport={{ once: true }}
-          >
-            BE THE CHANGE. <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-orange to-red-500">JANSETU IS LIVE.</span>
-          </motion.h2>
+      <section className="py-20 bg-slate-900 text-white relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-blue/10 rounded-full blur-[140px] pointer-events-none"></div>
+        <div className="max-w-5xl mx-auto px-6 text-center relative z-10">
+          <div className="inline-flex items-center gap-2 px-4 py-1 bg-slate-800 text-amber-400 rounded-full text-xs font-black uppercase tracking-wider mb-6">
+            <Sparkles size={14} /> National Civic Transformation
+          </div>
 
-          <motion.p
-            className="text-2xl text-slate-500 font-bold max-w-2xl mx-auto mb-16"
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-          >
-            Join thousands of citizens building the first transparent smart city together.
-          </motion.p>
+          <h2 className="text-3xl sm:text-5xl font-black tracking-tight mb-6">
+            Empower Your City with Real-Time Civic Accountability
+          </h2>
 
-          <div className="flex flex-col sm:flex-row gap-6 justify-center">
-            <motion.button
-                onClick={() => navigate('/register')}
-                className="px-16 py-6 bg-brand-blue text-white rounded-full font-black text-xl italic tracking-tighter shadow-2xl hover:scale-105 transition-transform"
-                whileHover={{ y: -5 }}
-            >
-                REGISTER NOW
-            </motion.button>
-            <motion.button
+          <p className="text-base text-slate-300 font-medium max-w-2xl mx-auto mb-10">
+            Join thousands of citizens and municipal officers collaborating to build cleaner, safer, and smarter urban infrastructure.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <button
                 onClick={() => navigate('/report')}
-                className="px-16 py-6 border-4 border-slate-900 text-slate-900 rounded-full font-black text-xl italic tracking-tighter hover:bg-slate-900 hover:text-white transition-all hover:scale-105"
-                whileHover={{ y: -5 }}
+                className="px-8 py-4 bg-brand-orange hover:bg-orange-600 text-white rounded-2xl font-black text-sm uppercase tracking-wider shadow-xl shadow-orange-500/20 active:scale-95 transition-all"
             >
-                QUICK REPORT
-            </motion.button>
+                Raise a Grievance Now
+            </button>
+            <button
+                onClick={() => navigate('/department/register')}
+                className="px-8 py-4 bg-slate-800 hover:bg-slate-700 text-white rounded-2xl font-black text-sm uppercase tracking-wider border border-slate-700 shadow-md active:scale-95 transition-all"
+            >
+                Register as Department Officer
+            </button>
           </div>
         </div>
       </section>

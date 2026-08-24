@@ -6,7 +6,7 @@ const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   phoneNumber: { type: String, unique: true, sparse: true },
   password: { type: String, required: true },
-  role: { type: String, enum: ['citizen', 'authority'], default: 'citizen' },
+  role: { type: String, enum: ['citizen', 'authority', 'admin'], default: 'citizen' },
   department: { type: String }, // For authority users
   rewardPoints: { type: Number, default: 0 },
 }, { timestamps: true });

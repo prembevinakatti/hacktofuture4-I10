@@ -43,15 +43,23 @@ const ReportIssue = () => {
         }
     };
 
+    const [locating, setLocating] = useState(false);
+
+    useEffect(() => {
+        // Auto-detect GPS location on mount
+        getLocation();
+    }, []);
+
     const getLocation = () => {
         if (!navigator.geolocation) {
             return toast.error('Geolocation is not supported by your browser');
         }
-        toast.loading('Detecting address...', { id: 'gps', duration: 2000 });
+        setLocating(true);
+        const gpsToast = toast.loading('Acquiring precise GPS location & address...');
 
         const options = {
             enableHighAccuracy: true,
-            timeout: 5000,
+            timeout: 10000,
             maximumAge: 0
         };
 
@@ -61,28 +69,39 @@ const ReportIssue = () => {
                 console.log('GPS Coordinates Captured:', { latitude, longitude });
 
                 try {
-                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`, {
+                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`, {
                         headers: { 'User-Agent': 'JanSetu-SmartCity-App' }
                     });
                     const data = await response.json();
-                    console.log('Geocoding API Data:', data);
+                    console.log('Geocoding Full Address Data:', data);
                     
-                    // Prioritize specific Place/Building name (College, Hospital, etc)
-                    const parts = data.address;
-                    const streetAddress = [
-                        parts.amenity || parts.building || parts.university || parts.office || parts.road,
-                        parts.suburb || parts.neighbourhood || parts.village,
-                        parts.city || parts.town || parts.county
-                    ].filter(Boolean).join(', ');
+                    const fullAddress = data.display_name || `${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
 
-                    setFormData({ ...formData, location: streetAddress || data.display_name.split(',').slice(0, 3).join(','), lat: latitude, lng: longitude });
-                    toast.success('Address Captured', { id: 'gps' });
+                    setFormData(prev => ({ 
+                        ...prev, 
+                        location: fullAddress, 
+                        lat: latitude, 
+                        lng: longitude 
+                    }));
+                    toast.success('Precise Full Address Locked! 📍', { id: gpsToast });
                 } catch (err) {
-                    setFormData({ ...formData, location: `${latitude.toFixed(4)}, ${longitude.toFixed(4)}`, lat: latitude, lng: longitude });
-                    toast.success('Coordinates Captured', { id: 'gps' });
+                    const fallback = `Coordinates: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
+                    setFormData(prev => ({ 
+                        ...prev, 
+                        location: fallback, 
+                        lat: latitude, 
+                        lng: longitude 
+                    }));
+                    toast.success('GPS Coordinates Locked! 📍', { id: gpsToast });
+                } finally {
+                    setLocating(false);
                 }
             },
-            () => toast.error('Location Access Denied', { id: 'gps' })
+            (err) => {
+                setLocating(false);
+                toast.error('Location permission required. Please allow GPS access.', { id: gpsToast });
+            },
+            options
         );
     };
 
@@ -152,21 +171,64 @@ const ReportIssue = () => {
                                 </div>
 
                                 <div className="space-y-2">
-                                    <label className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] ml-1">Incident Location</label>
-                                    <div className="relative group">
-                                        <MapPin className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-300" size={18} />
-                                        <input 
-                                            className="input-field pl-14 pr-14" 
-                                            placeholder="Auto-detect or Type location"
-                                            value={formData.location} onChange={e => setFormData({...formData, location: e.target.value})}
-                                        />
+                                    <div className="flex items-center justify-between">
+                                        <label className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] ml-1 flex items-center gap-1.5">
+                                            <MapPin size={14} className="text-brand-blue" /> Verified GPS Incident Location
+                                        </label>
                                         <button 
                                             type="button"
                                             onClick={getLocation}
-                                            className="absolute right-4 top-1/2 -translate-y-1/2 p-2 hover:bg-slate-100 rounded-xl text-brand-blue transition-all"
+                                            disabled={locating}
+                                            className="inline-flex items-center gap-1.5 text-xs font-bold text-brand-blue hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-3 py-1.5 rounded-xl border border-blue-100 transition-all active:scale-95"
                                         >
-                                            <Navigation size={18} />
+                                            {locating ? <Loader2 size={13} className="animate-spin" /> : <Navigation size={13} />}
+                                            {locating ? 'Acquiring GPS...' : 'Re-detect Current GPS'}
                                         </button>
+                                    </div>
+
+                                    <div className="p-4 bg-slate-50 border-2 border-slate-200/80 rounded-2xl">
+                                        {locating ? (
+                                            <div className="flex items-center gap-3 text-slate-500 py-2">
+                                                <Loader2 className="animate-spin text-brand-blue flex-shrink-0" size={20} />
+                                                <div>
+                                                    <p className="text-xs font-bold text-slate-700">Connecting to GPS Satellites & Geocoding Service...</p>
+                                                    <p className="text-[11px] text-slate-400">Fetching high-accuracy full street address</p>
+                                                </div>
+                                            </div>
+                                        ) : formData.location ? (
+                                            <div>
+                                                <div className="flex items-start gap-2.5 mb-2">
+                                                    <CheckCircle2 size={18} className="text-emerald-500 flex-shrink-0 mt-0.5" />
+                                                    <p className="text-xs font-bold text-slate-800 leading-relaxed">
+                                                        {formData.location}
+                                                    </p>
+                                                </div>
+                                                {formData.lat && formData.lng && (
+                                                    <div className="flex items-center gap-2 pt-2 border-t border-slate-200/60 text-[10px] font-black text-slate-400 uppercase tracking-wider">
+                                                        <span className="px-2 py-0.5 bg-white rounded-md border border-slate-200 text-brand-blue">
+                                                            LAT: {formData.lat.toFixed(6)}°
+                                                        </span>
+                                                        <span className="px-2 py-0.5 bg-white rounded-md border border-slate-200 text-brand-blue">
+                                                            LNG: {formData.lng.toFixed(6)}°
+                                                        </span>
+                                                        <span className="text-emerald-600 font-bold ml-auto flex items-center gap-1">
+                                                            ● GPS Auto-Locked
+                                                        </span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ) : (
+                                            <div className="flex items-center justify-between py-1">
+                                                <p className="text-xs font-medium text-slate-400">Location not yet acquired</p>
+                                                <button 
+                                                    type="button" 
+                                                    onClick={getLocation} 
+                                                    className="text-xs font-black text-brand-blue uppercase tracking-wider underline"
+                                                >
+                                                    Click to Fetch Location
+                                                </button>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 

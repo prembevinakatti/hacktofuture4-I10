@@ -64,7 +64,7 @@ const HotspotMap = ({ complaints, userLocation }) => {
         <motion.div 
             initial={{ opacity: 0, scale: 0.98 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="w-full h-[550px] rounded-[3rem] overflow-hidden shadow-2xl border-[10px] border-white bg-slate-100 relative group"
+            className="w-full h-[550px] rounded-[3rem] overflow-hidden shadow-2xl border-[10px] border-white bg-slate-100 relative group isolate z-0"
         >
             <MapContainer 
                 center={center} 
@@ -105,14 +105,14 @@ const HotspotMap = ({ complaints, userLocation }) => {
             </MapContainer>
 
             {/* Premium Overlay UI */}
-            <div className="absolute top-8 left-8 z-[1000] pointer-events-none">
+            <div className="absolute top-8 left-8 z-20 pointer-events-none">
                 <div className="bg-white/90 backdrop-blur-xl px-10 py-6 rounded-[3rem] border border-slate-200 shadow-2xl">
                     <p className="text-[10px] font-black text-slate-400 uppercase tracking-[0.4em] mb-1">City Intelligence</p>
                     <h3 className="text-slate-900 font-black italic tracking-tighter text-2xl leading-none uppercase">JanSetu Overwatch</h3>
                 </div>
             </div>
 
-            <div className="absolute bottom-10 left-10 z-[1000] flex gap-4">
+            <div className="absolute bottom-10 left-10 z-20 flex gap-4">
                 <div className="bg-white text-slate-900 px-8 py-4 rounded-[2rem] shadow-2xl flex items-center gap-4 border border-slate-100">
                     <div className="w-3 h-3 rounded-full bg-red-600 shadow-lg shadow-red-200" />
                     <span className="text-[11px] font-black uppercase tracking-[0.2em]">Verified Reports</span>

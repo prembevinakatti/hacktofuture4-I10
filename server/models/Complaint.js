@@ -21,6 +21,17 @@ const ComplaintSchema = new mongoose.Schema({
     enum: ['Pending', 'Assigned', 'In Progress', 'Resolved'], 
     default: 'Pending' 
   },
+  resolutionImageUrl: { type: String },
+  resolutionNote: { type: String },
+  resolvedAt: { type: Date },
+  verificationStatus: { 
+    type: String, 
+    enum: ['None', 'Verified', 'Rejected', 'Flagged'], 
+    default: 'None' 
+  },
+  verificationScore: { type: Number, default: 0 },
+  verificationVerdict: { type: String },
+  fraudAuditFlag: { type: Boolean, default: false },
 }, { timestamps: true });
 
 module.exports = mongoose.model('Complaint', ComplaintSchema);

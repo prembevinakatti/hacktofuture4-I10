@@ -48,6 +48,32 @@ const loginUser = async (req, res) => {
   }
 };
 
+const adminLogin = async (req, res) => {
+  const { email, password } = req.body;
+  try {
+    const user = await User.findOne({ email });
+    if (!user || !(await user.matchPassword(password))) {
+      return res.status(401).json({ message: 'Invalid admin credentials' });
+    }
+
+    if (user.role !== 'admin' && user.role !== 'authority') {
+      return res.status(403).json({ message: 'Access Denied: Citizen accounts cannot enter the Admin Command Matrix' });
+    }
+
+    res.json({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+      department: user.department,
+      rewardPoints: user.rewardPoints,
+      token: generateToken(user._id),
+    });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 const getMe = async (req, res) => {
   try {
     const user = await User.findById(req.user._id).select('-password');
@@ -57,4 +83,4 @@ const getMe = async (req, res) => {
   }
 }
 
-module.exports = { registerUser, loginUser, getMe };
+module.exports = { registerUser, loginUser, adminLogin, getMe };
