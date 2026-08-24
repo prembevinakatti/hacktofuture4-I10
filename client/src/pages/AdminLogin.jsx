@@ -11,12 +11,13 @@ import {
     Activity, 
     Building2, 
     KeyRound, 
-    AlertTriangle 
+    ShieldAlert,
+    CheckCircle2
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const AdminLogin = () => {
-    const [formData, setFormData] = useState({ email: '', password: '' });
+    const [formData, setFormData] = useState({ email: 'admin@jansetu.city', password: 'adminPassword123' });
     const [loading, setLoading] = useState(false);
     const { login } = useAuth();
     const navigate = useNavigate();
@@ -29,7 +30,7 @@ const AdminLogin = () => {
         try {
             const { data } = await axios.post('http://localhost:5000/api/auth/admin-login', formData);
             login(data);
-            toast.success(`Welcome, Officer ${data.name.split(' ')[0]}`, { id: loginToast });
+            toast.success(`Welcome, Commissioner ${data.name.split(' ')[0]}`, { id: loginToast });
             navigate('/admin');
         } catch (err) {
             const errorMsg = err.response?.data?.message || 'Invalid administrative credentials';
@@ -40,22 +41,22 @@ const AdminLogin = () => {
     };
 
     return (
-        <div className="min-h-screen pt-28 pb-20 bg-slate-950 text-white flex items-center justify-center relative overflow-hidden">
-            {/* Ambient Background Glows */}
-            <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-brand-blue/10 rounded-full blur-[140px] pointer-events-none"></div>
-            <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-brand-orange/10 rounded-full blur-[140px] pointer-events-none"></div>
+        <div className="min-h-screen pt-28 pb-20 bg-slate-50 text-slate-900 flex items-center justify-center relative overflow-hidden">
+            {/* Ambient Background Accents */}
+            <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[140px] pointer-events-none"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-[140px] pointer-events-none"></div>
 
             <div className="container mx-auto px-6 relative z-10 max-w-md">
                 {/* Security Tag */}
                 <div className="text-center mb-8">
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-slate-900 border border-slate-800 rounded-full text-[11px] font-black text-brand-orange uppercase tracking-widest mb-4 shadow-inner">
-                        <Activity size={14} className="animate-pulse" /> Restricted Official Access
+                    <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 border border-blue-200 rounded-full text-[11px] font-black text-brand-blue uppercase tracking-widest mb-4 shadow-sm">
+                        <Activity size={14} className="text-brand-blue animate-pulse" /> City Executive Gateway
                     </div>
-                    <h1 className="text-3xl lg:text-4xl font-black tracking-tight text-white mb-2">
-                        Admin <span className="text-brand-orange">Command Matrix</span>
+                    <h1 className="text-3xl lg:text-4xl font-black tracking-tight text-slate-900 mb-2">
+                        Admin <span className="text-brand-blue">Command Matrix</span>
                     </h1>
-                    <p className="text-slate-400 text-xs font-medium">
-                        City Administration, Commissioner & Departmental Oversight Gateway
+                    <p className="text-slate-500 text-xs font-medium">
+                        City Administration, Commissioner & Inter-Departmental Oversight
                     </p>
                 </div>
 
@@ -63,39 +64,39 @@ const AdminLogin = () => {
                 <motion.div 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="p-8 bg-slate-900/90 backdrop-blur-xl border border-slate-800 rounded-3xl shadow-2xl"
+                    className="p-8 sm:p-10 bg-white border border-slate-200/90 rounded-3xl shadow-xl shadow-slate-200/50"
                 >
                     <form onSubmit={handleSubmit} className="space-y-5">
                         <div>
-                            <label className="block text-xs font-black uppercase tracking-wider text-slate-400 mb-2">
-                                Official Email Address
+                            <label className="block text-xs font-black uppercase tracking-wider text-slate-500 mb-2">
+                                Official Commissioner Email
                             </label>
                             <div className="relative">
-                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
+                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                                 <input 
                                     type="email"
                                     required
-                                    placeholder="officer@jansetu.city"
+                                    placeholder="admin@jansetu.city"
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    className="w-full pl-12 pr-4 py-3.5 bg-slate-950/80 border border-slate-800 rounded-2xl text-sm font-medium text-white placeholder-slate-600 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange transition-all"
+                                    className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-900 placeholder-slate-400 outline-none focus:border-brand-blue focus:bg-white focus:ring-2 focus:ring-blue-100 transition-all"
                                 />
                             </div>
                         </div>
 
                         <div>
-                            <label className="block text-xs font-black uppercase tracking-wider text-slate-400 mb-2">
+                            <label className="block text-xs font-black uppercase tracking-wider text-slate-500 mb-2">
                                 Security Passkey
                             </label>
                             <div className="relative">
-                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
+                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
                                 <input 
                                     type="password"
                                     required
                                     placeholder="••••••••••••"
                                     value={formData.password}
                                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                    className="w-full pl-12 pr-4 py-3.5 bg-slate-950/80 border border-slate-800 rounded-2xl text-sm font-medium text-white placeholder-slate-600 outline-none focus:border-brand-orange focus:ring-1 focus:ring-brand-orange transition-all"
+                                    className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-900 placeholder-slate-400 outline-none focus:border-brand-blue focus:bg-white focus:ring-2 focus:ring-blue-100 transition-all"
                                 />
                             </div>
                         </div>
@@ -103,26 +104,26 @@ const AdminLogin = () => {
                         <button 
                             type="submit"
                             disabled={loading}
-                            className="w-full py-4 bg-brand-orange hover:bg-orange-600 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-brand-orange/20 flex items-center justify-center gap-2 active:scale-95 transition-all mt-6"
+                            className="w-full py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-slate-900/10 flex items-center justify-center gap-2 active:scale-95 transition-all mt-6"
                         >
-                            {loading ? 'Verifying Credentials...' : 'Authenticate Matrix Access'} <ArrowRight size={16} />
+                            {loading ? 'Authenticating Access...' : 'Authenticate Matrix Access'} <ArrowRight size={16} />
                         </button>
                     </form>
 
                     {/* Notice */}
-                    <div className="mt-8 pt-6 border-t border-slate-800/80 space-y-3 text-center">
-                        <p className="text-xs text-slate-400 font-medium">
+                    <div className="mt-8 pt-6 border-t border-slate-100 space-y-3 text-center">
+                        <p className="text-xs text-slate-500 font-medium">
                             Municipal Line Department Officer?{' '}
-                            <Link to="/department/login" className="text-amber-400 font-bold hover:underline">
+                            <Link to="/department/login" className="text-amber-600 font-bold hover:underline">
                                 Department Portal Login
                             </Link>
                         </p>
-                        <div className="flex justify-center gap-4 text-[11px] text-slate-500 pt-1">
-                            <Link to="/department/register" className="hover:text-amber-300 font-bold transition-colors">
+                        <div className="flex justify-center gap-4 text-[11px] text-slate-400 pt-1 font-bold">
+                            <Link to="/department/register" className="hover:text-amber-600 transition-colors">
                                 🏢 Register Department
                             </Link>
                             <span>•</span>
-                            <Link to="/login" className="hover:text-brand-blue font-bold transition-colors">
+                            <Link to="/login" className="hover:text-brand-blue transition-colors">
                                 👤 Citizen Portal
                             </Link>
                         </div>

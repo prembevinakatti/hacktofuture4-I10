@@ -1,25 +1,36 @@
 const axios = require('axios');
 require('dotenv').config();
 
+/**
+ * 🧠 Intelligent Groq Civic AI Classifier & Severity Analyzer
+ */
 const analyzeWithGroq = async (text) => {
   try {
-    const prompt = `You are a city administration AI. Categorize this civic complaint into exactly one category and one severity level.
-    Return strictly valid JSON with these keys: "category", "severity".
+    const prompt = `You are a Smart City Municipal Governance AI triaging citizen complaints.
+Analyze the following civic complaint and accurately determine its category, severity level, and key risk indicators.
 
-    Categories:
-    - Garbage: Trash collection, sanitation, waste disposal, cleaning.
-    - Water: Leaks, pipe bursts, supply shortages, drainage issues, sewage.
-    - Electricity: Street lights, power outages, sparking wires, transformer issues.
-    - Road: Potholes, broken pavement, illegal parking, traffic signals.
-    - Safety: Security concerns, theft, harassment, emergency situations.
-    - Other: Anything that doesn't fit the above.
+Categories:
+- Road: Potholes, broken asphalt, damaged footpaths, sinkholes, road cave-in, traffic signal faults, bridge damage, debris blocking roads.
+- Water: Pipeline bursts, severe leaks, water contamination, low pressure, water supply shortage, sewage overflow, drainage flooding.
+- Electricity: Exposed/hanging live wires, sparking transformers, street light outages, power grid failures, damaged electric poles, blackout.
+- Garbage: Waste accumulation, overflowing municipal bins, illegal toxic dumping, animal carcass, littering around public areas.
+- Safety: Open/uncovered manholes, structural building cracks, fire hazards, public harassment, theft, dangerous open excavations.
+- Other: General municipal inquiries and miscellaneous civic items.
 
-    Severities:
-    - Low: Minor inconvenience, non-urgent.
-    - Medium: Disruptive but not immediately dangerous.
-    - High: Emergency, hazard, danger, accidents, or life-safety risk.
+Severity Guidelines:
+- High: Immediate threat to life, public safety, physical injury, electrocution risk, open manholes, major pipe bursts flooding roads, deep dangerous potholes causing accidents, sparking wires, hospital area blocks.
+- Medium: Significant public inconvenience, standard potholes, neighborhood streetlight outages, overflowing trash bins, moderate water leaks, clogged drain.
+- Low: Cosmetic issues, routine maintenance, faded lane markings, requested speed bumps, park bench repairs, non-hazardous overgrown grass.
 
-    Complaint: "${text}"`;
+Return ONLY a valid JSON object with the following structure:
+{
+  "category": "Road" | "Water" | "Electricity" | "Garbage" | "Safety" | "Other",
+  "severity": "High" | "Medium" | "Low",
+  "reason": "Brief 1-sentence rationale for chosen severity",
+  "keywords": ["keyword1", "keyword2"]
+}
+
+Complaint: "${text}"`;
 
     const response = await axios.post(
       'https://api.groq.com/openai/v1/chat/completions',
@@ -27,39 +38,46 @@ const analyzeWithGroq = async (text) => {
         model: 'llama3-8b-8192',
         messages: [{ role: 'user', content: prompt }],
         response_format: { type: 'json_object' },
+        temperature: 0.1,
       },
       {
         headers: {
           'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
           'Content-Type': 'application/json',
         },
+        timeout: 10000
       }
     );
 
     const result = JSON.parse(response.data.choices[0].message.content);
+    console.log(`🤖 Groq AI Triage: [${result.category}] Severity: [${result.severity}] -> "${text}"`);
     return result;
   } catch (error) {
-    console.error('Groq API Error - Activating Local Backup Brain:', error.message);
+    console.error('⚠️ Groq API Error - Running Enhanced Local Heuristic Brain:', error.message);
     
-    // Local Backup Hero: If AI fails, use keyword heuristics
-    const lowText = text.toLowerCase();
+    // High-accuracy fallback heuristic rules
+    const low = text.toLowerCase();
     let category = 'Other';
     let severity = 'Medium';
 
-    if (lowText.includes('water') || lowText.includes('leak') || lowText.includes('pipe')) category = 'Water';
-    else if (lowText.includes('garbage') || lowText.includes('trash') || lowText.includes('waste')) category = 'Garbage';
-    else if (lowText.includes('light') || lowText.includes('electric') || lowText.includes('power')) category = 'Electricity';
-    else if (lowText.includes('road') || lowText.includes('pothole')) category = 'Road';
-    else if (lowText.includes('safe') || lowText.includes('theft') || lowText.includes('police')) category = 'Safety';
+    if (/water|leak|pipe|flood|sewage|drain|contamination|tap/i.test(low)) category = 'Water';
+    else if (/garbage|trash|waste|dump|litter|cleaning|sanitation|carcass/i.test(low)) category = 'Garbage';
+    else if (/electric|wire|light|power|pole|spark|transformer|current|shock/i.test(low)) category = 'Electricity';
+    else if (/road|pothole|pavement|bridge|asphalt|traffic|culvert|divider/i.test(low)) category = 'Road';
+    else if (/manhole|safe|theft|danger|harass|police|security|hazard|crack/i.test(low)) category = 'Safety';
 
-    if (lowText.includes('massive') || 
-        lowText.includes('emergency') || 
-        lowText.includes('hazard') || 
-        lowText.includes('danger') || 
-        lowText.includes('accident') || 
-        lowText.includes('injury') ||
-        lowText.includes('broken')) {
+    // Critical safety triggers
+    const highRiskTriggers = [
+      'live wire', 'spark', 'shock', 'electrocution', 'open manhole', 'manhole',
+      'deep pothole', 'accident', 'injury', 'danger', 'hazard', 'emergency',
+      'burst', 'flooding', 'flooded', 'toxic', 'collapsed', 'cave in', 'hospital'
+    ];
+
+    const isHigh = highRiskTriggers.some(trigger => low.includes(trigger));
+    if (isHigh) {
       severity = 'High';
+    } else if (/faded|bench|paint|grass|request|minor|cosmetic/i.test(low)) {
+      severity = 'Low';
     }
 
     return { category, severity, keywords: [] };

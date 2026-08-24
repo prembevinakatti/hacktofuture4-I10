@@ -33,7 +33,7 @@ const processNewComplaint = async ({ title, location, userId, lat, lng, imageUrl
         complaint.clusterId = await assignCluster(title);
 
         // 4. Priority & SLA Calculation
-        const { priorityScore, priorityLabel, deadline } = await calculatePriority(complaint.severity, complaint.clusterId);
+        const { priorityScore, priorityLabel, deadline } = await calculatePriority(complaint.severity, complaint.clusterId, title);
         complaint.priorityScore = priorityScore;
         complaint.priority = priorityLabel;
         complaint.deadline = deadline;

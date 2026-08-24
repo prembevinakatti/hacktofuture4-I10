@@ -1,31 +1,62 @@
+const mongoose = require('mongoose');
 const Complaint = require('../models/Complaint');
 
-const calculatePriority = async (severity, clusterId) => {
-  // 1. Initial Mapping
+/**
+ * ⚡ Multi-Factor Smart City Priority & SLA Engine
+ * Evaluates AI severity, critical safety keyword overrides, cluster density, and computes exact SLA deadlines.
+ */
+const calculatePriority = async (severity, clusterId, title = '') => {
+  // 1. Initial AI Severity Mapping
   const severityMap = { Low: 1, Medium: 2, High: 3 };
-  let score = severityMap[severity] || 1;
+  let score = severityMap[severity] || 2;
 
-  // 2. Volume Escalation
-  const clusterSizeCount = await Complaint.countDocuments({ clusterId });
-  if (clusterSizeCount > 5) score = Math.max(score, 2); // At least Med
-  if (clusterSizeCount > 15) score = 3; // At least High
+  // 2. Critical Safety Keyword Overrides (Enforce High Priority for immediate hazards)
+  const lowTitle = (title || '').toLowerCase();
+  const criticalSafetyTriggers = [
+    'live wire', 'sparking', 'spark', 'electric shock', 'open manhole', 'manhole open',
+    'deep pothole', 'accident', 'danger', 'hazard', 'emergency', 'burst pipe',
+    'pipe burst', 'flooding', 'flooded', 'toxic', 'collapsed', 'sinkhole',
+    'sewage overflow', 'fire', 'ambulance', 'hospital'
+  ];
 
-  // 3. Labels
-  let priorityLabel = 'Low';
+  const hasCriticalTrigger = criticalSafetyTriggers.some(term => lowTitle.includes(term));
+  if (hasCriticalTrigger) {
+    score = 3; // Force High Priority
+  }
+
+  // 3. Cluster Density Escalation (Multiple citizens reporting in the same hotspot)
+  if (mongoose.connection.readyState === 1 && clusterId !== null && clusterId !== undefined) {
+    try {
+      const clusterCount = await Complaint.countDocuments({ clusterId });
+      if (clusterCount >= 5) {
+        score = 3; // Escalated to High due to critical cluster volume
+      } else if (clusterCount >= 3) {
+        score = Math.max(score, 2); // Escalated to at least Medium
+      }
+    } catch (e) {
+      console.warn('Cluster count skipped:', e.message);
+    }
+  }
+
+  // 4. Assign Final Priority Label
+  let priorityLabel = 'Medium';
   if (score >= 3) priorityLabel = 'High';
-  else if (score >= 2) priorityLabel = 'Medium';
+  else if (score === 2) priorityLabel = 'Medium';
+  else priorityLabel = 'Low';
 
-  // 4. SLA Calculation (Deadlines)
+  // 5. SLA Calculation (Deadlines)
   const now = new Date();
   let deadline = new Date();
 
-  // Rules: High=12h, Med=48h, Low=1 Week
   if (priorityLabel === 'High') {
+    // 🚨 High Priority: 12-hour resolution SLA
     deadline.setHours(now.getHours() + 12);
   } else if (priorityLabel === 'Medium') {
-    deadline.setHours(now.getHours() + 48);
+    // ⚠️ Medium Priority: 36-hour resolution SLA
+    deadline.setHours(now.getHours() + 36);
   } else {
-    deadline.setDate(now.getDate() + 7);
+    // 🟢 Low Priority: 72-hour (3 days) resolution SLA
+    deadline.setHours(now.getHours() + 72);
   }
 
   return { priorityScore: score, priorityLabel, deadline };
