@@ -86,11 +86,13 @@ router.post('/process', async (req, res) => {
 
     const twiml = new VoiceResponse();
 
+    const publicUrl = await getPublicUrl();
+
     // If speech was not detected / timed out
     if (!speechResult || speechResult.trim().length === 0) {
       const gather = twiml.gather({
         input: 'speech',
-        action: '/api/voice/process',
+        action: `${publicUrl}/api/voice/process`,
         method: 'POST',
         timeout: 6,
         speechTimeout: 'auto',
@@ -129,7 +131,7 @@ router.post('/process', async (req, res) => {
       // Need more information (e.g. location/landmark)
       const gather = twiml.gather({
         input: 'speech',
-        action: '/api/voice/process',
+        action: `${publicUrl}/api/voice/process`,
         method: 'POST',
         timeout: 6,
         speechTimeout: 'auto',
