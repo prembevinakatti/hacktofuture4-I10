@@ -41,34 +41,34 @@ const AdminLogin = () => {
     };
 
     return (
-        <div className="min-h-screen pt-28 pb-20 bg-slate-50 text-slate-900 flex items-center justify-center relative overflow-hidden">
+        <div className="min-h-screen pt-20 sm:pt-28 pb-28 sm:pb-20 bg-slate-50 text-slate-900 flex items-center justify-center relative overflow-hidden">
             {/* Ambient Background Accents */}
-            <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-blue-500/5 rounded-full blur-[140px] pointer-events-none"></div>
-            <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-[140px] pointer-events-none"></div>
+            <div className="absolute top-1/4 left-1/4 w-[400px] sm:w-[500px] h-[400px] sm:h-[500px] bg-blue-500/5 rounded-full blur-[140px] pointer-events-none"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-[400px] sm:w-[500px] h-[400px] sm:h-[500px] bg-amber-500/5 rounded-full blur-[140px] pointer-events-none"></div>
 
-            <div className="container mx-auto px-6 relative z-10 max-w-md">
+            <div className="container mx-auto px-4 sm:px-6 relative z-10 max-w-md">
                 {/* Security Tag */}
-                <div className="text-center mb-8">
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-blue-50 border border-blue-200 rounded-full text-[11px] font-black text-brand-blue uppercase tracking-widest mb-4 shadow-sm">
-                        <Activity size={14} className="text-brand-blue animate-pulse" /> City Executive Gateway
+                <div className="text-center mb-6 sm:mb-8">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-50 border border-blue-200 rounded-full text-[10px] sm:text-[11px] font-black text-brand-blue uppercase tracking-wider mb-3 shadow-xs">
+                        <Activity size={13} className="text-brand-blue animate-pulse" /> City Executive Gateway
                     </div>
-                    <h1 className="text-3xl lg:text-4xl font-black tracking-tight text-slate-900 mb-2">
+                    <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-slate-900 mb-1.5">
                         Admin <span className="text-brand-blue">Command Matrix</span>
                     </h1>
-                    <p className="text-slate-500 text-xs font-medium">
+                    <p className="text-slate-500 text-xs sm:text-sm font-medium">
                         City Administration, Commissioner & Inter-Departmental Oversight
                     </p>
                 </div>
 
                 {/* Login Card */}
                 <motion.div 
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="p-8 sm:p-10 bg-white border border-slate-200/90 rounded-3xl shadow-xl shadow-slate-200/50"
+                    className="p-6 sm:p-10 bg-white border border-slate-200/90 rounded-3xl shadow-xl shadow-slate-200/50"
                 >
-                    <form onSubmit={handleSubmit} className="space-y-5">
+                    <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
                         <div>
-                            <label className="block text-xs font-black uppercase tracking-wider text-slate-500 mb-2">
+                            <label className="block text-xs font-black uppercase tracking-wider text-slate-500 mb-1.5">
                                 Official Commissioner Email
                             </label>
                             <div className="relative">
@@ -79,13 +79,13 @@ const AdminLogin = () => {
                                     placeholder="admin@jansetu.city"
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-900 placeholder-slate-400 outline-none focus:border-brand-blue focus:bg-white focus:ring-2 focus:ring-blue-100 transition-all"
+                                    className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs sm:text-sm font-medium text-slate-900 placeholder-slate-400 outline-none focus:border-brand-blue focus:bg-white transition-all"
                                 />
                             </div>
                         </div>
 
                         <div>
-                            <label className="block text-xs font-black uppercase tracking-wider text-slate-500 mb-2">
+                            <label className="block text-xs font-black uppercase tracking-wider text-slate-500 mb-1.5">
                                 Security Passkey
                             </label>
                             <div className="relative">
@@ -96,7 +96,7 @@ const AdminLogin = () => {
                                     placeholder="••••••••••••"
                                     value={formData.password}
                                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                    className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-900 placeholder-slate-400 outline-none focus:border-brand-blue focus:bg-white focus:ring-2 focus:ring-blue-100 transition-all"
+                                    className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs sm:text-sm font-medium text-slate-900 placeholder-slate-400 outline-none focus:border-brand-blue focus:bg-white transition-all"
                                 />
                             </div>
                         </div>
@@ -104,21 +104,21 @@ const AdminLogin = () => {
                         <button 
                             type="submit"
                             disabled={loading}
-                            className="w-full py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-slate-900/10 flex items-center justify-center gap-2 active:scale-95 transition-all mt-6"
+                            className="w-full py-4 bg-slate-900 hover:bg-slate-800 text-white rounded-2xl font-black text-xs uppercase tracking-wider shadow-lg shadow-slate-900/10 flex items-center justify-center gap-2 active:scale-95 transition-all mt-4"
                         >
                             {loading ? 'Authenticating Access...' : 'Authenticate Matrix Access'} <ArrowRight size={16} />
                         </button>
                     </form>
 
                     {/* Notice */}
-                    <div className="mt-8 pt-6 border-t border-slate-100 space-y-3 text-center">
+                    <div className="mt-6 pt-6 border-t border-slate-100 space-y-2.5 text-center">
                         <p className="text-xs text-slate-500 font-medium">
                             Municipal Line Department Officer?{' '}
                             <Link to="/department/login" className="text-amber-600 font-bold hover:underline">
-                                Department Portal Login
+                                Department Login
                             </Link>
                         </p>
-                        <div className="flex justify-center gap-4 text-[11px] text-slate-400 pt-1 font-bold">
+                        <div className="flex justify-center items-center gap-3 text-[11px] text-slate-400 pt-1 font-bold">
                             <Link to="/department/register" className="hover:text-amber-600 transition-colors">
                                 🏢 Register Department
                             </Link>

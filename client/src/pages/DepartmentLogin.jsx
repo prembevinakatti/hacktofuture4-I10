@@ -75,18 +75,18 @@ const DepartmentLogin = () => {
     };
 
     return (
-        <div className="min-h-screen pt-28 pb-20 bg-slate-50 text-slate-900 flex items-center justify-center relative overflow-hidden">
+        <div className="min-h-screen pt-20 sm:pt-28 pb-28 sm:pb-20 bg-slate-50 text-slate-900 flex items-center justify-center relative overflow-hidden">
             {/* Ambient Lighting Gradients */}
-            <div className="absolute top-1/3 left-1/4 w-[600px] h-[600px] bg-blue-500/5 rounded-full blur-[150px] pointer-events-none"></div>
-            <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-amber-500/5 rounded-full blur-[150px] pointer-events-none"></div>
+            <div className="absolute top-1/3 left-1/4 w-[400px] sm:w-[600px] h-[400px] sm:h-[600px] bg-blue-500/5 rounded-full blur-[150px] pointer-events-none"></div>
+            <div className="absolute bottom-1/4 right-1/4 w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] bg-amber-500/5 rounded-full blur-[150px] pointer-events-none"></div>
 
-            <div className="container mx-auto px-6 relative z-10 max-w-xl">
+            <div className="container mx-auto px-4 sm:px-6 relative z-10 max-w-xl">
                 {/* Header Badge */}
-                <div className="text-center mb-8">
-                    <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-amber-50 border border-amber-200 rounded-full text-[11px] font-black text-amber-700 uppercase tracking-widest mb-4 shadow-sm">
-                        <Building2 size={14} className="text-amber-600" /> Municipal Department Officers & Field Engineers
+                <div className="text-center mb-6 sm:mb-8">
+                    <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-50 border border-amber-200 rounded-full text-[10px] sm:text-[11px] font-black text-amber-700 uppercase tracking-wider mb-3 shadow-xs">
+                        <Building2 size={13} className="text-amber-600" /> Municipal Department Officers
                     </div>
-                    <h1 className="text-3xl lg:text-4xl font-black tracking-tight text-slate-900 mb-2">
+                    <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-slate-900 mb-1 sm:mb-2">
                         Department <span className="text-amber-600">Command Portal</span>
                     </h1>
                     <p className="text-slate-500 text-xs sm:text-sm font-medium max-w-md mx-auto">
@@ -95,11 +95,11 @@ const DepartmentLogin = () => {
                 </div>
 
                 {/* 1-Click Quick Department Selectors */}
-                <div className="mb-6">
-                    <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest mb-3 flex items-center gap-2">
-                        <Sparkles size={14} className="text-amber-600" /> 1-Click Quick Fill Demo Departments:
+                <div className="mb-5 sm:mb-6">
+                    <p className="text-[10px] sm:text-[11px] font-black text-slate-400 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
+                        <Sparkles size={13} className="text-amber-600" /> 1-Click Quick Fill Demo Departments:
                     </p>
-                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-2.5">
                         {DEPARTMENT_PRESETS.map((preset) => {
                             const IconComponent = preset.icon;
                             const isSelected = formData.email === preset.email;
@@ -108,17 +108,17 @@ const DepartmentLogin = () => {
                                     key={preset.name}
                                     type="button"
                                     onClick={() => handleQuickPreset(preset)}
-                                    className={`p-3 rounded-2xl border text-left transition-all relative overflow-hidden group ${
+                                    className={`p-2.5 sm:p-3 rounded-2xl border text-left transition-all relative overflow-hidden group ${
                                         isSelected 
-                                            ? 'bg-amber-50/70 border-amber-400 shadow-md ring-2 ring-amber-300' 
-                                            : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/80 shadow-sm'
+                                            ? 'bg-amber-50/70 border-amber-400 shadow-xs ring-2 ring-amber-300' 
+                                            : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50/80 shadow-xs'
                                     }`}
                                 >
-                                    <div className={`w-8 h-8 rounded-xl ${preset.color} flex items-center justify-center mb-2 shadow`}>
-                                        <IconComponent size={16} />
+                                    <div className={`w-7 h-7 sm:w-8 sm:h-8 rounded-xl ${preset.color} flex items-center justify-center mb-1.5 shadow-xs`}>
+                                        <IconComponent size={14} />
                                     </div>
                                     <p className="text-xs font-bold text-slate-900 truncate">{preset.name}</p>
-                                    <p className="text-[9px] text-slate-400 truncate">{preset.email.split('@')[0]}</p>
+                                    <p className="text-[8px] sm:text-[9px] text-slate-400 truncate">{preset.email.split('@')[0]}</p>
                                 </button>
                             );
                         })}
@@ -127,13 +127,13 @@ const DepartmentLogin = () => {
 
                 {/* Main Login Card */}
                 <motion.div 
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="p-8 sm:p-10 bg-white border border-slate-200/90 rounded-3xl shadow-xl shadow-slate-200/50"
+                    className="p-6 sm:p-10 bg-white border border-slate-200/90 rounded-3xl shadow-xl shadow-slate-200/50"
                 >
-                    <form onSubmit={handleSubmit} className="space-y-5">
+                    <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
                         <div>
-                            <label className="block text-xs font-black uppercase tracking-wider text-slate-500 mb-2">
+                            <label className="block text-xs font-black uppercase tracking-wider text-slate-500 mb-1.5">
                                 Official Department Email
                             </label>
                             <div className="relative">
@@ -144,14 +144,14 @@ const DepartmentLogin = () => {
                                     placeholder="officer@jansetu.city"
                                     value={formData.email}
                                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                                    className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-900 placeholder-slate-400 outline-none focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-100 transition-all"
+                                    className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs sm:text-sm font-medium text-slate-900 placeholder-slate-400 outline-none focus:border-amber-500 focus:bg-white transition-all"
                                 />
                             </div>
                         </div>
 
                         <div>
-                            <label className="block text-xs font-black uppercase tracking-wider text-slate-500 mb-2">
-                                Officer Security Key / Password
+                            <label className="block text-xs font-black uppercase tracking-wider text-slate-500 mb-1.5">
+                                Officer Security Key
                             </label>
                             <div className="relative">
                                 <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
@@ -161,7 +161,7 @@ const DepartmentLogin = () => {
                                     placeholder="••••••••••••"
                                     value={formData.password}
                                     onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                                    className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-sm font-medium text-slate-900 placeholder-slate-400 outline-none focus:border-amber-500 focus:bg-white focus:ring-2 focus:ring-amber-100 transition-all"
+                                    className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs sm:text-sm font-medium text-slate-900 placeholder-slate-400 outline-none focus:border-amber-500 focus:bg-white transition-all"
                                 />
                             </div>
                         </div>
@@ -169,23 +169,23 @@ const DepartmentLogin = () => {
                         <button 
                             type="submit"
                             disabled={loading}
-                            className="w-full py-4 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-2xl font-black text-xs uppercase tracking-widest shadow-xl shadow-orange-500/20 flex items-center justify-center gap-2 active:scale-95 transition-all mt-6"
+                            className="w-full py-4 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-600 hover:to-orange-700 text-white rounded-2xl font-black text-xs uppercase tracking-wider shadow-lg shadow-orange-500/20 flex items-center justify-center gap-2 active:scale-95 transition-all mt-4"
                         >
-                            {loading ? 'Authenticating Department Access...' : 'Enter Department Dashboard'} <ArrowRight size={16} />
+                            {loading ? 'Authenticating Access...' : 'Enter Department Dashboard'} <ArrowRight size={16} />
                         </button>
                     </form>
 
                     {/* Navigation Switchers */}
-                    <div className="mt-8 pt-6 border-t border-slate-100 space-y-3 text-center">
+                    <div className="mt-6 pt-6 border-t border-slate-100 space-y-2.5 text-center">
                         <p className="text-xs text-slate-500 font-medium">
                             New Department Officer or Field Engineer?{' '}
                             <Link to="/department/register" className="text-amber-600 font-bold hover:underline inline-flex items-center gap-1">
-                                Register Officer Account <UserPlus size={13} />
+                                Register Account <UserPlus size={13} />
                             </Link>
                         </p>
-                        <div className="flex justify-center gap-4 text-[11px] text-slate-400 pt-1 font-bold">
+                        <div className="flex justify-center items-center gap-3 text-[11px] text-slate-400 pt-1 font-bold">
                             <Link to="/admin/login" className="hover:text-slate-700 transition-colors">
-                                🏛️ Super Admin Portal
+                                🏛️ Super Admin
                             </Link>
                             <span>•</span>
                             <Link to="/login" className="hover:text-brand-blue transition-colors">

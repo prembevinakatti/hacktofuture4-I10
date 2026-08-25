@@ -19,6 +19,7 @@ import DepartmentLogin from './pages/DepartmentLogin';
 import DepartmentRegister from './pages/DepartmentRegister';
 import Navbar from './components/Navbar';
 import Chatbot from './components/Chatbot';
+import PWAInstallPrompt from './components/PWAInstallPrompt';
 
 function App() {
   const { user, loading } = useAuth();
@@ -121,6 +122,7 @@ function App() {
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
       <Chatbot />
+      <PWAInstallPrompt />
     </Router>
   );
 }
