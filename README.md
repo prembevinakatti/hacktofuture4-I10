@@ -80,13 +80,24 @@ npm run dev
 
 ---
 
-## 📱 WhatsApp Integration Settings
+## 📱 Multi-Channel Integration Settings
 
+### 1. 📞 AI Voice Helpline Phone Call Integration (Twilio Voice)
+To receive real incoming telephone calls from citizens:
+1. **Start Ngrok**: `ngrok http 5000`
+2. **Twilio Voice Webhook**: In your Twilio Console -> Phone Numbers -> Active Numbers -> Click your number.
+3. Under **Voice & Fax** -> **"A Call Comes In"**, set:
+   - Webhook URL: `https://your-ngrok-url.ngrok.io/api/voice/incoming`
+   - HTTP Method: `HTTP POST`
+4. **Try It**: Call your Twilio number from any mobile phone. The AI voice officer will answer, ask for the issue and location, register the ticket in the database, and send you an SMS confirmation!
+
+### 2. 📱 WhatsApp Integration Settings
 To test WhatsApp reporting:
-1.  **Start Ngrok**: `ngrok http 5000`
-2.  **Twilio Sandbox**: Go to Twilio Messaging Settings -> WhatsApp Sandbox.
-3.  **Webhook URL**: Set the "When a message comes in" URL to `https://your-ngrok-url.ngrok.io/api/whatsapp`.
-4.  **Try it**: Send a status query like *"Total number of complaints"* or a report like *"Report a water leak at MGM Hospital"* followed by your location pin.
+1. **Start Ngrok**: `ngrok http 5000`
+2. **Twilio Sandbox**: Go to Twilio Messaging Settings -> WhatsApp Sandbox.
+3. **Webhook URL**: Set the "When a message comes in" URL to `https://your-ngrok-url.ngrok.io/api/whatsapp`.
+4. **Try it**: Send a report like *"Water leak on MG Road"* followed by your location pin.
+
 
 ---
 

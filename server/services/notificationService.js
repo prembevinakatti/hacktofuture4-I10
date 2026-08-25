@@ -95,4 +95,31 @@ const sendEscalationEmail = async (email, complaint, type = 'citizen') => {
     } catch (err) { console.error('Escalation Mail Failed:', err.message); }
 };
 
-module.exports = { sendStatusEmail, sendDepartmentAlert, sendEscalationEmail };
+const sendComplaintSMS = async (phoneNumber, complaint) => {
+  try {
+    if (!process.env.TWILIO_ACCOUNT_SID || !process.env.TWILIO_AUTH_TOKEN) return;
+    const twilio = require('twilio');
+    const client = twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+    const twilioNumber = process.env.TWILIO_PHONE_NUMBER || process.env.TWILIO_NUMBER?.replace('whatsapp:', '');
+
+    if (!twilioNumber) {
+      console.log('ℹ️ Twilio Phone Number not configured for SMS');
+      return;
+    }
+
+    const ticketId = complaint._id.toString().slice(-6);
+    const message = `[JanSetu Smart City] Your civic report has been received!\nTicket ID: #${ticketId}\nDept: ${complaint.department}\nPriority: ${complaint.priority}\nWe are dispatching a field team.`;
+
+    await client.messages.create({
+      body: message,
+      from: twilioNumber,
+      to: phoneNumber
+    });
+    console.log(`📱 SMS Confirmation sent to ${phoneNumber} for Ticket #${ticketId}`);
+  } catch (err) {
+    console.error('⚠️ Twilio SMS Delivery Notice:', err.message);
+  }
+};
+
+module.exports = { sendStatusEmail, sendDepartmentAlert, sendEscalationEmail, sendComplaintSMS };
+

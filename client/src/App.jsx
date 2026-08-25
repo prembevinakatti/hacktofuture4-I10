@@ -20,6 +20,9 @@ import DepartmentRegister from './pages/DepartmentRegister';
 import Navbar from './components/Navbar';
 import Chatbot from './components/Chatbot';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
+import VoiceCallButton from './components/VoiceCallButton';
+
+
 
 function App() {
   const { user, loading } = useAuth();
@@ -123,8 +126,10 @@ function App() {
       </Routes>
       <Chatbot />
       <PWAInstallPrompt />
+      <VoiceCallButton isFloating={true} />
     </Router>
   );
 }
+
 
 export default App;

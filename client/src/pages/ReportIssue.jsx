@@ -3,8 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
-import { Send, MapPin, Camera, Type, CheckCircle2, Trophy, Navigation, Loader2 } from 'lucide-react';
+import { Send, MapPin, Camera, Type, CheckCircle2, Trophy, Navigation, Loader2, PhoneCall } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import VoiceCallButton from '../components/VoiceCallButton';
+
 
 const ReportIssue = () => {
     const [formData, setFormData] = useState({ title: '', text: '', location: '', imageUrl: '', lat: null, lng: null });
@@ -163,7 +165,24 @@ const ReportIssue = () => {
                                         Earn JanSetu loyalty reward points for photographic evidence contributing to city maintenance and safety.
                                     </p>
                                 </div>
+
+                                <div className="mt-4 p-4 sm:p-6 bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 border border-emerald-200/80 rounded-2xl sm:rounded-3xl shadow-sm">
+                                    <div className="flex items-center gap-3 mb-2">
+                                        <div className="p-2 rounded-xl bg-emerald-600 text-white shadow-md shadow-emerald-500/20">
+                                            <PhoneCall size={18} className="animate-bounce" />
+                                        </div>
+                                        <div>
+                                            <h4 className="font-black text-slate-900 text-xs sm:text-sm">Prefer Speaking?</h4>
+                                            <p className="text-emerald-700 text-[10px] sm:text-xs font-semibold">Instant AI Voice Helpline</p>
+                                        </div>
+                                    </div>
+                                    <p className="text-slate-600 text-xs mb-3">
+                                        Report civic issues hands-free in seconds by talking to our live Voice AI Officer.
+                                    </p>
+                                    <VoiceCallButton isFloating={false} />
+                                </div>
                             </div>
+
 
                             {/* Form Card */}
                             <form onSubmit={handleSubmit} className="flex-[1.4] card-premium p-5 sm:p-10 space-y-6 sm:space-y-8 bg-white rounded-3xl shadow-lg border border-slate-100">

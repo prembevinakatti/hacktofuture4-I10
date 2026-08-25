@@ -18,6 +18,8 @@ import {
     Sparkles
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import VoiceCallButton from './VoiceCallButton';
+
 
 const Navbar = () => {
     const { user, logout } = useAuth();
@@ -72,6 +74,7 @@ const Navbar = () => {
                                         >
                                             Raise Report
                                         </Link>
+                                        <VoiceCallButton isFloating={false} />
                                         <Link 
                                             to="/rewards" 
                                             className={`flex items-center gap-2 px-3.5 py-1.5 bg-orange-50 text-brand-orange rounded-xl font-bold border border-orange-200 hover:bg-orange-100 transition-colors text-xs ${isActive('/rewards') ? 'ring-2 ring-brand-orange/30' : ''}`}
@@ -93,6 +96,7 @@ const Navbar = () => {
                                         >
                                             Department Feed
                                         </Link>
+                                        <VoiceCallButton isFloating={false} />
                                     </>
                                 ) : (
                                     <>
@@ -108,6 +112,7 @@ const Navbar = () => {
                                         >
                                             Overview
                                         </Link>
+                                        <VoiceCallButton isFloating={false} />
                                     </>
                                 )}
 
@@ -128,6 +133,7 @@ const Navbar = () => {
                             </>
                         ) : (
                             <div className="flex items-center gap-2 lg:gap-3">
+                                <VoiceCallButton isFloating={false} />
                                 <Link 
                                     to="/login" 
                                     className="flex items-center gap-1.5 px-3 py-2 text-xs text-slate-700 font-bold hover:text-brand-blue transition-colors"
@@ -154,6 +160,7 @@ const Navbar = () => {
                                 </Link>
                             </div>
                         )}
+
                     </div>
 
                     {/* Mobile Hamburger Toggle Button */}
