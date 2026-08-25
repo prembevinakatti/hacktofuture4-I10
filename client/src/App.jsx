@@ -126,7 +126,6 @@ function App() {
       </Routes>
       <Chatbot />
       <PWAInstallPrompt />
-      <VoiceCallButton isFloating={true} />
     </Router>
   );
 }

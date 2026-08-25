@@ -136,26 +136,29 @@ const LandingPage = () => {
                   className="w-full h-[280px] sm:h-[400px] lg:h-[480px] object-cover group-hover:scale-105 transition-transform duration-700"
                 />
                 
-                {/* Overlay Floating Stats Card */}
-                <div className="absolute bottom-3 left-3 right-3 sm:bottom-6 sm:left-6 sm:right-6 bg-white/95 backdrop-blur-xl p-3.5 sm:p-5 rounded-xl sm:rounded-2xl border border-slate-200/80 shadow-xl flex justify-between items-center">
+                {/* Floating Glassmorphic Metric Ribbon */}
+                <div className="absolute bottom-3 left-3 right-3 sm:bottom-5 sm:left-5 sm:right-5 bg-slate-950/85 backdrop-blur-xl px-4 py-3 sm:px-5 sm:py-3.5 rounded-2xl border border-white/10 shadow-2xl flex items-center justify-between text-white">
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-500/20 border border-emerald-500/30 flex items-center justify-center text-emerald-400 flex-shrink-0">
+                      <Activity className="w-5 h-5 animate-pulse" />
+                    </div>
                     <div>
-                        <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-wider text-slate-400 mb-0.5">Municipal Response</p>
-                        <p className="text-base sm:text-2xl font-black text-slate-900">24x7 Active</p>
+                      <div className="flex items-center gap-1.5">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
+                        <span className="text-[10px] sm:text-xs font-black uppercase tracking-wider text-emerald-400">Command Matrix Live</span>
+                      </div>
+                      <p className="text-xs sm:text-sm font-bold text-slate-200">24×7 Automated AI Triage & Dispatch</p>
                     </div>
-                    <div className="w-px h-6 sm:h-8 bg-slate-200"></div>
-                    <div>
-                        <p className="text-[8px] sm:text-[10px] font-black uppercase tracking-wider text-slate-400 mb-0.5">AI Quality Score</p>
-                        <p className="text-base sm:text-2xl font-black text-emerald-600">99.4% Verified</p>
-                    </div>
-                    <div className="w-px h-6 sm:h-8 bg-slate-200"></div>
-                    <div className="h-8 w-8 sm:h-11 sm:w-11 rounded-lg sm:rounded-xl bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center text-white shadow-md flex-shrink-0">
-                        <Activity size={16} />
-                    </div>
+                  </div>
+                  <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/5 border border-white/10 text-xs font-semibold text-slate-300">
+                    <ShieldCheck className="w-4 h-4 text-blue-400" />
+                    <span>Vision AI Audited</span>
+                  </div>
                 </div>
 
                 {/* Top Badge */}
-                <div className="absolute top-3 left-3 sm:top-4 sm:left-4 bg-slate-900/90 backdrop-blur-md text-white text-[9px] sm:text-[11px] font-black px-2.5 py-1 sm:px-3.5 sm:py-1.5 rounded-lg sm:rounded-xl uppercase tracking-wider shadow">
-                    🏛️ Municipal Command Headquarters
+                <div className="absolute top-3 left-3 sm:top-4 sm:left-4 bg-slate-950/80 backdrop-blur-md text-white text-[9px] sm:text-[11px] font-black px-3 py-1.5 rounded-xl uppercase tracking-wider shadow border border-white/10 flex items-center gap-1.5">
+                  <Building2 className="w-3.5 h-3.5 text-amber-400" /> Municipal Command Center
                 </div>
               </div>
             </motion.div>

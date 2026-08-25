@@ -1,11 +1,13 @@
+require('dotenv').config();
 const localtunnel = require('localtunnel');
 
 const PORT = process.env.PORT || 5000;
+const SUBDOMAIN = process.env.TUNNEL_SUBDOMAIN || 'odd-walls-report';
 
 async function startTunnel() {
-  console.log(`🌐 Initializing secure public tunnel for JanSetu API on port ${PORT}...`);
+  console.log(`🌐 Initializing secure public tunnel for JanSetu API on port ${PORT} (Subdomain: ${SUBDOMAIN})...`);
   try {
-    const tunnel = await localtunnel({ port: PORT });
+    const tunnel = await localtunnel({ port: PORT, subdomain: SUBDOMAIN });
 
     console.log(`\n=======================================================`);
     console.log(`🚀 PUBLIC TUNNEL IS LIVE & ACTIVE!`);

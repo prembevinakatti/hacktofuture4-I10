@@ -67,7 +67,7 @@ Return ONLY a valid JSON object:
     const response = await axios.post(
       'https://api.groq.com/openai/v1/chat/completions',
       {
-        model: 'llama3-8b-8192',
+        model: 'llama-3.3-70b-versatile',
         messages: [{ role: 'user', content: prompt }],
         response_format: { type: 'json_object' },
         temperature: 0.2,
@@ -141,12 +141,15 @@ const handleVoiceTurn = async ({ sessionId, callerPhone, speechResult, isWeb = f
     const { lat, lng, formattedAddress } = await geocodeAddress(finalLocation);
 
     // Identify or create citizen user
-    const cleanPhone = (callerPhone || '9999999999').replace(/[^0-9+]/g, '');
-    let user = await User.findOne({ phoneNumber: cleanPhone });
+    const cleanPhone = (callerPhone || '+919999999999').replace(/[^0-9+]/g, '');
+    const userEmail = `voice_${cleanPhone.replace(/[^0-9]/g, '')}@jansetu.city`;
+    let user = await User.findOne({ 
+      $or: [{ phoneNumber: cleanPhone }, { email: userEmail }] 
+    });
     if (!user) {
       user = await User.create({
         name: `Caller ${cleanPhone.slice(-4)}`,
-        email: `voice_${cleanPhone.replace('+', '')}@jansetu.city`,
+        email: userEmail,
         phoneNumber: cleanPhone,
         password: "voiceCitizenTempPass123"
       });

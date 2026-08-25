@@ -57,7 +57,7 @@ const Navbar = () => {
                     </Link>
 
                     {/* Desktop Navigation Links */}
-                    <div className="hidden md:flex items-center gap-4 lg:gap-6">
+                    <div className="hidden md:flex items-center gap-3 lg:gap-5">
                         {user ? (
                             <>
                                 {user.role === 'citizen' ? (
@@ -74,10 +74,9 @@ const Navbar = () => {
                                         >
                                             Raise Report
                                         </Link>
-                                        <VoiceCallButton isFloating={false} />
                                         <Link 
                                             to="/rewards" 
-                                            className={`flex items-center gap-2 px-3.5 py-1.5 bg-orange-50 text-brand-orange rounded-xl font-bold border border-orange-200 hover:bg-orange-100 transition-colors text-xs ${isActive('/rewards') ? 'ring-2 ring-brand-orange/30' : ''}`}
+                                            className={`flex items-center gap-2 px-3 py-1.5 bg-orange-50 text-brand-orange rounded-xl font-bold border border-orange-200 hover:bg-orange-100 transition-colors text-xs ${isActive('/rewards') ? 'ring-2 ring-brand-orange/30' : ''}`}
                                         >
                                             <Trophy size={16} /> {user.rewardPoints || 0} Pts
                                         </Link>
@@ -96,7 +95,6 @@ const Navbar = () => {
                                         >
                                             Department Feed
                                         </Link>
-                                        <VoiceCallButton isFloating={false} />
                                     </>
                                 ) : (
                                     <>
@@ -112,9 +110,10 @@ const Navbar = () => {
                                         >
                                             Overview
                                         </Link>
-                                        <VoiceCallButton isFloating={false} />
                                     </>
                                 )}
+
+                                <VoiceCallButton />
 
                                 <div className="h-6 w-px bg-slate-200 mx-1"></div>
 
@@ -133,7 +132,7 @@ const Navbar = () => {
                             </>
                         ) : (
                             <div className="flex items-center gap-2 lg:gap-3">
-                                <VoiceCallButton isFloating={false} />
+                                <VoiceCallButton />
                                 <Link 
                                     to="/login" 
                                     className="flex items-center gap-1.5 px-3 py-2 text-xs text-slate-700 font-bold hover:text-brand-blue transition-colors"
@@ -163,22 +162,23 @@ const Navbar = () => {
 
                     </div>
 
-                    {/* Mobile Hamburger Toggle Button */}
+                    {/* Mobile Navigation Controls */}
                     <div className="flex items-center gap-2 md:hidden">
+                        <VoiceCallButton className="scale-90 px-2.5 py-1.5 text-[11px]" />
                         {user && user.role === 'citizen' && (
                             <Link 
                                 to="/rewards"
-                                className="flex items-center gap-1 px-2.5 py-1 bg-orange-50 text-brand-orange rounded-lg font-bold border border-orange-200 text-xs"
+                                className="flex items-center gap-1 px-2.5 py-1.5 bg-orange-50 text-brand-orange rounded-lg font-bold border border-orange-200 text-xs"
                             >
                                 <Trophy size={14} /> {user.rewardPoints || 0}
                             </Link>
                         )}
                         <button
                             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                            className="p-2.5 text-slate-700 hover:bg-slate-100 rounded-xl transition-colors active:scale-95"
+                            className="p-2 text-slate-700 hover:bg-slate-100 rounded-xl transition-colors active:scale-95"
                             aria-label="Toggle navigation menu"
                         >
-                            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+                            {isMobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
                         </button>
                     </div>
                 </div>
@@ -193,6 +193,9 @@ const Navbar = () => {
                             className="md:hidden border-t border-slate-100 bg-white/95 backdrop-blur-2xl px-6 py-6 shadow-2xl overflow-hidden"
                         >
                             <div className="space-y-4">
+                                <div className="pb-1">
+                                    <VoiceCallButton className="w-full justify-center py-3 text-sm shadow-lg" />
+                                </div>
                                 {user ? (
                                     <>
                                         <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-between">

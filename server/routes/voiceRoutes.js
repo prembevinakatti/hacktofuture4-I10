@@ -173,6 +173,75 @@ router.post('/web-agent', async (req, res) => {
 });
 
 /**
+ * 🎙️ Direct Audio Stream Transcription & AI Turn (Universal Browser Support for Brave/Chrome/Edge/Safari)
+ */
+router.post('/web-agent-audio', async (req, res) => {
+  try {
+    const { audioBase64, mimeType, sessionId, callerPhone } = req.body;
+    if (!audioBase64) {
+      return res.status(400).json({ success: false, message: 'Audio payload missing' });
+    }
+
+    const base64Data = audioBase64.replace(/^data:audio\/\w+;base64,/, '');
+    const buffer = Buffer.from(base64Data, 'base64');
+
+    // Transcribe with Groq Whisper
+    const formData = new FormData();
+    const blob = new Blob([buffer], { type: mimeType || 'audio/webm' });
+    formData.append('file', blob, 'recording.webm');
+    formData.append('model', 'whisper-large-v3');
+    formData.append('language', 'en');
+
+    let transcribedText = '';
+    try {
+      const whisperRes = await axios.post('https://api.groq.com/openai/v1/audio/transcriptions', formData, {
+        headers: {
+          'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+        },
+        timeout: 15000
+      });
+      transcribedText = whisperRes.data.text || '';
+      console.log(`🎙️ [Groq Whisper STT]: "${transcribedText}"`);
+    } catch (whisperErr) {
+      console.error('Groq Whisper error:', whisperErr.response?.data || whisperErr.message);
+    }
+
+    if (!transcribedText || transcribedText.trim().length === 0) {
+      return res.status(200).json({
+        success: true,
+        transcribedText: '',
+        spokenReply: "I didn't hear your response clearly. Please speak again or type your complaint.",
+        isFinished: false,
+        complaint: null
+      });
+    }
+
+    const cleanSessionId = sessionId || `web_${Date.now()}`;
+    const result = await handleVoiceTurn({
+      sessionId: cleanSessionId,
+      callerPhone: callerPhone || '+919876543210',
+      speechResult: transcribedText,
+      isWeb: true
+    });
+
+    res.status(200).json({
+      success: true,
+      transcribedText,
+      spokenReply: result.spokenReply,
+      isFinished: result.isFinished,
+      complaint: result.complaint
+    });
+  } catch (error) {
+    console.error('💥 Web Voice Audio Agent Error:', error.message);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to process voice audio request',
+      spokenReply: 'I am experiencing a momentary connection issue. Please try speaking again.'
+    });
+  }
+});
+
+/**
  * 📲 Outbound AI Call Trigger
  * Calls the citizen's phone directly so they don't have to pay international call charges
  */
@@ -195,10 +264,32 @@ router.post('/call-user', async (req, res) => {
       });
     }
 
-    const publicUrl = process.env.PUBLIC_URL || 'https://odd-walls-report.loca.lt';
+    const publicUrl = (process.env.PUBLIC_URL || 'https://odd-walls-report.loca.lt').replace(/\/$/, '');
+
+    // Construct instant TwiML so Twilio plays greeting immediately on pickup without waiting for initial webhook
+    const initialTwiml = new VoiceResponse();
+    const gather = initialTwiml.gather({
+      input: 'speech',
+      action: `${publicUrl}/api/voice/process`,
+      method: 'POST',
+      timeout: 5,
+      speechTimeout: 'auto',
+      language: 'en-IN'
+    });
+
+    gather.say(
+      { voice: 'Polly.Aditi', language: 'en-IN' },
+      'Namaste! Welcome to JanSetu Smart City Grievance Helpline. Please describe the civic issue you are facing and mention the location or landmark.'
+    );
+
+    initialTwiml.say(
+      { voice: 'Polly.Aditi', language: 'en-IN' },
+      'We did not hear any response. Please call back anytime to report an issue. Thank you.'
+    );
+    initialTwiml.hangup();
 
     const call = await twilioClient.calls.create({
-      url: `${publicUrl}/api/voice/incoming`,
+      twiml: initialTwiml.toString(),
       to: phoneNumber,
       from: twilioNumber
     });
@@ -211,9 +302,17 @@ router.post('/call-user', async (req, res) => {
     });
   } catch (err) {
     console.error('💥 Outbound Call Error:', err.message);
+
+    let userFriendlyMsg = err.message;
+    if (err.code === 21215 || err.message?.includes('unverified') || err.message?.includes('trial')) {
+      userFriendlyMsg = `Twilio Free Trial Notice: Phone number ${req.body.phoneNumber} is unverified. Please add it to "Verified Caller IDs" in your Twilio Console (Phone Numbers > Manage > Verified Caller IDs), or use the "Talk via Browser" button for instant free calling!`;
+    } else if (err.code === 21211 || err.message?.includes('invalid')) {
+      userFriendlyMsg = `Invalid phone number format. Please ensure country code is included (e.g. +919876543210).`;
+    }
+
     res.status(500).json({
       success: false,
-      message: err.message
+      message: userFriendlyMsg
     });
   }
 });
