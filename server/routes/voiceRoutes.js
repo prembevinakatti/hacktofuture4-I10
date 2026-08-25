@@ -1,9 +1,30 @@
 const express = require('express');
 const router = express.Router();
 const twilio = require('twilio');
+const axios = require('axios');
+const FormData = require('form-data');
 const { handleVoiceTurn } = require('../services/voiceService');
 
 const VoiceResponse = twilio.twiml.VoiceResponse;
+
+/**
+ * Helper to resolve the active public URL (ngrok or env)
+ */
+const getPublicUrl = async () => {
+  if (process.env.PUBLIC_URL && !process.env.PUBLIC_URL.includes('loca.lt')) {
+    return process.env.PUBLIC_URL.replace(/\/$/, '');
+  }
+  try {
+    const ngrokRes = await axios.get('http://127.0.0.1:4040/api/tunnels', { timeout: 1500 });
+    const httpsTunnel = ngrokRes.data?.tunnels?.find(t => t.proto === 'https');
+    if (httpsTunnel && httpsTunnel.public_url) {
+      return httpsTunnel.public_url.replace(/\/$/, '');
+    }
+  } catch (e) {
+    // Ngrok not running on port 4040
+  }
+  return (process.env.PUBLIC_URL || 'http://localhost:5000').replace(/\/$/, '');
+};
 
 /**
  * 📞 Inbound Phone Call Webhook (Twilio Voice)
@@ -151,7 +172,7 @@ router.post('/web-agent', async (req, res) => {
 
     const result = await handleVoiceTurn({
       sessionId: cleanSessionId,
-      callerPhone: callerPhone || '+919876543210',
+      callerPhone: callerPhone || '+918660465213',
       speechResult: message || '',
       isWeb: true
     });
@@ -186,19 +207,19 @@ router.post('/web-agent-audio', async (req, res) => {
     const buffer = Buffer.from(base64Data, 'base64');
 
     // Transcribe with Groq Whisper
-    const formData = new FormData();
-    const blob = new Blob([buffer], { type: mimeType || 'audio/webm' });
-    formData.append('file', blob, 'recording.webm');
-    formData.append('model', 'whisper-large-v3');
-    formData.append('language', 'en');
+    const form = new FormData();
+    form.append('file', buffer, { filename: 'recording.webm', contentType: mimeType || 'audio/webm' });
+    form.append('model', 'whisper-large-v3');
+    form.append('language', 'en');
 
     let transcribedText = '';
     try {
-      const whisperRes = await axios.post('https://api.groq.com/openai/v1/audio/transcriptions', formData, {
+      const whisperRes = await axios.post('https://api.groq.com/openai/v1/audio/transcriptions', form, {
         headers: {
           'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+          ...form.getHeaders()
         },
-        timeout: 15000
+        timeout: 20000
       });
       transcribedText = whisperRes.data.text || '';
       console.log(`🎙️ [Groq Whisper STT]: "${transcribedText}"`);
@@ -219,7 +240,7 @@ router.post('/web-agent-audio', async (req, res) => {
     const cleanSessionId = sessionId || `web_${Date.now()}`;
     const result = await handleVoiceTurn({
       sessionId: cleanSessionId,
-      callerPhone: callerPhone || '+919876543210',
+      callerPhone: callerPhone || '+918660465213',
       speechResult: transcribedText,
       isWeb: true
     });
@@ -250,6 +271,15 @@ router.post('/call-user', async (req, res) => {
     const { phoneNumber } = req.body;
     if (!phoneNumber) return res.status(400).json({ success: false, message: 'Phone number is required' });
 
+    let formattedPhone = phoneNumber.trim().replace(/[\s-()]/g, '');
+    if (!formattedPhone.startsWith('+')) {
+      if (formattedPhone.length === 10) {
+        formattedPhone = '+91' + formattedPhone;
+      } else {
+        formattedPhone = '+' + formattedPhone;
+      }
+    }
+
     if (!process.env.TWILIO_ACCOUNT_SID || !process.env.TWILIO_AUTH_TOKEN) {
       return res.status(500).json({ success: false, message: 'Twilio credentials not configured' });
     }
@@ -264,7 +294,7 @@ router.post('/call-user', async (req, res) => {
       });
     }
 
-    const publicUrl = (process.env.PUBLIC_URL || 'https://odd-walls-report.loca.lt').replace(/\/$/, '');
+    const publicUrl = await getPublicUrl();
 
     // Construct instant TwiML so Twilio plays greeting immediately on pickup without waiting for initial webhook
     const initialTwiml = new VoiceResponse();
@@ -290,14 +320,14 @@ router.post('/call-user', async (req, res) => {
 
     const call = await twilioClient.calls.create({
       twiml: initialTwiml.toString(),
-      to: phoneNumber,
+      to: formattedPhone,
       from: twilioNumber
     });
 
-    console.log(`📲 Outbound call triggered to ${phoneNumber} (SID: ${call.sid})`);
+    console.log(`📲 Outbound call triggered to ${formattedPhone} from ${twilioNumber} (SID: ${call.sid})`);
     res.status(200).json({
       success: true,
-      message: `Calling ${phoneNumber}... Pick up your phone to talk to JanSetu AI!`,
+      message: `Calling ${formattedPhone}... Pick up your phone to talk to JanSetu AI!`,
       callSid: call.sid
     });
   } catch (err) {
