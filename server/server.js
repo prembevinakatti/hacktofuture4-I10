@@ -30,7 +30,7 @@ app.use('/api/auth', require('./routes/authRoutes'));
 app.use('/api/complaints', require('./routes/complaintRoutes'));
 app.use('/api/chat', require('./routes/chatRoutes'));
 app.use('/api/whatsapp', require('./routes/whatsappRoutes'));
-app.use('/api/voice', require('./routes/voiceRoutes'));
+// app.use('/api/voice', require('./routes/voiceRoutes'));
 
 
 // Global Error Handler for debugging

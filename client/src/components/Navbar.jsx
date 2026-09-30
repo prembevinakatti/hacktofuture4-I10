@@ -113,7 +113,7 @@ const Navbar = () => {
                                     </>
                                 )}
 
-                                <VoiceCallButton />
+                                {/* <VoiceCallButton /> */}
 
                                 <div className="h-6 w-px bg-slate-200 mx-1"></div>
 
@@ -132,7 +132,7 @@ const Navbar = () => {
                             </>
                         ) : (
                             <div className="flex items-center gap-2 lg:gap-3">
-                                <VoiceCallButton />
+                                {/* <VoiceCallButton /> */}
                                 <Link 
                                     to="/login" 
                                     className="flex items-center gap-1.5 px-3 py-2 text-xs text-slate-700 font-bold hover:text-brand-blue transition-colors"
@@ -164,7 +164,7 @@ const Navbar = () => {
 
                     {/* Mobile Navigation Controls */}
                     <div className="flex items-center gap-2 md:hidden">
-                        <VoiceCallButton className="scale-90 px-2.5 py-1.5 text-[11px]" />
+                        {/* <VoiceCallButton className="scale-90 px-2.5 py-1.5 text-[11px]" /> */}
                         {user && user.role === 'citizen' && (
                             <Link 
                                 to="/rewards"
@@ -193,9 +193,9 @@ const Navbar = () => {
                             className="md:hidden border-t border-slate-100 bg-white/95 backdrop-blur-2xl px-6 py-6 shadow-2xl overflow-hidden"
                         >
                             <div className="space-y-4">
-                                <div className="pb-1">
+                                {/* <div className="pb-1">
                                     <VoiceCallButton className="w-full justify-center py-3 text-sm shadow-lg" />
-                                </div>
+                                </div> */}
                                 {user ? (
                                     <>
                                         <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100 flex items-center justify-between">

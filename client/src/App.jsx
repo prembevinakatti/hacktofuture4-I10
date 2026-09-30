@@ -20,7 +20,7 @@ import DepartmentRegister from './pages/DepartmentRegister';
 import Navbar from './components/Navbar';
 import Chatbot from './components/Chatbot';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
-import VoiceCallButton from './components/VoiceCallButton';
+// import VoiceCallButton from './components/VoiceCallButton';
 
 
 

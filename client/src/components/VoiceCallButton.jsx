@@ -4,6 +4,10 @@ import { motion } from 'framer-motion';
 import VoiceCallModal from './VoiceCallModal';
 
 export default function VoiceCallButton({ className = "", isMobile = false }) {
+  // AI Voice Call temporarily disabled
+  return null;
+
+  /*
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -24,4 +28,5 @@ export default function VoiceCallButton({ className = "", isMobile = false }) {
       <VoiceCallModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </>
   );
+  */
 }

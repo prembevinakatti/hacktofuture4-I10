@@ -166,6 +166,7 @@ const ReportIssue = () => {
                                     </p>
                                 </div>
 
+                                {/* AI Voice Helpline temporarily commented out
                                 <div className="mt-4 p-4 sm:p-6 bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 border border-emerald-200/80 rounded-2xl sm:rounded-3xl shadow-sm">
                                     <div className="flex items-center gap-3 mb-2">
                                         <div className="p-2 rounded-xl bg-emerald-600 text-white shadow-md shadow-emerald-500/20">
@@ -181,6 +182,7 @@ const ReportIssue = () => {
                                     </p>
                                     <VoiceCallButton isFloating={false} />
                                 </div>
+                                */}
                             </div>
 
 
