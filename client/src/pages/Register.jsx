@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import { UserPlus, User, Building2, Mail, Key, ArrowRight } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { API_BASE_URL } from '../api';
 
 const Register = () => {
     const [role, setRole] = useState('citizen');
@@ -18,7 +19,7 @@ const Register = () => {
         setLoading(true);
         try {
             const sendData = { ...formData, role };
-            const { data } = await axios.post('http://localhost:5000/api/auth/register', sendData);
+            const { data } = await axios.post(`${API_BASE_URL}/api/auth/register`, sendData);
             login(data);
             toast.success(`Welcome to JanSetu, ${data.name}!`);
             navigate('/home');

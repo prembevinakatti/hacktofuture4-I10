@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Phone, PhoneOff, Mic, MicOff, Volume2, VolumeX, Sparkles, CheckCircle2, AlertTriangle, ShieldCheck, MapPin, Building2, Clock, Radio, PhoneForwarded, Send, RefreshCw } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { API_BASE_URL } from '../api';
 
 export default function VoiceCallModal({ isOpen, onClose }) {
   const [callMode, setCallMode] = useState('BROWSER'); // 'BROWSER' | 'PHONE'
@@ -221,7 +222,7 @@ export default function VoiceCallModal({ isOpen, onClose }) {
     setCallStatus('THINKING');
 
     try {
-      const response = await axios.post('http://localhost:5000/api/voice/web-agent', {
+      const response = await axios.post(`${API_BASE_URL}/api/voice/web-agent`, {
         message: cleanText,
         sessionId: sessionIdRef.current,
         callerPhone: phoneNumberInput || '+918660465213'
@@ -387,7 +388,7 @@ export default function VoiceCallModal({ isOpen, onClose }) {
       reader.onloadend = async () => {
         const base64Audio = reader.result;
         try {
-          const response = await axios.post('http://localhost:5000/api/voice/web-agent-audio', {
+          const response = await axios.post(`${API_BASE_URL}/api/voice/web-agent-audio`, {
             audioBase64: base64Audio,
             mimeType,
             sessionId: sessionIdRef.current,
@@ -493,7 +494,7 @@ export default function VoiceCallModal({ isOpen, onClose }) {
     const callToast = toast.loading(`Triggering JanSetu AI Voice Call to ${phoneNumberInput}...`);
 
     try {
-      const res = await axios.post('http://localhost:5000/api/voice/call-user', {
+      const res = await axios.post(`${API_BASE_URL}/api/voice/call-user`, {
         phoneNumber: phoneNumberInput.trim()
       });
 

@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { Send, MapPin, Camera, Type, CheckCircle2, Trophy, Navigation, Loader2, PhoneCall } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import VoiceCallButton from '../components/VoiceCallButton';
+import { API_BASE_URL } from '../api';
 
 
 const ReportIssue = () => {
@@ -118,7 +119,7 @@ const ReportIssue = () => {
             const payload = { ...formData, text: formData.title };
             
             const { data } = await axios.post(
-                'http://localhost:5000/api/complaints', 
+                `${API_BASE_URL}/api/complaints`, 
                 payload,
                 { headers: { Authorization: `Bearer ${user.token}` } }
             );

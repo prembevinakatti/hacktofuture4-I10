@@ -16,6 +16,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import toast from 'react-hot-toast';
+import { API_BASE_URL } from '../api';
 
 import HotspotMap from '../components/HotspotMap';
 
@@ -31,8 +32,8 @@ const ExecutiveView = () => {
         const fetchData = async () => {
             try {
                 const [complaintsRes, statsRes] = await Promise.all([
-                    axios.get('http://localhost:5000/api/complaints/all', { headers: { Authorization: `Bearer ${user.token}` } }),
-                    axios.get('http://localhost:5000/api/complaints/stats', { headers: { Authorization: `Bearer ${user.token}` } })
+                    axios.get(`${API_BASE_URL}/api/complaints/all`, { headers: { Authorization: `Bearer ${user.token}` } }),
+                    axios.get(`${API_BASE_URL}/api/complaints/stats`, { headers: { Authorization: `Bearer ${user.token}` } })
                 ]);
                 setAllComplaints(complaintsRes.data.data);
                 setStats(statsRes.data.data);

@@ -23,6 +23,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import BeforeAfterSlider from '../components/BeforeAfterSlider';
+import { API_BASE_URL } from '../api';
 import ResolveModal from '../components/ResolveModal';
 
 const StatusBadge = ({ status, isAuditFlagged }) => {
@@ -209,7 +210,7 @@ export const CitizenDashboard = () => {
 
     useEffect(() => {
         const fetch = async () => {
-            const { data } = await axios.get('http://localhost:5000/api/complaints/my', {
+            const { data } = await axios.get(`${API_BASE_URL}/api/complaints/my`, {
                 headers: { Authorization: `Bearer ${user.token}` }
             });
             setComplaints(data.data);
@@ -257,7 +258,7 @@ export const AuthorityDashboard = () => {
 
     const fetchData = async () => {
         try {
-            const { data } = await axios.get('http://localhost:5000/api/complaints/department', {
+            const { data } = await axios.get(`${API_BASE_URL}/api/complaints/department`, {
                 headers: { Authorization: `Bearer ${user.token}` }
             });
             setComplaints(data.data);
@@ -276,7 +277,7 @@ export const AuthorityDashboard = () => {
 
     const handleUpdateStatus = async (id, status) => {
         try {
-            await axios.patch(`http://localhost:5000/api/complaints/${id}/status`, { status }, {
+            await axios.patch(`${API_BASE_URL}/api/complaints/${id}/status`, { status }, {
                 headers: { Authorization: `Bearer ${user.token}` }
             });
             toast.success(`Protocol ${status} Handled.`);

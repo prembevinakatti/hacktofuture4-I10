@@ -3,6 +3,7 @@ import axios from 'axios';
 import { MessageCircle, X, Send, Bot, User, Sparkles, Mic, MicOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
+import { API_BASE_URL } from '../api';
 
 const Chatbot = () => {
     const { user } = useAuth();
@@ -66,7 +67,7 @@ const Chatbot = () => {
         try {
             const config = user?.token ? { headers: { Authorization: `Bearer ${user.token}` } } : {};
             const { data } = await axios.post(
-                'http://localhost:5000/api/chat',
+                `${API_BASE_URL}/api/chat`,
                 { message: currentMsg },
                 config
             );

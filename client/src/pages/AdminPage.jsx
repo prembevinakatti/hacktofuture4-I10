@@ -5,6 +5,7 @@ import HotspotMap from '../components/HotspotMap';
 import DepartmentScoreboard from '../components/DepartmentScoreboard';
 import BeforeAfterSlider from '../components/BeforeAfterSlider';
 import toast from 'react-hot-toast';
+import { API_BASE_URL } from '../api';
 import { 
     Building2, 
     ShieldAlert, 
@@ -32,13 +33,13 @@ const AdminPage = () => {
         const fetchAdminData = async () => {
             try {
                 const [compRes, scoresRes, statsRes] = await Promise.all([
-                    axios.get('http://localhost:5000/api/complaints/all', {
+                    axios.get(`${API_BASE_URL}/api/complaints/all`, {
                         headers: { Authorization: `Bearer ${user.token}` }
                     }),
-                    axios.get('http://localhost:5000/api/complaints/scores', {
+                    axios.get(`${API_BASE_URL}/api/complaints/scores`, {
                         headers: { Authorization: `Bearer ${user.token}` }
                     }),
-                    axios.get('http://localhost:5000/api/complaints/stats', {
+                    axios.get(`${API_BASE_URL}/api/complaints/stats`, {
                         headers: { Authorization: `Bearer ${user.token}` }
                     })
                 ]);

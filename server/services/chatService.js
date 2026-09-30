@@ -81,15 +81,27 @@ const processChatMessage = async (message, senderPhone = null, coords = { lat: n
         } catch (e) { }
 
         if (analysis.intent === "REPORT") {
-            const cleanPhone = (senderPhone || "").replace('whatsapp:', '');
-            let user = await User.findOne({ phoneNumber: cleanPhone });
-            if (!user && cleanPhone) {
-                user = await User.create({ name: `Citizen ${cleanPhone.slice(-4)}`, email: `${cleanPhone}@jansetu.city`, phoneNumber: cleanPhone, password: "temp123" });
+            const cleanPhone = (senderPhone || "").replace('whatsapp:', '').trim();
+            let user = null;
+            if (cleanPhone) {
+                user = await User.findOne({ $or: [{ phoneNumber: cleanPhone }, { email: `${cleanPhone}@jansetu.city` }] });
+                if (!user) {
+                    try {
+                        user = await User.create({ name: `Citizen ${cleanPhone.slice(-4)}`, email: `${cleanPhone}@jansetu.city`, phoneNumber: cleanPhone, password: "temp123", role: 'citizen' });
+                    } catch (err) {
+                        user = await User.findOne({ email: `${cleanPhone}@jansetu.city` });
+                    }
+                }
+            }
+            if (!user) {
+                user = await User.findOne() || await User.create({ name: "Citizen", email: "citizen@jansetu.city", password: "tempPassword123" });
             }
             const complaint = await processNewComplaint({
-                title: analysis.extractedTitle, location: analysis.extractedLocation,
-                userId: user ? user._id : "67af1c000000000000000000",
-                lat: coords.lat, lng: coords.lng
+                title: analysis.extractedTitle || message || "Civic Grievance",
+                location: analysis.extractedLocation || "Smart City Zone",
+                userId: user._id,
+                lat: coords.lat,
+                lng: coords.lng
             });
             return `✅ *Action Logged*\nIssue: "${complaint.title}"\nDept: *${complaint.department}*\nID: ${complaint._id.toString().slice(-6)}`;
         }

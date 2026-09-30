@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+import { API_BASE_URL } from '../api';
 import { 
     Building2, 
     Lock, 
@@ -39,7 +40,7 @@ const DepartmentLogin = () => {
         const loginToast = toast.loading('Connecting to Department Operational Matrix...');
 
         try {
-            const { data } = await axios.post('http://localhost:5000/api/auth/admin-login', formData);
+            const { data } = await axios.post(`${API_BASE_URL}/api/auth/admin-login`, formData);
             
             if (data.role !== 'authority' && data.role !== 'admin') {
                 throw new Error('This gateway is exclusively for Department Officers & Authorities.');
@@ -50,7 +51,7 @@ const DepartmentLogin = () => {
             navigate('/department');
         } catch (err) {
             try {
-                const { data } = await axios.post('http://localhost:5000/api/auth/login', formData);
+                const { data } = await axios.post(`${API_BASE_URL}/api/auth/login`, formData);
                 if (data.role !== 'authority' && data.role !== 'admin') {
                     throw new Error('Access Denied: Only Department Authorities and Admins are permitted.');
                 }

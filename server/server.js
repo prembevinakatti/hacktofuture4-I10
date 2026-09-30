@@ -17,7 +17,27 @@ runDeadlineCheck();
 const app = express();
 
 // Middleware
-app.use(cors());
+const allowedOrigins = [
+  'https://hacktofuture4-i10.vercel.app',
+  'https://jansetu-sekx.onrender.com',
+  process.env.FRONTEND_URL,
+  process.env.CLIENT_URL,
+  process.env.BACKEND_URL,
+  'http://localhost:5173',
+  'http://localhost:3000'
+].filter(Boolean).map(url => url.replace(/\/$/, ''));
+
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true);
+    const normalized = origin.replace(/\/$/, '');
+    if (allowedOrigins.includes(normalized) || origin.endsWith('.vercel.app') || origin.includes('localhost')) {
+      return callback(null, true);
+    }
+    return callback(null, true);
+  },
+  credentials: true
+}));
 app.use(express.json({ limit: '25mb' }));
 app.use(express.urlencoded({ extended: true, limit: '25mb' })); // Required for Twilio Webhooks
 app.use(morgan('dev'));

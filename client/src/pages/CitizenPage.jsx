@@ -17,6 +17,7 @@ import {
 import { motion, AnimatePresence } from 'framer-motion';
 import BeforeAfterSlider from '../components/BeforeAfterSlider';
 import toast from 'react-hot-toast';
+import { API_BASE_URL } from '../api';
 
 const CitizenPage = () => {
     const [complaints, setComplaints] = useState([]);
@@ -28,7 +29,7 @@ const CitizenPage = () => {
     useEffect(() => {
         const loadData = async () => {
             try {
-                const compRes = await axios.get('http://localhost:5000/api/complaints/my', {
+                const compRes = await axios.get(`${API_BASE_URL}/api/complaints/my`, {
                     headers: { Authorization: `Bearer ${user.token}` }
                 });
                 setComplaints(compRes.data.data || []);

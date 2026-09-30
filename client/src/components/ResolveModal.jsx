@@ -12,6 +12,7 @@ import {
     Sparkles 
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { API_BASE_URL } from '../api';
 
 const ResolveModal = ({ complaint, isOpen, onClose, onSuccess, token }) => {
     const [resolutionImage, setResolutionImage] = useState('');
@@ -68,7 +69,7 @@ const ResolveModal = ({ complaint, isOpen, onClose, onSuccess, token }) => {
 
         try {
             const response = await axios.post(
-                `http://localhost:5000/api/complaints/${complaint._id}/resolve`,
+                `${API_BASE_URL}/api/complaints/${complaint._id}/resolve`,
                 {
                     resolutionImageUrl: resolutionImage,
                     resolutionNote: note

@@ -29,6 +29,9 @@ const sendStatusEmail = async (userEmail, complaintTitle, status) => {
                Status: ${status}
             </div>
             <p style="margin-top:20px; font-size: 14px; color: #64748b;">Thank you for your patience as we build a smarter city.</p>
+            <p style="margin-top:12px; font-size: 14px;">
+              <a href="${(process.env.FRONTEND_URL || 'https://hacktofuture4-i10.vercel.app').replace(/\/$/, '')}/citizen" style="color: #2563eb; font-weight: bold; text-decoration: underline;">Track live updates on the JanSetu Portal</a>
+            </p>
           </div>
         </div>
       `
@@ -41,6 +44,7 @@ const sendDepartmentAlert = async (deptEmail, complaint) => {
     try {
       if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) return;
   
+      const frontendUrl = (process.env.FRONTEND_URL || 'https://hacktofuture4-i10.vercel.app').replace(/\/$/, '');
       const mailOptions = {
         from: `"JanSetu Alerts" <${process.env.EMAIL_USER}>`,
         to: deptEmail,
@@ -58,7 +62,7 @@ const sendDepartmentAlert = async (deptEmail, complaint) => {
                 <tr><th style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Deadline</th><td style="padding: 8px; border-bottom: 1px solid #ddd;">${new Date(complaint.deadline).toLocaleString()}</td></tr>
                 <tr><th style="text-align: left; padding: 8px; border-bottom: 1px solid #ddd;">Location</th><td style="padding: 8px; border-bottom: 1px solid #ddd;">${complaint.location}</td></tr>
               </table>
-              <p>Please initialize deployment and update status via the JanSetu Terminal.</p>
+              <p>Please initialize deployment and update status via the <a href="${frontendUrl}/department/login" style="color: #ef4444; font-weight: bold;">JanSetu Department Portal</a>.</p>
             </div>
           </div>
         `
@@ -72,6 +76,7 @@ const sendEscalationEmail = async (email, complaint, type = 'citizen') => {
     try {
       if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) return;
   
+      const frontendUrl = (process.env.FRONTEND_URL || 'https://hacktofuture4-i10.vercel.app').replace(/\/$/, '');
       const mailOptions = {
         from: `"JanSetu Escalation" <${process.env.EMAIL_USER}>`,
         to: email,
@@ -87,6 +92,7 @@ const sendEscalationEmail = async (email, complaint, type = 'citizen') => {
                 Status: OVERDUE
               </div>
               <p style="margin-top: 20px;">${type === 'citizen' ? 'We apologize for the delay. The department head has been notified of this escalation.' : 'As the department in charge, please resolve this immediately to restore service levels.'}</p>
+              <p><a href="${frontendUrl}" style="color: #b91c1c; font-weight: bold;">View in JanSetu Portal</a></p>
             </div>
           </div>
         `
@@ -107,8 +113,9 @@ const sendComplaintSMS = async (phoneNumber, complaint) => {
       return;
     }
 
+    const frontendUrl = (process.env.FRONTEND_URL || 'https://hacktofuture4-i10.vercel.app').replace(/\/$/, '');
     const ticketId = complaint._id.toString().slice(-6);
-    const message = `[JanSetu Smart City] Your civic report has been received!\nTicket ID: #${ticketId}\nDept: ${complaint.department}\nPriority: ${complaint.priority}\nWe are dispatching a field team.`;
+    const message = `[JanSetu Smart City] Your civic report has been received!\nTicket ID: #${ticketId}\nDept: ${complaint.department}\nPriority: ${complaint.priority}\nTrack: ${frontendUrl}/citizen`;
 
     await client.messages.create({
       body: message,

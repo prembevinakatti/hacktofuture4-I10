@@ -49,12 +49,14 @@ async function processWhatsAppMedia(mediaUrl) {
         fs.writeFileSync(filePath, Buffer.from(response.data));
         console.log(`✅ WhatsApp media saved locally to: ${filePath}`);
 
-        // Return the static URL path
-        return `http://localhost:5000/uploads/${fileName}`;
+        // Return the accessible public URL path
+        const baseUrl = (process.env.BACKEND_URL || process.env.RENDER_EXTERNAL_URL || process.env.PUBLIC_URL || 'https://jansetu-sekx.onrender.com').replace(/\/$/, '');
+        return `${baseUrl}/uploads/${fileName}`;
     } catch (err) {
         console.error('❌ Failed to download Twilio media locally:', err.message);
+        const baseUrl = (process.env.BACKEND_URL || process.env.RENDER_EXTERNAL_URL || process.env.PUBLIC_URL || 'https://jansetu-sekx.onrender.com').replace(/\/$/, '');
         // Fallback to proxy route
-        return `http://localhost:5000/api/whatsapp/media-proxy?url=${encodeURIComponent(mediaUrl)}`;
+        return `${baseUrl}/api/whatsapp/media-proxy?url=${encodeURIComponent(mediaUrl)}`;
     }
 }
 

@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+import { API_BASE_URL } from '../api';
 import { 
     ShieldCheck, 
     Lock, 
@@ -28,7 +29,7 @@ const AdminLogin = () => {
         const loginToast = toast.loading('Authenticating Administrative Access...');
 
         try {
-            const { data } = await axios.post('http://localhost:5000/api/auth/admin-login', formData);
+            const { data } = await axios.post(`${API_BASE_URL}/api/auth/admin-login`, formData);
             login(data);
             toast.success(`Welcome, Commissioner ${data.name.split(' ')[0]}`, { id: loginToast });
             navigate('/admin');

@@ -22,6 +22,7 @@ import {
     Layers
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { API_BASE_URL } from '../api';
 
 const DepartmentPage = () => {
     const [allComplaints, setAllComplaints] = useState([]);
@@ -39,10 +40,10 @@ const DepartmentPage = () => {
     const fetchData = async () => {
         try {
             const [deptCompRes, scoresRes] = await Promise.all([
-                axios.get('http://localhost:5000/api/complaints/department', {
+                axios.get(`${API_BASE_URL}/api/complaints/department`, {
                     headers: { Authorization: `Bearer ${user.token}` }
                 }),
-                axios.get('http://localhost:5000/api/complaints/scores', {
+                axios.get(`${API_BASE_URL}/api/complaints/scores`, {
                     headers: { Authorization: `Bearer ${user.token}` }
                 })
             ]);
@@ -67,7 +68,7 @@ const DepartmentPage = () => {
 
     const handleUpdateStatus = async (id, status) => {
         try {
-            await axios.patch(`http://localhost:5000/api/complaints/${id}/status`, { status }, {
+            await axios.patch(`${API_BASE_URL}/api/complaints/${id}/status`, { status }, {
                 headers: { Authorization: `Bearer ${user.token}` }
             });
             toast.success(`Ticket updated to ${status}`);

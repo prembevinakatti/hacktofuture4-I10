@@ -3,6 +3,7 @@ import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
+import { API_BASE_URL } from '../api';
 import { 
     Building2, 
     Lock, 
@@ -62,7 +63,7 @@ const DepartmentRegister = () => {
                 department: formData.department
             };
 
-            const { data } = await axios.post('http://localhost:5000/api/auth/register', payload);
+            const { data } = await axios.post(`${API_BASE_URL}/api/auth/register`, payload);
             login(data);
             toast.success(`Official Account Registered: Welcome Officer ${data.name.split(' ')[0]}!`, { id: regToast });
             navigate('/department');

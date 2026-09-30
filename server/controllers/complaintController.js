@@ -30,8 +30,12 @@ const submitComplaint = async (req, res) => {
 
 const sanitizeComplaintImageUrl = (url) => {
   if (!url) return url;
+  const baseUrl = (process.env.BACKEND_URL || process.env.RENDER_EXTERNAL_URL || process.env.PUBLIC_URL || 'https://jansetu-sekx.onrender.com').replace(/\/$/, '');
   if (url.includes('api.twilio.com')) {
-    return `http://localhost:5000/api/whatsapp/media-proxy?url=${encodeURIComponent(url)}`;
+    return `${baseUrl}/api/whatsapp/media-proxy?url=${encodeURIComponent(url)}`;
+  }
+  if (url.startsWith('http://localhost:5000')) {
+    return url.replace('http://localhost:5000', baseUrl);
   }
   return url;
 };

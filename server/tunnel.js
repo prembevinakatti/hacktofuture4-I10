@@ -12,8 +12,8 @@ async function startTunnel() {
     console.log(`\n=======================================================`);
     console.log(`🚀 PUBLIC TUNNEL IS LIVE & ACTIVE!`);
     console.log(`🔗 Public URL: ${tunnel.url}`);
-    console.log(`\n📞 Twilio Voice Webhook URL:`);
-    console.log(`   ${tunnel.url}/api/voice/incoming`);
+    // console.log(`\n📞 Twilio Voice Webhook URL:`);
+    // console.log(`   ${tunnel.url}/api/voice/incoming`);
     console.log(`\n📱 Twilio WhatsApp Webhook URL:`);
     console.log(`   ${tunnel.url}/api/whatsapp`);
     console.log(`=======================================================\n`);

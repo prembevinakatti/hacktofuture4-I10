@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 import { LogIn, User, Building2, Key, Mail, ArrowRight } from 'lucide-react';
 import { motion } from 'framer-motion';
+import { API_BASE_URL } from '../api';
 
 const Login = () => {
     const [formData, setFormData] = useState({ email: '', password: '' });
@@ -16,7 +17,7 @@ const Login = () => {
         e.preventDefault();
         setLoading(true);
         try {
-            const { data } = await axios.post('http://localhost:5000/api/auth/login', formData);
+            const { data } = await axios.post(`${API_BASE_URL}/api/auth/login`, formData);
             login(data);
             toast.success(`Welcome back, ${data.name}`);
             navigate('/home');
