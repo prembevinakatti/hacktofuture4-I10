@@ -35,7 +35,7 @@ Complaint: "${text}"`;
     const response = await axios.post(
       'https://api.groq.com/openai/v1/chat/completions',
       {
-        model: 'llama-3.3-70b-versatile',
+        model: 'openai/gpt-oss-20b',
         messages: [{ role: 'user', content: prompt }],
         response_format: { type: 'json_object' },
         temperature: 0.1,
@@ -45,7 +45,7 @@ Complaint: "${text}"`;
           'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
           'Content-Type': 'application/json',
         },
-        timeout: 10000
+        timeout: 4000
       }
     );
 

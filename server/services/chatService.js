@@ -74,8 +74,8 @@ const processChatMessage = async (message, senderPhone = null, coords = { lat: n
         try {
             const intentPrompt = `Analyze: "${message}". JSON: {"intent": "REPORT", "title": "...", "location": "..."}`;
             const { data } = await axios.post('https://api.groq.com/openai/v1/chat/completions', {
-                model: 'llama-3.3-70b-versatile', messages: [{ role: "user", content: intentPrompt }], response_format: { type: "json_object" }
-            }, { headers: { Authorization: `Bearer ${process.env.GROQ_API_KEY?.trim()}` } });
+                model: 'openai/gpt-oss-20b', messages: [{ role: "user", content: intentPrompt }], response_format: { type: "json_object" }
+            }, { headers: { Authorization: `Bearer ${process.env.GROQ_API_KEY?.trim()}` }, timeout: 4000 });
             const aiResultJSON = JSON.parse(data.choices[0].message.content);
             analysis = { ...analysis, ...aiResultJSON };
         } catch (e) { }

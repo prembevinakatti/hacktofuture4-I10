@@ -48,13 +48,21 @@ const processNewComplaint = async ({ title, location, userId, lat, lng, imageUrl
         // 7. Save Final Matrix
         await complaint.save();
 
-        // 8. Notifications
-        try {
-            if (userEmail) await sendStatusEmail(userEmail, complaint.title, 'Successfully Logged & Dispatched');
-            
-            const deptAuthorities = await User.find({ role: 'authority', department: complaint.department });
-            await Promise.all(deptAuthorities.map(auth => sendDepartmentAlert(auth.email, complaint)));
-        } catch (e) { console.error('Notification Error:', e.message); }
+        // 8. Notifications (Non-blocking background delivery to keep web/whatsapp responses instantaneous)
+        (async () => {
+            try {
+                if (userEmail && !userEmail.endsWith('@jansetu.city')) {
+                    await sendStatusEmail(userEmail, complaint.title, 'Successfully Logged & Dispatched');
+                }
+                
+                const deptAuthorities = await User.find({ role: 'authority', department: complaint.department });
+                if (deptAuthorities.length > 0) {
+                    await Promise.all(deptAuthorities.map(auth => sendDepartmentAlert(auth.email, complaint)));
+                }
+            } catch (e) { 
+                console.error('⚠️ Background Notification Error:', e.message); 
+            }
+        })();
 
         return complaint;
     } catch (err) {

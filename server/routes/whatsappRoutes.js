@@ -80,23 +80,26 @@ async function getOrCreateCitizen(senderPhone) {
 }
 
 /**
- * 🛠️ Helper: Reverse Geocode with strict 4s timeout
+ * 🛠️ Helper: Reverse Geocode with strict 1.5s timeout & Address hint fallback
  */
-async function reverseGeocode(lat, lng) {
+async function reverseGeocode(lat, lng, addressHint = '') {
+    if (addressHint && addressHint.trim().length > 3) {
+        return addressHint.trim();
+    }
     let readableLocation = `Coordinates: ${lat}, ${lng}`;
     try {
         const geoRes = await axios.get(
             `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${lat}&lon=${lng}`,
             {
                 headers: { 'User-Agent': 'JanSetu-Smart-City/1.0' },
-                timeout: 4000
+                timeout: 1500
             }
         );
         if (geoRes.data && geoRes.data.display_name) {
             readableLocation = geoRes.data.display_name;
         }
     } catch (e) {
-        console.warn('⚠️ Geocoding failed, using fallback coordinates:', e.message);
+        console.warn('⚠️ Geocoding fallback to coordinates:', e.message);
     }
     return readableLocation;
 }
@@ -104,9 +107,9 @@ async function reverseGeocode(lat, lng) {
 /**
  * 🛠️ Helper: Submit and Finalize Complaint
  */
-async function submitComplaint({ sender, title, lat, lng, imageUrl }) {
+async function submitComplaint({ sender, title, lat, lng, imageUrl, addressHint = '' }) {
     const user = await getOrCreateCitizen(sender);
-    const readableLocation = await reverseGeocode(lat, lng);
+    const readableLocation = await reverseGeocode(lat, lng, addressHint);
 
     const complaint = await processNewComplaint({
         title: title.trim(),
@@ -125,6 +128,8 @@ async function submitComplaint({ sender, title, lat, lng, imageUrl }) {
     const ticketId = complaint._id.toString().slice(-6);
     const hasPhoto = !!complaint.imageUrl;
 
+    console.log(`✅ WhatsApp Complaint #${ticketId} submitted successfully for ${sender}`);
+
     return `✅ *Complaint Registered Successfully!*\n\n🔖 Ticket ID: *#${ticketId}*\n🏢 Department: *${complaint.department}*\n⚡ Priority: *${complaint.priority}*\n📍 Location: ${readableLocation.split(',').slice(0, 3).join(',')}\n${hasPhoto ? '📸 *Evidence Photo Attached*\n' : ''}\n🌐 *Track your report online:*\n${frontendUrl}/citizen\n\nOur municipal team has been dispatched. Thank you for making our city better! 🏛️`;
 }
 
@@ -138,8 +143,9 @@ router.post('/', async (req, res) => {
     try {
         const incomingMsg = req.body.Body ? req.body.Body.trim() : "";
         const sender = req.body.From || "";
-        const lat = req.body.Latitude;
-        const lng = req.body.Longitude;
+        const lat = req.body.Latitude || req.body.lat;
+        const lng = req.body.Longitude || req.body.lng || req.body.lon;
+        const addressHint = req.body.Address || req.body.Label || "";
 
         // Twilio media (photos, audio, etc.)
         const numMedia = parseInt(req.body.NumMedia || "0", 10);
@@ -149,7 +155,7 @@ router.post('/', async (req, res) => {
         console.log(`📩 WhatsApp Message from ${sender}`);
         if (incomingMsg) console.log(`💬 Text: "${incomingMsg}"`);
         if (incomingMediaUrl) console.log(`📸 Image received: ${incomingMediaUrl}`);
-        if (lat && lng) console.log(`📍 GPS Pin received: ${lat}, ${lng}`);
+        if (lat && lng) console.log(`📍 GPS Pin received: ${lat}, ${lng} ${addressHint ? `(${addressHint})` : ''}`);
 
         let session = userSessions.get(sender) || {};
 
@@ -207,7 +213,8 @@ router.post('/', async (req, res) => {
                     title: session.title,
                     lat: finalLat,
                     lng: finalLng,
-                    imageUrl: session.imageUrl
+                    imageUrl: session.imageUrl,
+                    addressHint: addressHint || session.addressHint
                 });
                 twiml.message(confirmation);
                 return res.status(200).send(twiml.toString());
@@ -232,7 +239,8 @@ router.post('/', async (req, res) => {
                     title: session.title,
                     lat: session.lat,
                     lng: session.lng,
-                    imageUrl: null
+                    imageUrl: null,
+                    addressHint: session.addressHint || addressHint
                 });
                 twiml.message(confirmation);
                 return res.status(200).send(twiml.toString());
@@ -246,6 +254,7 @@ router.post('/', async (req, res) => {
         if (lat && lng) {
             session.lat = lat;
             session.lng = lng;
+            session.addressHint = addressHint;
             userSessions.set(sender, session);
 
             if (session.title) {
@@ -255,7 +264,8 @@ router.post('/', async (req, res) => {
                     title: session.title,
                     lat,
                     lng,
-                    imageUrl: session.imageUrl || null
+                    imageUrl: session.imageUrl || null,
+                    addressHint
                 });
                 twiml.message(confirmation);
                 return res.status(200).send(twiml.toString());
@@ -275,7 +285,8 @@ router.post('/', async (req, res) => {
                     title: incomingMsg,
                     lat: session.lat,
                     lng: session.lng,
-                    imageUrl: session.imageUrl || null
+                    imageUrl: session.imageUrl || null,
+                    addressHint: session.addressHint || addressHint
                 });
                 twiml.message(confirmation);
                 return res.status(200).send(twiml.toString());
