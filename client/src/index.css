@@ -19,6 +19,30 @@
 }
 
 @layer components {
+  .citizen-dashboard {
+    background: radial-gradient(circle at 75% 0%, rgba(219, 239, 255, 0.72), transparent 34rem), #f8fbff;
+  }
+
+  .citizen-stat {
+    @apply relative overflow-hidden rounded-2xl border bg-white p-5 shadow-sm;
+  }
+
+  .citizen-stat span {
+    @apply block text-[10px] font-black uppercase tracking-[0.16em];
+  }
+
+  .citizen-stat strong {
+    @apply mt-2 block text-3xl font-black text-slate-900;
+  }
+
+  .citizen-stat > svg {
+    @apply absolute right-5 top-5 text-slate-300;
+  }
+
+  .citizen-empty {
+    @apply rounded-2xl border border-dashed border-slate-200 bg-white;
+  }
+
   .card-premium {
     @apply bg-white rounded-3xl border border-slate-100 shadow-xl shadow-slate-200/50 hover:shadow-2xl transition-all duration-300;
   }

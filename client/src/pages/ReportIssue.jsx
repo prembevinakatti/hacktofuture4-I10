@@ -3,14 +3,36 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
-import { Send, MapPin, Camera, Type, CheckCircle2, Trophy, Navigation, Loader2, PhoneCall } from 'lucide-react';
+import { 
+    Send, 
+    MapPin, 
+    Camera, 
+    Type, 
+    CheckCircle2, 
+    Navigation, 
+    Loader2, 
+    FileEdit, 
+    ArrowLeft,
+    Sparkles, 
+    ShieldCheck, 
+    Trophy,
+    Clock,
+    AlertCircle,
+    Info,
+    HelpCircle
+} from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
-import VoiceCallButton from '../components/VoiceCallButton';
 import { API_BASE_URL } from '../api';
 
-
 const ReportIssue = () => {
-    const [formData, setFormData] = useState({ title: '', text: '', location: '', imageUrl: '', lat: null, lng: null });
+    const [formData, setFormData] = useState({ 
+        title: '', 
+        text: '', 
+        location: '', 
+        imageUrl: '', 
+        lat: null, 
+        lng: null 
+    });
     const [loading, setLoading] = useState(false);
     const [uploading, setUploading] = useState(false);
     const [locating, setLocating] = useState(false);
@@ -31,7 +53,7 @@ const ReportIssue = () => {
         if (!file) return;
 
         setUploading(true);
-        const uploadToast = toast.loading('Uploading evidence to Cloudinary...');
+        const uploadToast = toast.loading('Uploading evidence photo...');
         
         const data = new FormData();
         data.append('file', file);
@@ -49,7 +71,7 @@ const ReportIssue = () => {
             } else {
                 throw new Error('Upload error');
             }
-        } catch (err) {
+        } catch {
             toast.error('Cloudinary Upload Failed', { id: uploadToast });
         } finally {
             setUploading(false);
@@ -61,7 +83,7 @@ const ReportIssue = () => {
             return toast.error('Geolocation is not supported by your browser');
         }
         setLocating(true);
-        const gpsToast = toast.loading('Acquiring precise GPS location & address...');
+        const gpsToast = toast.loading('Acquiring high-accuracy GPS coordinates...');
 
         const options = {
             enableHighAccuracy: true,
@@ -88,7 +110,7 @@ const ReportIssue = () => {
                         lng: longitude 
                     }));
                     toast.success('GPS Address Locked! 📍', { id: gpsToast });
-                } catch (err) {
+                } catch {
                     const fallback = `Coordinates: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
                     setFormData(prev => ({ 
                         ...prev, 
@@ -101,7 +123,7 @@ const ReportIssue = () => {
                     setLocating(false);
                 }
             },
-            (err) => {
+            () => {
                 setLocating(false);
                 toast.error('Location permission needed. Please allow GPS access.', { id: gpsToast });
             },
@@ -127,7 +149,7 @@ const ReportIssue = () => {
             setResult(data.data);
             if (refreshUser) await refreshUser();
             toast.success('Issue Logged. +10 Reward Points!', { id: processingToast });
-        } catch (err) {
+        } catch {
             toast.error('Submission failed.', { id: processingToast });
         } finally {
             setLoading(false);
@@ -135,216 +157,319 @@ const ReportIssue = () => {
     };
 
     return (
-        <div className="min-h-screen pt-20 sm:pt-28 pb-28 sm:pb-20 bg-slate-50">
-            <div className="container mx-auto px-4 sm:px-6">
+        <div className="h-screen w-screen bg-[#f1f5f9] flex items-center justify-center p-3 sm:p-5 lg:p-6 overflow-hidden select-none font-sans">
+            <div className="w-full max-w-6xl h-full max-h-[840px] flex flex-col justify-between">
+                
+                {/* Top Return Breadcrumb */}
+                <div className="flex items-center justify-between pb-2 px-1">
+                    <button
+                        onClick={() => navigate('/citizen')}
+                        className="inline-flex items-center gap-2 text-xs font-bold text-slate-600 hover:text-sky-600 bg-white/90 hover:bg-white px-3 py-1.5 rounded-xl border border-slate-200/80 shadow-2xs transition-all active:scale-95 cursor-pointer"
+                    >
+                        <ArrowLeft size={14} /> Back to Citizen Portal
+                    </button>
+                    <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-wider text-slate-500">
+                        <Sparkles size={13} className="text-sky-600" />
+                        AI Verified Civic Filing Protocol
+                    </div>
+                </div>
+
                 <AnimatePresence mode="wait">
                     {!result ? (
-                        <motion.div 
-                            key="form" 
-                            initial={{ opacity: 0, scale: 0.98 }} 
-                            animate={{ opacity: 1, scale: 1 }} 
-                            className="max-w-4xl mx-auto flex flex-col lg:flex-row gap-8 lg:gap-12"
+                        /* Attached Dual-Pane Layout (Non-Scrollable, Skyblue & Grey Combo) */
+                        <div 
+                            key="form"
+                            className="w-full flex-1 bg-white rounded-3xl shadow-xl border border-slate-200/80 flex flex-col lg:flex-row items-stretch overflow-hidden"
                         >
-                            {/* Left Side Header */}
-                            <div className="flex-1 lg:pt-8">
-                                <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-blue-50 text-brand-blue rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider mb-4 border border-blue-100">
-                                    <Send size={13} /> Grievance Submission
-                                </div>
-                                <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-slate-900 tracking-tight leading-tight mb-4 sm:mb-6">
-                                    Report <br/> <span className="text-brand-blue">Awareness.</span>
-                                </h1>
-                                <p className="text-slate-500 font-medium text-xs sm:text-base mb-6 sm:mb-8 leading-relaxed">
-                                    Upload a photo and provide a title. Our AI neural routing handles automated classification, department assignment, and SLA tracking.
-                                </p>
+                            {/* LEFT CARD: Skyblue & Grey Color Combo with Issue Reporting Guidelines */}
+                            <div className="w-full lg:w-[48%] bg-gradient-to-br from-[#0284c7] via-[#334155] to-[#0f172a] p-6 sm:p-8 text-white flex flex-col justify-between relative overflow-hidden border-b lg:border-b-0 lg:border-r border-slate-700/60">
                                 
-                                <div className="card-premium p-4 sm:p-6 border-none shadow-blue-500/5 bg-blue-50/70 rounded-2xl sm:rounded-3xl">
-                                    <div className="flex items-center gap-3 mb-2 sm:mb-3">
-                                        <Trophy className="text-brand-orange" size={20} />
-                                        <h4 className="font-black text-slate-800 uppercase tracking-wider text-xs">Citizen Reward</h4>
+                                <div className="relative z-10 space-y-4">
+                                    {/* Sky Blue & Grey Badge */}
+                                    <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-sky-500/20 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-wider border border-sky-400/30 text-sky-200">
+                                        <Sparkles size={12} className="text-sky-300" />
+                                        SMART GRIEVANCE GUIDELINES
                                     </div>
-                                    <p className="text-slate-600 text-xs sm:text-sm font-medium leading-relaxed">
-                                        Earn JanSetu loyalty reward points for photographic evidence contributing to city maintenance and safety.
-                                    </p>
+
+                                    {/* Headline */}
+                                    <div>
+                                        <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight leading-[1.12]">
+                                            Report Civic Issues. <br />
+                                            <span className="text-sky-300">Fast & AI Routed.</span>
+                                        </h1>
+                                        <p className="mt-2 text-xs sm:text-[13px] text-slate-300 leading-relaxed font-medium">
+                                            Follow these smart submission steps. Every report is automatically classified, assigned to the concerned ward, and tracked under municipal SLA rules.
+                                        </p>
+                                    </div>
+
+                                    {/* Guidance & Process Cards */}
+                                    <div className="space-y-2.5 pt-1">
+                                        {/* Step 1: Photo Evidence */}
+                                        <div className="flex items-start gap-3 p-2.5 rounded-2xl bg-slate-800/60 backdrop-blur-md border border-slate-700/60 shadow-2xs">
+                                            <div className="w-8 h-8 rounded-xl bg-sky-500/20 text-sky-300 flex items-center justify-center shrink-0 mt-0.5 border border-sky-400/20">
+                                                <Camera size={16} />
+                                            </div>
+                                            <div>
+                                                <h4 className="text-xs font-bold text-white flex items-center gap-1.5">
+                                                    1. Clear Evidence Photo
+                                                    <span className="text-[10px] font-normal text-sky-300">(Recommended)</span>
+                                                </h4>
+                                                <p className="text-[10px] text-slate-300 mt-0.5 leading-snug">
+                                                    Capture a clear photo showing the hazard, road pothole, or street light for instant AI neural validation.
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        {/* Step 2: GPS Location */}
+                                        <div className="flex items-start gap-3 p-2.5 rounded-2xl bg-slate-800/60 backdrop-blur-md border border-slate-700/60 shadow-2xs">
+                                            <div className="w-8 h-8 rounded-xl bg-sky-500/20 text-sky-300 flex items-center justify-center shrink-0 mt-0.5 border border-sky-400/20">
+                                                <MapPin size={16} />
+                                            </div>
+                                            <div>
+                                                <h4 className="text-xs font-bold text-white flex items-center gap-1.5">
+                                                    2. Auto-Locked GPS Ward Mapping
+                                                </h4>
+                                                <p className="text-[10px] text-slate-300 mt-0.5 leading-snug">
+                                                    Verified satellite GPS coordinates instantly route the ticket to the exact line officer and ward team.
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        {/* Step 3: SLA & AI Verification */}
+                                        <div className="flex items-start gap-3 p-2.5 rounded-2xl bg-slate-800/60 backdrop-blur-md border border-slate-700/60 shadow-2xs">
+                                            <div className="w-8 h-8 rounded-xl bg-sky-500/20 text-sky-300 flex items-center justify-center shrink-0 mt-0.5 border border-sky-400/20">
+                                                <Clock size={16} />
+                                            </div>
+                                            <div>
+                                                <h4 className="text-xs font-bold text-white flex items-center gap-1.5">
+                                                    3. 24-Day Resolution SLA
+                                                </h4>
+                                                <p className="text-[10px] text-slate-300 mt-0.5 leading-snug">
+                                                    All reports have a guaranteed municipal resolution countdown with automatic administrative escalation.
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        {/* Step 4: Loyalty Points */}
+                                        <div className="flex items-start gap-3 p-2.5 rounded-2xl bg-slate-800/60 backdrop-blur-md border border-slate-700/60 shadow-2xs">
+                                            <div className="w-8 h-8 rounded-xl bg-sky-500/20 text-sky-300 flex items-center justify-center shrink-0 mt-0.5 border border-sky-400/20">
+                                                <Trophy size={16} />
+                                            </div>
+                                            <div>
+                                                <h4 className="text-xs font-bold text-white flex items-center gap-1.5">
+                                                    4. +10 Civic Reward Points
+                                                </h4>
+                                                <p className="text-[10px] text-slate-300 mt-0.5 leading-snug">
+                                                    Receive verified community loyalty points redeemable for public badges and civic recognition.
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
-                                {/* AI Voice Helpline temporarily commented out
-                                <div className="mt-4 p-4 sm:p-6 bg-gradient-to-br from-emerald-50 via-teal-50 to-cyan-50 border border-emerald-200/80 rounded-2xl sm:rounded-3xl shadow-sm">
-                                    <div className="flex items-center gap-3 mb-2">
-                                        <div className="p-2 rounded-xl bg-emerald-600 text-white shadow-md shadow-emerald-500/20">
-                                            <PhoneCall size={18} className="animate-bounce" />
+                                {/* Bottom Tag */}
+                                <div className="relative z-10 pt-3 border-t border-slate-700/70 flex items-center justify-between text-[11px] text-slate-400 font-bold">
+                                    <span className="text-sky-200">"Your Report Today, A Better City Tomorrow"</span>
+                                    <span className="flex items-center gap-1 text-emerald-400">
+                                        <CheckCircle2 size={13} /> Active SLA
+                                    </span>
+                                </div>
+
+                                {/* Radiant Sky-Blue Background Glow */}
+                                <div className="absolute -top-12 -left-12 w-48 h-48 bg-sky-400/20 rounded-full blur-3xl pointer-events-none"></div>
+                                <div className="absolute -bottom-10 -right-10 w-56 h-56 bg-sky-500/15 rounded-full blur-3xl pointer-events-none"></div>
+                            </div>
+
+                            {/* RIGHT CARD: Submit a Grievance Report Form (Attached Beside) */}
+                            <form 
+                                onSubmit={handleSubmit}
+                                className="w-full lg:w-[52%] bg-white p-6 sm:p-8 flex flex-col justify-between overflow-y-auto"
+                            >
+                                <div className="space-y-4">
+                                    {/* Form Header */}
+                                    <div className="flex items-start gap-3 pb-3 border-b border-slate-100">
+                                        <div className="w-10 h-10 rounded-xl bg-sky-50 text-sky-600 flex items-center justify-center shrink-0">
+                                            <FileEdit size={20} />
                                         </div>
                                         <div>
-                                            <h4 className="font-black text-slate-900 text-xs sm:text-sm">Prefer Speaking?</h4>
-                                            <p className="text-emerald-700 text-[10px] sm:text-xs font-semibold">Instant AI Voice Helpline</p>
+                                            <h2 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight">
+                                                Submit a Grievance Report
+                                            </h2>
+                                            <p className="text-xs text-slate-400 font-medium mt-0.5">
+                                                Fill out the details below with clarity. Attach an image and location for faster action.
+                                            </p>
                                         </div>
                                     </div>
-                                    <p className="text-slate-600 text-xs mb-3">
-                                        Report civic issues hands-free in seconds by talking to our live Voice AI Officer.
-                                    </p>
-                                    <VoiceCallButton isFloating={false} />
-                                </div>
-                                */}
-                            </div>
 
-
-                            {/* Form Card */}
-                            <form onSubmit={handleSubmit} className="flex-[1.4] card-premium p-5 sm:p-10 space-y-6 sm:space-y-8 bg-white rounded-3xl shadow-lg border border-slate-100">
-                                <div className="space-y-2">
-                                    <label className="text-[11px] sm:text-xs font-black text-slate-500 uppercase tracking-wider ml-1">
-                                        Grievance Title
-                                    </label>
-                                    <div className="relative">
-                                        <Type className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
-                                        <input 
-                                            required 
-                                            className="w-full pl-12 pr-4 py-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs sm:text-sm font-medium focus:outline-none focus:border-brand-blue focus:bg-white transition-all placeholder:text-slate-400" 
-                                            placeholder="Example: Broken Street Lamp or Open Pothole"
-                                            value={formData.title} 
-                                            onChange={e => setFormData({...formData, title: e.target.value})}
-                                        />
-                                    </div>
-                                </div>
-
-                                {/* Location with GPS */}
-                                <div className="space-y-2">
-                                    <div className="flex items-center justify-between gap-2">
-                                        <label className="text-[11px] sm:text-xs font-black text-slate-500 uppercase tracking-wider ml-1 flex items-center gap-1.5">
-                                            <MapPin size={13} className="text-brand-blue" /> Verified GPS Location
+                                    {/* Field 1: Grievance Title */}
+                                    <div className="space-y-1.5">
+                                        <label className="text-[11px] font-black uppercase tracking-wider text-slate-500 block">
+                                            GRIEVANCE TITLE
                                         </label>
-                                        <button 
-                                            type="button"
-                                            onClick={getLocation}
-                                            disabled={locating}
-                                            className="inline-flex items-center gap-1 text-[10px] sm:text-xs font-bold text-brand-blue hover:text-blue-700 bg-blue-50 hover:bg-blue-100 px-2.5 py-1 rounded-lg sm:rounded-xl border border-blue-100 transition-all active:scale-95 flex-shrink-0"
-                                        >
-                                            {locating ? <Loader2 size={12} className="animate-spin" /> : <Navigation size={12} />}
-                                            {locating ? 'Acquiring GPS...' : 'Re-detect GPS'}
-                                        </button>
+                                        <div className="relative">
+                                            <Type size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                                            <input 
+                                                required 
+                                                type="text"
+                                                className="w-full pl-10 pr-4 py-3 bg-slate-50/80 border border-slate-200/90 rounded-xl text-xs sm:text-sm font-medium focus:outline-none focus:border-sky-600 focus:bg-white transition-all placeholder:text-slate-400" 
+                                                placeholder="Summarize the problem briefly (e.g. Broken streetlight on 2nd Cross)"
+                                                value={formData.title} 
+                                                onChange={e => setFormData({ ...formData, title: e.target.value })}
+                                            />
+                                        </div>
                                     </div>
 
-                                    <div className="p-3.5 sm:p-4 bg-slate-50 border border-slate-200/80 rounded-2xl">
-                                        {locating ? (
-                                            <div className="flex items-center gap-3 text-slate-500 py-1.5">
-                                                <Loader2 className="animate-spin text-brand-blue flex-shrink-0" size={18} />
+                                    {/* Field 2: Ward or City Location with GPS */}
+                                    <div className="space-y-1.5">
+                                        <div className="flex items-center justify-between">
+                                            <label className="text-[11px] font-black uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
+                                                <MapPin size={13} className="text-sky-600" />
+                                                WARD OR CITY LOCATION
+                                            </label>
+                                            <button 
+                                                type="button"
+                                                onClick={getLocation}
+                                                disabled={locating}
+                                                className="inline-flex items-center gap-1 text-[11px] font-bold text-sky-700 hover:text-sky-800 bg-sky-50 hover:bg-sky-100 px-2.5 py-1 rounded-lg border border-sky-200 transition-all active:scale-95 cursor-pointer shrink-0"
+                                            >
+                                                {locating ? <Loader2 size={12} className="animate-spin" /> : <Navigation size={12} />}
+                                                {locating ? 'Acquiring GPS...' : 'Auto-detect GPS'}
+                                            </button>
+                                        </div>
+
+                                        <div className="p-3 bg-slate-50/80 border border-slate-200/90 rounded-xl">
+                                            {locating ? (
+                                                <div className="flex items-center gap-2 py-1 text-slate-500">
+                                                    <Loader2 size={15} className="animate-spin text-sky-600 shrink-0" />
+                                                    <span className="text-xs font-bold text-slate-700">Connecting to GPS satellites...</span>
+                                                </div>
+                                            ) : formData.location ? (
                                                 <div>
-                                                    <p className="text-xs font-bold text-slate-700">Connecting to GPS Satellites...</p>
-                                                    <p className="text-[10px] text-slate-400">Fetching high-accuracy street address</p>
-                                                </div>
-                                            </div>
-                                        ) : formData.location ? (
-                                            <div>
-                                                <div className="flex items-start gap-2 mb-1.5">
-                                                    <CheckCircle2 size={16} className="text-emerald-500 flex-shrink-0 mt-0.5" />
-                                                    <p className="text-xs font-bold text-slate-800 leading-relaxed">
-                                                        {formData.location}
-                                                    </p>
-                                                </div>
-                                                {formData.lat && formData.lng && (
-                                                    <div className="flex items-center gap-1.5 pt-1.5 border-t border-slate-200/60 text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-wider flex-wrap">
-                                                        <span className="px-1.5 py-0.5 bg-white rounded border border-slate-200 text-brand-blue">
-                                                            LAT: {formData.lat.toFixed(5)}°
-                                                        </span>
-                                                        <span className="px-1.5 py-0.5 bg-white rounded border border-slate-200 text-brand-blue">
-                                                            LNG: {formData.lng.toFixed(5)}°
-                                                        </span>
-                                                        <span className="text-emerald-600 font-bold ml-auto flex items-center gap-1">
-                                                            ● GPS Auto-Locked
-                                                        </span>
+                                                    <div className="flex items-start gap-2 mb-1">
+                                                        <CheckCircle2 size={15} className="text-emerald-500 shrink-0 mt-0.5" />
+                                                        <p className="text-xs font-bold text-slate-800 leading-snug truncate">
+                                                            {formData.location}
+                                                        </p>
                                                     </div>
-                                                )}
-                                            </div>
-                                        ) : (
-                                            <div className="flex items-center justify-between py-1">
-                                                <p className="text-xs text-slate-400">Location not yet acquired</p>
-                                                <button 
-                                                    type="button" 
-                                                    onClick={getLocation} 
-                                                    className="text-xs font-bold text-brand-blue underline"
-                                                >
-                                                    Tap to Fetch GPS
-                                                </button>
-                                            </div>
-                                        )}
+                                                    {formData.lat && formData.lng && (
+                                                        <div className="flex items-center gap-2 pt-1 border-t border-slate-200/60 text-[10px] font-black text-slate-400 uppercase tracking-wider">
+                                                            <span className="text-sky-600">LAT: {formData.lat.toFixed(4)}°</span>
+                                                            <span className="text-sky-600">LNG: {formData.lng.toFixed(4)}°</span>
+                                                            <span className="text-emerald-600 font-bold ml-auto">● GPS Auto-Locked</span>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            ) : (
+                                                <div className="flex items-center justify-between py-1">
+                                                    <span className="text-xs text-slate-400">Location will appear here...</span>
+                                                    <button 
+                                                        type="button" 
+                                                        onClick={getLocation} 
+                                                        className="text-xs font-bold text-sky-600 underline"
+                                                    >
+                                                        Fetch GPS
+                                                    </button>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Field 3: Evidence Photos */}
+                                    <div className="space-y-1.5">
+                                        <label className="text-[11px] font-black uppercase tracking-wider text-slate-500 block">
+                                            EVIDENCE PHOTOS
+                                        </label>
+                                        
+                                        <div className="group relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 hover:border-sky-500 bg-slate-50/50 hover:bg-sky-50/20 p-4 transition-all">
+                                            {formData.imageUrl ? (
+                                                <div className="relative w-full aspect-video max-h-36 rounded-xl overflow-hidden shadow-xs">
+                                                    <img src={formData.imageUrl} alt="Uploaded evidence" className="w-full h-full object-cover" />
+                                                    <button 
+                                                        type="button"
+                                                        onClick={() => setFormData({ ...formData, imageUrl: '' })}
+                                                        className="absolute top-2 right-2 px-2.5 py-1 bg-red-600 text-white rounded-lg text-xs font-bold shadow-md hover:bg-red-700 active:scale-95 transition-all"
+                                                    >
+                                                        Remove
+                                                    </button>
+                                                </div>
+                                            ) : (
+                                                <>
+                                                    <Camera size={28} className="text-slate-300 group-hover:text-sky-600 mb-1.5 transition-colors" />
+                                                    <p className="text-slate-600 font-bold text-xs mb-0.5">Tap to capture or upload photo</p>
+                                                    <p className="text-slate-400 text-[10px]">PNG, JPG or JPEG up to 10MB</p>
+                                                    <input 
+                                                        type="file" 
+                                                        accept="image/*"
+                                                        onChange={handleImageUpload}
+                                                        className="absolute inset-0 opacity-0 cursor-pointer"
+                                                    />
+                                                    {uploading && (
+                                                        <div className="absolute inset-0 bg-white/90 flex items-center justify-center rounded-2xl backdrop-blur-xs">
+                                                            <Loader2 size={24} className="animate-spin text-sky-600" />
+                                                        </div>
+                                                    )}
+                                                </>
+                                            )}
+                                        </div>
                                     </div>
                                 </div>
 
-                                {/* Photo Upload */}
-                                <div className="space-y-3">
-                                    <label className="text-[11px] sm:text-xs font-black text-slate-500 uppercase tracking-wider ml-1">
-                                        Evidence Photo
-                                    </label>
-                                    <div className="flex flex-col items-center justify-center border-2 border-dashed border-slate-200 rounded-3xl p-6 sm:p-8 hover:border-brand-blue transition-colors relative group">
-                                        {formData.imageUrl ? (
-                                            <div className="relative w-full aspect-video rounded-2xl overflow-hidden shadow-md">
-                                                <img src={formData.imageUrl} alt="Preview" className="w-full h-full object-cover" />
-                                                <button 
-                                                    type="button"
-                                                    onClick={() => setFormData({...formData, imageUrl: ''})}
-                                                    className="absolute top-2 right-2 px-3 py-1.5 bg-red-600 text-white rounded-xl text-xs font-bold shadow-lg hover:bg-red-700"
-                                                >
-                                                    Remove
-                                                </button>
-                                            </div>
+                                {/* Submit Action Button */}
+                                <div className="pt-3">
+                                    <button 
+                                        type="submit"
+                                        disabled={loading || uploading} 
+                                        className="w-full py-3.5 bg-gradient-to-r from-sky-600 via-sky-500 to-blue-700 hover:from-sky-700 hover:to-blue-800 text-white font-black text-xs uppercase tracking-wider rounded-xl shadow-lg shadow-sky-500/25 active:scale-98 transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50"
+                                    >
+                                        {loading ? (
+                                            <>
+                                                <Loader2 size={16} className="animate-spin" />
+                                                <span>Analyzing with AI Matrix...</span>
+                                            </>
                                         ) : (
                                             <>
-                                                <Camera size={36} className="text-slate-300 mb-2 group-hover:text-brand-blue transition-colors" />
-                                                <p className="text-slate-500 font-bold text-xs sm:text-sm mb-1 text-center">Tap to capture or upload photo</p>
-                                                <p className="text-slate-400 text-[10px] sm:text-xs">Camera or Gallery (JPEG, PNG)</p>
-                                                <input 
-                                                    type="file" 
-                                                    accept="image/*"
-                                                    onChange={handleImageUpload}
-                                                    className="absolute inset-0 opacity-0 cursor-pointer"
-                                                />
-                                                {uploading && (
-                                                    <div className="absolute inset-0 bg-white/85 flex items-center justify-center rounded-3xl backdrop-blur-xs">
-                                                        <Loader2 className="animate-spin text-brand-blue" size={28} />
-                                                    </div>
-                                                )}
+                                                <Send size={15} />
+                                                <span>SUBMIT GRIEVANCE REPORT</span>
                                             </>
                                         )}
-                                    </div>
+                                    </button>
                                 </div>
-
-                                <button 
-                                    disabled={loading || uploading} 
-                                    className="w-full py-4 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 text-white font-black text-sm uppercase tracking-wider rounded-2xl shadow-lg shadow-blue-500/20 active:scale-95 transition-all"
-                                >
-                                    {loading ? 'Analyzing with AI...' : 'Submit Grievance Report'}
-                                </button>
                             </form>
-                        </motion.div>
+                        </div>
                     ) : (
-                        <motion.div 
+                        /* Success View */
+                        <div 
                             key="result" 
-                            initial={{ opacity: 0, scale: 0.95 }} 
-                            animate={{ opacity: 1, scale: 1 }} 
-                            className="max-w-xl mx-auto card-premium p-8 sm:p-12 text-center bg-white rounded-3xl shadow-xl border border-slate-100"
+                            className="w-full flex-1 bg-white rounded-3xl shadow-xl border border-slate-200/80 p-8 sm:p-12 text-center flex flex-col items-center justify-center max-w-2xl mx-auto"
                         >
-                            <div className="w-16 h-16 sm:w-20 sm:h-20 bg-green-50 text-emerald-500 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-md shadow-emerald-200/50">
-                                <CheckCircle2 size={36} />
+                            <div className="w-16 h-16 bg-emerald-50 text-emerald-500 rounded-2xl flex items-center justify-center mb-4 shadow-sm border border-emerald-100">
+                                <CheckCircle2 size={32} />
                             </div>
-                            <h2 className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mb-2">Report Logged!</h2>
-                            <p className="text-slate-400 font-bold mb-8 uppercase text-[10px] sm:text-xs tracking-wider">Status: Dispatched via AI Routing</p>
+                            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight mb-1">
+                                Report Successfully Logged!
+                            </h2>
+                            <p className="text-slate-400 font-bold uppercase text-[10px] tracking-wider mb-6">
+                                Dispatched via JanSetu AI Neural Routing
+                            </p>
                             
-                            <div className="grid grid-cols-2 gap-3 sm:gap-4 text-left mb-8">
-                                <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                                    <p className="text-[9px] font-black text-slate-400 uppercase mb-1">Assigned To</p>
-                                    <p className="text-sm sm:text-base font-black text-brand-blue truncate">{result.department}</p>
+                            <div className="grid grid-cols-2 gap-3 w-full text-left mb-6">
+                                <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-100">
+                                    <p className="text-[10px] font-black text-slate-400 uppercase mb-0.5">Assigned Department</p>
+                                    <p className="text-sm font-black text-sky-600 truncate">{result.department}</p>
                                 </div>
-                                <div className="p-4 bg-slate-50 rounded-2xl border border-slate-100">
-                                    <p className="text-[9px] font-black text-slate-400 uppercase mb-1">AI Priority</p>
-                                    <p className="text-sm sm:text-base font-black text-brand-orange">{result.priority}</p>
+                                <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-100">
+                                    <p className="text-[10px] font-black text-slate-400 uppercase mb-0.5">AI Priority Rating</p>
+                                    <p className="text-sm font-black text-amber-600">{result.priority}</p>
                                 </div>
                             </div>
 
                             <button 
                                 onClick={() => navigate('/citizen')} 
-                                className="w-full py-4 bg-brand-blue text-white rounded-2xl font-black text-xs uppercase tracking-wider shadow-lg shadow-blue-500/20 active:scale-95 transition-all"
+                                className="w-full py-3.5 bg-sky-600 hover:bg-sky-700 text-white rounded-xl font-black text-xs uppercase tracking-wider shadow-md shadow-sky-500/20 active:scale-95 transition-all cursor-pointer"
                             >
                                 Back to My Citizen Portal
                             </button>
-                        </motion.div>
+                        </div>
                     )}
                 </AnimatePresence>
             </div>

@@ -3,13 +3,14 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { 
     ShieldCheck, 
-    ArrowRight, 
+    ChevronRight, 
     Building2, 
-    Target, 
     Zap, 
     TrendingUp,
-    LayoutDashboard,
-    AlertCircle
+    FileText,
+    AlertTriangle,
+    BarChart3,
+    CheckCircle2
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -20,86 +21,189 @@ const AuthorityHome = () => {
     if (!user) return null;
 
     return (
-        <div className="min-h-screen pt-20 sm:pt-28 pb-28 sm:pb-20 bg-white text-slate-900 overflow-hidden relative">
-            {/* Background Accents */}
-            <div className="absolute top-0 right-0 w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] bg-brand-blue opacity-5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
-            <div className="absolute bottom-0 left-0 w-[300px] sm:w-[500px] h-[300px] sm:h-[500px] bg-brand-orange opacity-5 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2 pointer-events-none"></div>
+        <div className="min-h-screen bg-[#f5f8fc] text-slate-900 pt-6 sm:pt-8 pb-16 px-4 sm:px-6 lg:px-8 font-sans antialiased">
+            <div className="max-w-7xl mx-auto space-y-6">
+                
+                {/* 1. Hero Banner - Exact Match to Reference Image 1 */}
+                <div className="relative rounded-3xl bg-white border border-slate-200/80 shadow-xs p-6 sm:p-8 lg:p-10 overflow-hidden">
+                    <div className="relative z-10 max-w-2xl">
+                        {/* Authority Access Badge */}
+                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider mb-4 border border-blue-200/60 shadow-2xs">
+                            <ShieldCheck size={14} className="text-blue-600" /> OFFICIAL AUTHORITY ACCESS
+                        </div>
 
-            <div className="container mx-auto px-4 sm:px-6 relative z-10">
-                <header className="max-w-4xl mb-10 sm:mb-16">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-brand-blue/15 text-brand-blue rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider mb-4 border border-brand-blue/30">
-                        <ShieldCheck size={14} /> Official Authority Access
+                        {/* Title: Simple, clear, understandable terminology replacing "Command Terminal" */}
+                        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 leading-[1.08] mb-3">
+                            Department <br />
+                            <span className="text-[#ea580c]">Operations Hub.</span>
+                        </h1>
+
+                        {/* Subtitle with dynamic officer & department name */}
+                        <p className="text-xs sm:text-sm lg:text-base text-slate-500 font-medium leading-relaxed max-w-xl">
+                            Welcome, Officer <span className="text-blue-600 font-bold">{user?.name ? user.name.split(' ')[0] : 'Officer'}</span>. 
+                            You are currently presiding over the <strong className="text-slate-800">{user?.department || 'Sanitation'}</strong> division.
+                        </p>
                     </div>
-                    <h1 className="text-4xl sm:text-6xl lg:text-7xl font-black tracking-tight mb-4 leading-tight text-slate-900">
-                        Command <br className="hidden sm:inline" /> <span className="text-brand-orange">Terminal.</span>
-                    </h1>
-                    <p className="text-sm sm:text-lg text-slate-500 font-medium max-w-2xl leading-relaxed">
-                        Welcome, Officer <span className="text-brand-blue font-bold">{user.name.split(' ')[0]}</span>. You are currently presiding over the <span className="text-brand-blue">{user.department}</span> division.
-                    </p>
-                </header>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8 mb-10 sm:mb-16">
-                    {/* Primary Operations */}
-                    <motion.div 
-                        whileHover={{ y: -6 }}
-                        className="p-6 sm:p-10 bg-slate-50 border border-slate-100 group cursor-pointer rounded-3xl sm:rounded-[40px] shadow-sm hover:shadow-xl transition-all"
-                        onClick={() => navigate('/department')}
-                    >
-                        <LayoutDashboard className="text-brand-blue mb-6" size={36} />
-                        <h3 className="text-xl sm:text-2xl font-black text-slate-900 mb-2">Operations Hub</h3>
-                        <p className="text-xs sm:text-sm text-slate-500 font-medium mb-6 leading-relaxed">Access real-time reports, assign tasks, and update resolution protocols.</p>
-                        <div className="flex items-center gap-2 text-brand-blue font-bold text-xs sm:text-sm uppercase tracking-wider group-hover:gap-3 transition-all">
-                            Initialize Hub <ArrowRight size={16} />
-                        </div>
-                    </motion.div>
-
-                    <motion.div 
-                        whileHover={{ y: -6 }}
-                        className="p-6 sm:p-10 bg-gradient-to-br from-amber-500 to-orange-600 group cursor-pointer rounded-3xl sm:rounded-[40px] shadow-lg shadow-orange-500/20 transition-all text-white"
-                        onClick={() => navigate('/department')}
-                    >
-                        <AlertCircle className="text-white mb-6" size={36} />
-                        <h3 className="text-xl sm:text-2xl font-black text-white mb-2">Priority Queue</h3>
-                        <p className="text-xs sm:text-sm text-orange-100 font-medium mb-6 leading-relaxed">Instant access to high-severity incidents requiring immediate deployment.</p>
-                        <div className="flex items-center gap-2 text-white font-bold text-xs sm:text-sm uppercase tracking-wider group-hover:gap-3 transition-all">
-                            View Alerts <ArrowRight size={16} />
-                        </div>
-                    </motion.div>
-
-                    <motion.div 
-                        whileHover={{ y: -6 }}
-                        className="p-6 sm:p-10 bg-slate-900 group cursor-pointer rounded-3xl sm:rounded-[40px] shadow-lg transition-all text-white"
-                        onClick={() => navigate(user.role === 'admin' ? '/admin' : '/department')}
-                    >
-                        <TrendingUp className="text-brand-blue mb-6" size={36} />
-                        <h3 className="text-xl sm:text-2xl font-black text-white mb-2">City Trends</h3>
-                        <p className="text-xs sm:text-sm text-slate-400 font-medium mb-6 leading-relaxed">Review departmental performance analytics and civic satisfaction trends.</p>
-                        <div className="flex items-center gap-2 text-brand-blue font-bold text-xs sm:text-sm uppercase tracking-wider group-hover:gap-3 transition-all">
-                            Open Console <ArrowRight size={16} />
-                        </div>
-                    </motion.div>
+                    {/* Right-side Municipal Corporation Authority Building (Image 2) */}
+                    <div className="hidden md:block absolute right-0 top-0 bottom-0 w-[48%] lg:w-[52%] pointer-events-none select-none overflow-hidden">
+                        <img 
+                            src="/dept_municipal_corp.jpg" 
+                            alt="Municipal Corporation Building" 
+                            className="w-full h-full object-cover object-center"
+                        />
+                        {/* Soft blend fade on the left edge for seamless transition into white content */}
+                        <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-white via-white/70 to-transparent"></div>
+                    </div>
                 </div>
 
-                <div className="p-6 sm:p-10 bg-slate-50 border border-slate-100 rounded-3xl sm:rounded-[40px]">
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-                         <div className="max-w-lg">
-                            <h2 className="text-xl sm:text-2xl font-black text-slate-900 mb-2 uppercase tracking-tight">Department Status</h2>
-                            <p className="text-xs sm:text-sm text-slate-500 font-medium leading-relaxed italic">
-                                "Efficiency in governance is the bridge between citizen voice and city action."
+                {/* 2. Three Operations Cards - Soft elegant gradients & correct curves matching Reference Image 1 */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                    
+                    {/* Card 1: Operations Hub (Soft Blue) */}
+                    <motion.div 
+                        whileHover={{ y: -3 }}
+                        onClick={() => navigate('/department')}
+                        className="bg-gradient-to-br from-blue-50/90 via-blue-50/40 to-blue-100/50 border border-blue-200/70 rounded-3xl p-6 sm:p-7 relative overflow-hidden shadow-xs hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
+                    >
+                        <div>
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="w-11 h-11 rounded-2xl bg-blue-100/80 text-blue-600 flex items-center justify-center shadow-2xs">
+                                    <FileText size={22} />
+                                </div>
+                                <div className="w-9 h-9 rounded-full bg-blue-100/70 text-blue-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors shadow-2xs">
+                                    <ChevronRight size={18} />
+                                </div>
+                            </div>
+
+                            <h3 className="text-lg sm:text-xl font-black text-slate-900 mb-1.5">
+                                Operations Hub
+                            </h3>
+                            <p className="text-xs sm:text-[13px] text-slate-500 font-medium leading-relaxed">
+                                Access real-time reports, assign tasks, and update resolution protocols.
                             </p>
-                         </div>
-                         <div className="flex gap-3 w-full sm:w-auto">
-                            <div className="flex-1 sm:flex-initial px-6 py-3 bg-white rounded-2xl border border-slate-100 text-center shadow-xs">
-                                <p className="text-[9px] font-black text-brand-blue uppercase tracking-wider mb-0.5">Status</p>
-                                <p className="text-base sm:text-lg font-black text-slate-900">Active</p>
+                        </div>
+
+                        {/* Subtle background watermark */}
+                        <div className="absolute -bottom-4 -right-4 text-blue-500/10 pointer-events-none select-none">
+                            <FileText size={100} />
+                        </div>
+                    </motion.div>
+
+                    {/* Card 2: Priority Queue (Soft Warm Amber/Peach) */}
+                    <motion.div 
+                        whileHover={{ y: -3 }}
+                        onClick={() => navigate('/department')}
+                        className="bg-gradient-to-br from-amber-50/90 via-orange-50/40 to-amber-100/50 border border-amber-200/70 rounded-3xl p-6 sm:p-7 relative overflow-hidden shadow-xs hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
+                    >
+                        <div>
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="w-11 h-11 rounded-2xl bg-amber-100/80 text-amber-600 flex items-center justify-center shadow-2xs">
+                                    <AlertTriangle size={22} />
+                                </div>
+                                <div className="w-9 h-9 rounded-full bg-amber-100/70 text-amber-600 flex items-center justify-center group-hover:bg-amber-600 group-hover:text-white transition-colors shadow-2xs">
+                                    <ChevronRight size={18} />
+                                </div>
                             </div>
-                            <div className="flex-1 sm:flex-initial px-6 py-3 bg-brand-blue rounded-2xl text-center shadow-xs">
-                                <p className="text-[9px] font-black text-blue-100 uppercase tracking-wider mb-0.5">Division</p>
-                                <p className="text-base sm:text-lg font-black text-white">{user.department?.split(' ')[0]}</p>
+
+                            <h3 className="text-lg sm:text-xl font-black text-slate-900 mb-1.5">
+                                Priority Queue
+                            </h3>
+                            <p className="text-xs sm:text-[13px] text-slate-500 font-medium leading-relaxed">
+                                Instant access to high-severity incidents requiring immediate deployment.
+                            </p>
+                        </div>
+
+                        {/* Subtle background watermark */}
+                        <div className="absolute -bottom-4 -right-4 text-amber-500/10 pointer-events-none select-none">
+                            <AlertTriangle size={100} />
+                        </div>
+                    </motion.div>
+
+                    {/* Card 3: City Trends (Soft Fresh Mint/Emerald) */}
+                    <motion.div 
+                        whileHover={{ y: -3 }}
+                        onClick={() => navigate(user.role === 'admin' ? '/admin' : '/department')}
+                        className="bg-gradient-to-br from-emerald-50/90 via-teal-50/40 to-emerald-100/50 border border-emerald-200/70 rounded-3xl p-6 sm:p-7 relative overflow-hidden shadow-xs hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between"
+                    >
+                        <div>
+                            <div className="flex items-center justify-between mb-4">
+                                <div className="w-11 h-11 rounded-2xl bg-emerald-100/80 text-emerald-600 flex items-center justify-center shadow-2xs">
+                                    <BarChart3 size={22} />
+                                </div>
+                                <div className="w-9 h-9 rounded-full bg-emerald-100/70 text-emerald-600 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-colors shadow-2xs">
+                                    <ChevronRight size={18} />
+                                </div>
                             </div>
-                         </div>
-                    </div>
+
+                            <h3 className="text-lg sm:text-xl font-black text-slate-900 mb-1.5">
+                                City Trends
+                            </h3>
+                            <p className="text-xs sm:text-[13px] text-slate-500 font-medium leading-relaxed">
+                                Review departmental performance analytics and civic satisfaction trends.
+                            </p>
+                        </div>
+
+                        {/* Subtle background watermark */}
+                        <div className="absolute -bottom-4 -right-4 text-emerald-500/10 pointer-events-none select-none">
+                            <TrendingUp size={100} />
+                        </div>
+                    </motion.div>
+
                 </div>
+
+                {/* 3. Bottom Status & Quick Actions Row - Exact Match to Reference Image 1 */}
+                <div className="flex flex-col lg:flex-row items-stretch gap-4">
+                    
+                    {/* Left Card: Department Status */}
+                    <div className="flex-1 bg-white border border-slate-200/80 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-2xs">
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0">
+                                <Building2 size={20} />
+                            </div>
+                            <div>
+                                <h4 className="text-sm font-black text-slate-900">Department Status</h4>
+                                <p className="text-xs text-slate-400 font-medium italic mt-0.5">
+                                    "Efficiency in governance is the bridge between citizen voice and city action."
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Status Pills from Reference Image 1 */}
+                        <div className="flex items-center gap-2 self-stretch sm:self-auto shrink-0">
+                            <div className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-bold text-slate-700 flex items-center gap-1">
+                                <span>Division: <strong>{user?.department || 'Sanitation'}</strong></span>
+                                <span className="text-slate-400 text-[10px]">⌄</span>
+                            </div>
+                            <div className="px-3 py-1.5 bg-emerald-50 border border-emerald-200 rounded-xl text-xs font-bold text-emerald-700 flex items-center gap-1.5">
+                                <span className="w-2 h-2 rounded-full bg-emerald-500 inline-block"></span>
+                                <span>Status: <strong>Active</strong></span>
+                                <span className="text-emerald-500 text-[10px]">⌄</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Right Card: Quick Actions */}
+                    <div 
+                        onClick={() => navigate('/department')}
+                        className="bg-white border border-slate-200/80 rounded-2xl p-4 sm:p-5 flex items-center justify-between gap-4 shadow-2xs hover:bg-slate-50 transition-colors cursor-pointer group shrink-0"
+                    >
+                        <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center shrink-0 group-hover:scale-105 transition-transform">
+                                <Zap size={20} />
+                            </div>
+                            <div>
+                                <h4 className="text-sm font-black text-slate-900">Quick Actions</h4>
+                                <p className="text-xs text-slate-400 font-medium">Perform common tasks instantly.</p>
+                            </div>
+                        </div>
+                        <div className="w-8 h-8 rounded-full bg-slate-100 text-slate-600 flex items-center justify-center group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                            <ChevronRight size={16} />
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
         </div>
     );
