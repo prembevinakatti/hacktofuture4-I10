@@ -37,7 +37,7 @@ const Navbar = () => {
   return (
     <>
       {/* Top Desktop & Mobile Navigation Header */}
-      <nav className="nav-blur relative z-[100] border-b border-slate-200/80">
+      <nav className="nav-blur relative z-[1000] isolate border-b border-slate-200/80">
         <div className="container mx-auto px-4 sm:px-6 h-16 sm:h-20 flex justify-between items-center">
           {/* Brand Logo */}
           <Link
@@ -199,7 +199,7 @@ const Navbar = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="md:hidden fixed inset-0 top-16 z-40 bg-slate-900/30 backdrop-blur-[1px]"
+                className="md:hidden fixed inset-0 top-16 z-[1001] bg-slate-900/30 backdrop-blur-[1px]"
                 onClick={() => setIsMobileMenuOpen(false)}
               />
               <motion.div
@@ -207,7 +207,7 @@ const Navbar = () => {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: "100%" }}
                 transition={{ type: "tween", duration: 0.2 }}
-                className="md:hidden fixed top-16 right-0 bottom-0 z-50 w-[min(86vw,22rem)] border-l border-slate-200 bg-white/95 backdrop-blur-2xl px-5 py-5 shadow-2xl overflow-y-auto"
+                className="md:hidden fixed top-16 right-0 bottom-0 z-[1002] w-[min(86vw,22rem)] border-l border-slate-200 bg-white/95 backdrop-blur-2xl px-5 py-5 shadow-2xl overflow-y-auto"
               >
               <div className="space-y-4">
                 {/* <div className="pb-1">
@@ -356,7 +356,7 @@ const Navbar = () => {
       </nav>
 
       {/* Mobile Bottom Quick Navigation Bar (Sticky for Touch Devices) */}
-      <div className="md:hidden fixed bottom-0 left-0 right-0 z-[100] bg-white/95 backdrop-blur-xl border-t border-slate-200/90 px-3 py-2 shadow-2xl safe-area-bottom">
+      <div className="md:hidden fixed bottom-0 left-0 right-0 z-[1000] bg-white/95 backdrop-blur-xl border-t border-slate-200/90 px-3 py-2 shadow-2xl safe-area-bottom">
         <div className="flex justify-around items-center">
           {user ? (
             user.role === "citizen" ? (
