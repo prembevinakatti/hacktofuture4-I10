@@ -37,6 +37,9 @@ const sanitizeComplaintImageUrl = (url) => {
   if (url.startsWith('http://localhost:5000')) {
     return url.replace('http://localhost:5000', baseUrl);
   }
+  if (url.includes('res.cloudinary.com') && url.includes('/image/upload/') && !url.includes('/image/upload/f_auto,q_auto,w_1600/')) {
+    return url.replace('/image/upload/', '/image/upload/f_auto,q_auto,w_1600/');
+  }
   return url;
 };
 

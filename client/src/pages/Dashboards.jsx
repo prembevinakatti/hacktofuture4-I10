@@ -89,7 +89,7 @@ const ComplaintCard = ({ c, isAuthority = false, onUpdateStatus, onOpenResolve, 
                     />
                 ) : c.imageUrl ? (
                     <div className="w-full h-40 rounded-2xl mb-4 overflow-hidden shadow-inner bg-slate-100">
-                        <img src={c.imageUrl} alt="Evidence" className="w-full h-full object-cover" />
+                        <img src={c.imageUrl} alt="Evidence" loading="lazy" decoding="async" className="w-full h-full object-cover" />
                     </div>
                 ) : null}
 

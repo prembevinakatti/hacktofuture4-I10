@@ -40,33 +40,26 @@ const AdminLogin = () => {
         setLoading(true);
         const loginToast = toast.loading('Authenticating Administrative Access...');
 
-        // Primary and fallback endpoints
-        const endpoints = [
-            `${API_BASE_URL}/api/auth/admin-login`,
-            `${API_BASE_URL}/api/auth/login`,
-            `http://localhost:5000/api/auth/admin-login`,
-            `http://localhost:5000/api/auth/login`
-        ];
-
         let success = false;
         let lastError = 'Invalid administrative credentials';
 
-        for (const url of endpoints) {
-            try {
-                const { data } = await axios.post(url, {
-                    email: formData.email.trim(),
-                    password: formData.password
-                });
-                if (data && (data.role === 'admin' || data.role === 'authority')) {
-                    login(data);
-                    toast.success(`Welcome, Commissioner ${data.name.split(' ')[0]}`, { id: loginToast });
-                    navigate('/admin');
-                    success = true;
-                    break;
-                }
-            } catch (err) {
-                lastError = err.response?.data?.message || err.message || lastError;
+        try {
+            const { data } = await axios.post(`${API_BASE_URL}/api/auth/admin-login`, {
+                email: formData.email.trim().toLowerCase(),
+                password: formData.password
+            }, { timeout: 15000 });
+            if (data && (data.role === 'admin' || data.role === 'authority')) {
+                login(data);
+                toast.success(`Welcome, Commissioner ${data.name.split(' ')[0]}`, { id: loginToast });
+                navigate('/admin');
+                success = true;
+            } else {
+                lastError = 'This account does not have administrative access';
             }
+        } catch (err) {
+            lastError = err.response?.data?.message || (err.code === 'ECONNABORTED'
+                ? 'The admin service took too long to respond'
+                : 'Unable to reach the admin service');
         }
 
         if (!success) {

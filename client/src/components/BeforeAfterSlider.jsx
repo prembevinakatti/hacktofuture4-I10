@@ -36,7 +36,7 @@ const BeforeAfterSlider = ({
         return (
             <div className="rounded-2xl overflow-hidden bg-slate-900 border border-slate-200 shadow-xs mb-3">
                 <div className="relative h-44 sm:h-52 w-full bg-slate-100">
-                    <img src={afterImage} alt="Resolution" className="w-full h-full object-cover" />
+                    <img src={afterImage} alt="Resolution" loading="lazy" decoding="async" className="w-full h-full object-cover" />
                     <span className="absolute top-2.5 right-2.5 px-2.5 py-1 bg-emerald-600 text-white rounded-lg text-[9px] sm:text-[10px] font-black uppercase tracking-wider shadow">
                         Proof of Work
                     </span>
@@ -67,6 +67,8 @@ const BeforeAfterSlider = ({
                     <img 
                         src={afterImage} 
                         alt="After (Resolved)" 
+                        loading="lazy"
+                        decoding="async"
                         className="absolute inset-0 w-full h-full object-cover pointer-events-none" 
                     />
                     <span className="absolute top-2.5 right-2.5 px-2 py-0.5 sm:px-2.5 sm:py-1 bg-emerald-600/90 backdrop-blur-md text-white rounded-md text-[9px] sm:text-[10px] font-black uppercase tracking-wider pointer-events-none shadow">
@@ -81,6 +83,8 @@ const BeforeAfterSlider = ({
                         <img 
                             src={beforeImage} 
                             alt="Before (Reported Issue)" 
+                            loading="lazy"
+                            decoding="async"
                             className="absolute inset-0 w-full h-full object-cover max-w-none"
                             style={{ 
                                 width: containerRef.current ? `${containerRef.current.clientWidth}px` : '100%',
@@ -104,7 +108,7 @@ const BeforeAfterSlider = ({
                 </div>
             ) : (
                 <div className="relative h-40 sm:h-48 w-full bg-slate-100">
-                    <img src={beforeImage} alt="Complaint Evidence" className="w-full h-full object-cover" />
+                    <img src={beforeImage} alt="Complaint Evidence" loading="lazy" decoding="async" className="w-full h-full object-cover" />
                     <span className="absolute top-2.5 left-2.5 px-2.5 py-1 bg-slate-900/80 text-white rounded-md text-[9px] sm:text-[10px] font-black uppercase tracking-wider">
                         Evidence Photo
                     </span>

@@ -104,6 +104,7 @@ const AdminPage = () => {
                                     <img 
                                         src="/admin_municipal_hero.jpg" 
                                         alt="Municipal Authority Office Headquarters" 
+                                        fetchPriority="high"
                                         className="w-full h-auto max-h-56 sm:max-h-64 object-contain group-hover:scale-[1.02] transition-transform duration-300 block mx-auto"
                                     />
                                 </div>
@@ -187,6 +188,8 @@ const AdminPage = () => {
                                                 <img 
                                                     src={c.imageUrl} 
                                                     alt="Complaint Evidence" 
+                                                    loading="lazy"
+                                                    decoding="async"
                                                     className="w-full h-full object-cover"
                                                 />
                                             </div>

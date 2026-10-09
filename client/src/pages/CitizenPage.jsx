@@ -477,7 +477,7 @@ const CitizenPage = () => {
                                                 />
                                             ) : c.imageUrl ? (
                                                 <div className="h-40 rounded-2xl overflow-hidden bg-slate-100 mb-2">
-                                                    <img src={c.imageUrl} alt="Complaint proof" className="w-full h-full object-cover" />
+                                                    <img src={c.imageUrl} alt="Complaint proof" loading="lazy" decoding="async" className="w-full h-full object-cover" />
                                                 </div>
                                             ) : null}
 

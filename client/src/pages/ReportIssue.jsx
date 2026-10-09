@@ -378,7 +378,7 @@ const ReportIssue = () => {
                                         <div className="group relative flex flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 hover:border-sky-500 bg-slate-50/50 hover:bg-sky-50/20 p-4 transition-all">
                                             {formData.imageUrl ? (
                                                 <div className="relative w-full aspect-video max-h-36 rounded-xl overflow-hidden shadow-xs">
-                                                    <img src={formData.imageUrl} alt="Uploaded evidence" className="w-full h-full object-cover" />
+                                                    <img src={formData.imageUrl} alt="Uploaded evidence" loading="lazy" decoding="async" className="w-full h-full object-cover" />
                                                     <button 
                                                         type="button"
                                                         onClick={() => setFormData({ ...formData, imageUrl: '' })}

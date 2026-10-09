@@ -39,32 +39,26 @@ const DepartmentLogin = () => {
         setLoading(true);
         const loginToast = toast.loading('Connecting to Department Operational Matrix...');
 
-        const endpoints = [
-            `${API_BASE_URL}/api/auth/admin-login`,
-            `${API_BASE_URL}/api/auth/login`,
-            `http://localhost:5000/api/auth/admin-login`,
-            `http://localhost:5000/api/auth/login`
-        ];
-
         let success = false;
         let lastError = 'Authentication failed';
 
-        for (const url of endpoints) {
-            try {
-                const { data } = await axios.post(url, {
-                    email: formData.email.trim(),
-                    password: formData.password
-                });
-                if (data && (data.role === 'authority' || data.role === 'admin')) {
-                    login(data);
-                    toast.success(`Welcome, Officer ${data.name.split(' ')[0]} (${data.department || 'Authority'})`, { id: loginToast });
-                    navigate('/department');
-                    success = true;
-                    break;
-                }
-            } catch (err) {
-                lastError = err.response?.data?.message || err.message || lastError;
+        try {
+            const { data } = await axios.post(`${API_BASE_URL}/api/auth/admin-login`, {
+                email: formData.email.trim().toLowerCase(),
+                password: formData.password
+            }, { timeout: 15000 });
+            if (data && (data.role === 'authority' || data.role === 'admin')) {
+                login(data);
+                toast.success(`Welcome, Officer ${data.name.split(' ')[0]} (${data.department || 'Authority'})`, { id: loginToast });
+                navigate('/department');
+                success = true;
+            } else {
+                lastError = 'This account does not have department access';
             }
+        } catch (err) {
+            lastError = err.response?.data?.message || (err.code === 'ECONNABORTED'
+                ? 'The department service took too long to respond'
+                : 'Unable to reach the department service');
         }
 
         if (!success) {

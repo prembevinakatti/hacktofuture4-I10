@@ -29,7 +29,7 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email?.trim().toLowerCase() });
     if (user && (await user.matchPassword(password))) {
       res.json({
         _id: user._id,
@@ -51,7 +51,7 @@ const loginUser = async (req, res) => {
 const adminLogin = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email: email?.trim().toLowerCase() });
     if (!user || !(await user.matchPassword(password))) {
       return res.status(401).json({ message: 'Invalid admin credentials' });
     }

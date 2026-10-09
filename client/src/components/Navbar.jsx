@@ -194,12 +194,21 @@ const Navbar = () => {
         {/* Mobile Drawer Menu (Slides Down on Small Screens) */}
         <AnimatePresence>
           {isMobileMenuOpen && (
-            <motion.div
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              className="md:hidden border-t border-slate-100 bg-white/95 backdrop-blur-2xl px-6 py-6 shadow-2xl overflow-hidden"
-            >
+            <>
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="md:hidden fixed inset-0 top-16 z-40 bg-slate-900/30 backdrop-blur-[1px]"
+                onClick={() => setIsMobileMenuOpen(false)}
+              />
+              <motion.div
+                initial={{ opacity: 0, x: "100%" }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: "100%" }}
+                transition={{ type: "tween", duration: 0.2 }}
+                className="md:hidden fixed top-16 right-0 bottom-0 z-50 w-[min(86vw,22rem)] border-l border-slate-200 bg-white/95 backdrop-blur-2xl px-5 py-5 shadow-2xl overflow-y-auto"
+              >
               <div className="space-y-4">
                 {/* <div className="pb-1">
                                     <VoiceCallButton className="w-full justify-center py-3 text-sm shadow-lg" />
@@ -337,30 +346,11 @@ const Navbar = () => {
                       </span>
                       <span className="text-xs text-white/80">Join now →</span>
                     </Link>
-                    <Link
-                      to="/department/login"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="p-3.5 rounded-xl font-bold text-sm text-amber-800 bg-amber-50 border border-amber-200 flex items-center justify-between"
-                    >
-                      <span className="flex items-center gap-2.5">
-                        <Building2 size={16} className="text-amber-700" /> Department Official Portal
-                      </span>
-                      <span className="text-xs text-amber-700">Enter →</span>
-                    </Link>
-                    <Link
-                      to="/admin/login"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="p-3.5 rounded-xl font-bold text-sm text-white bg-slate-900 flex items-center justify-between"
-                    >
-                      <span className="flex items-center gap-2.5">
-                        <ShieldCheck size={16} className="text-slate-200" /> Super Admin Matrix
-                      </span>
-                      <span className="text-xs text-slate-400">Access →</span>
-                    </Link>
                   </div>
                 )}
               </div>
-            </motion.div>
+              </motion.div>
+            </>
           )}
         </AnimatePresence>
       </nav>
@@ -454,17 +444,6 @@ const Navbar = () => {
               >
                 <FileText size={20} />
                 <span className="text-[10px]">Tracker</span>
-              </Link>
-              <Link
-                to="/report"
-                className="flex flex-col items-center gap-1 py-1 px-3 text-brand-orange font-bold rounded-xl"
-              >
-                <div className="w-7 h-7 -mt-3 bg-gradient-to-r from-amber-500 to-orange-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-orange-500/30">
-                  <PlusCircle size={18} />
-                </div>
-                <span className="text-[10px] text-brand-orange font-black">
-                  Report
-                </span>
               </Link>
               <Link
                 to="/login"

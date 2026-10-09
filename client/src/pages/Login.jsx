@@ -26,28 +26,22 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        const endpoints = [
-            `${API_BASE_URL}/api/auth/login`,
-            `http://localhost:5000/api/auth/login`
-        ];
-
         let success = false;
         let lastError = 'Login failed';
 
-        for (const url of endpoints) {
-            try {
-                const { data } = await axios.post(url, {
-                    email: formData.email.trim(),
-                    password: formData.password
-                });
-                login(data);
-                toast.success(`Welcome back, ${data.name}`);
-                navigate('/home');
-                success = true;
-                break;
-            } catch (err) {
-                lastError = err.response?.data?.message || err.message || lastError;
-            }
+        try {
+            const { data } = await axios.post(`${API_BASE_URL}/api/auth/login`, {
+                email: formData.email.trim().toLowerCase(),
+                password: formData.password
+            }, { timeout: 15000 });
+            login(data);
+            toast.success(`Welcome back, ${data.name}`);
+            navigate('/home');
+            success = true;
+        } catch (err) {
+            lastError = err.response?.data?.message || (err.code === 'ECONNABORTED'
+                ? 'The login service took too long to respond'
+                : 'Unable to reach the login service');
         }
 
         if (!success) {
