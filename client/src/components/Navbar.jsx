@@ -191,7 +191,9 @@ const Navbar = () => {
           </div>
         </div>
 
-        {/* Mobile Drawer Menu (Slides Down on Small Screens) */}
+      </nav>
+
+      {/* Mobile Drawer Menu (Slides Down on Small Screens) */}
         <AnimatePresence>
           {isMobileMenuOpen && (
             <>
@@ -353,7 +355,6 @@ const Navbar = () => {
             </>
           )}
         </AnimatePresence>
-      </nav>
 
       {/* Mobile Bottom Quick Navigation Bar (Sticky for Touch Devices) */}
       <div className="md:hidden fixed bottom-0 left-0 right-0 z-[1000] bg-white/95 backdrop-blur-xl border-t border-slate-200/90 px-3 py-2 shadow-2xl safe-area-bottom">
