@@ -71,36 +71,68 @@ const AdminPage = () => {
         : allComplaints.filter(c => c.department === selectedDeptFilter);
 
     return (
-        <div className="min-h-screen pt-20 sm:pt-28 pb-28 sm:pb-24 bg-slate-50">
-            <div className="container mx-auto px-4 sm:px-6">
-                {/* Admin Header */}
-                <header className="mb-8 sm:mb-12">
-                    <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-slate-900 text-white rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider mb-3 shadow-xs">
-                        <Activity size={13} className="text-brand-orange animate-pulse" /> City Executive Command Matrix
+        <div 
+            className="min-h-screen pt-20 sm:pt-26 pb-28 sm:pb-24 bg-slate-50 relative bg-cover bg-fixed bg-center"
+            style={{ backgroundImage: `url('/admin_aesthetic_bg.png')` }}
+        >
+            {/* Soft translucent backdrop to guarantee high contrast and readability */}
+            <div className="absolute inset-0 bg-white/75 backdrop-blur-[2px] pointer-events-none"></div>
+
+            <div className="container mx-auto px-4 sm:px-6 relative z-10">
+                {/* Admin Header with Side-by-Side Municipal Image Card */}
+                <header className="mb-8 sm:mb-12 bg-white/95 backdrop-blur-md rounded-2xl sm:rounded-3xl border border-slate-300 shadow-md p-5 sm:p-8">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                        <div className="lg:col-span-7">
+                       
+                            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+                                City Administration <span className="text-brand-blue">Portal.</span>
+                            </h1>
+                            <p className="text-slate-600 font-medium text-xs sm:text-base mt-2 max-w-xl leading-relaxed">
+                                Cross-department accountability rankings, AI anti-fraud audit radar, and city-wide resolution intelligence for senior municipal commissioners.
+                            </p>
+                            <div className="mt-4 flex flex-wrap items-center gap-3 text-xs font-bold text-slate-500">
+                                <span className="flex items-center gap-1.5"><Building2 size={14} className="text-brand-orange" /> 6 Connected Line Depts</span>
+                                <span>•</span>
+                                <span className="flex items-center gap-1.5"><MapPin size={14} className="text-emerald-600" /> City-Wide Geo Telemetry</span>
+                            </div>
+                        </div>
+
+                        {/* Image Card on the side - Full top emblem visibility */}
+                        <div className="lg:col-span-5">
+                            <div className="rounded-2xl border border-slate-300 bg-white p-2 shadow-sm group overflow-hidden">
+                                <div className="rounded-xl overflow-hidden bg-slate-100 flex items-center justify-center border border-slate-200">
+                                    <img 
+                                        src="/admin_municipal_hero.jpg" 
+                                        alt="Municipal Authority Office Headquarters" 
+                                        className="w-full h-auto max-h-56 sm:max-h-64 object-contain group-hover:scale-[1.02] transition-transform duration-300 block mx-auto"
+                                    />
+                                </div>
+                                <div className="pt-2 px-1 flex items-center justify-between text-slate-600">
+                                    <span className="text-[11px] font-bold">Municipal Governance Authority</span>
+                                    <span className="text-[10px] font-black text-blue-700 bg-blue-50 border border-blue-200 px-2 py-0.5 rounded-md">HQ Central</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <h1 className="text-3xl sm:text-4xl lg:text-6xl font-black text-slate-900 tracking-tight">
-                        City Administration <span className="text-brand-blue">Portal.</span>
-                    </h1>
-                    <p className="text-slate-500 font-medium text-xs sm:text-base mt-1.5 sm:mt-2">
-                        Cross-department accountability rankings, AI anti-fraud audit radar, and city-wide resolution intelligence.
-                    </p>
                 </header>
 
                 {/* Top Metrics Row */}
                 <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-6 mb-8 sm:mb-12">
-                    <div className="card-premium p-4 sm:p-6 bg-white border-l-4 border-brand-blue rounded-2xl sm:rounded-3xl shadow-xs">
+                    <div className="card-premium p-4 sm:p-6 bg-white/95 backdrop-blur-sm border border-slate-300 border-l-4 border-l-brand-blue rounded-2xl sm:rounded-3xl shadow-xs">
                         <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-wider mb-0.5">Total Complaints</p>
                         <p className="text-2xl sm:text-4xl font-black text-slate-900">{allComplaints.length}</p>
                     </div>
-                    <div className="card-premium p-4 sm:p-6 bg-white border-l-4 border-red-500 rounded-2xl sm:rounded-3xl shadow-xs">
-                        <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-wider mb-0.5">High Priority 🚨</p>
+                    <div className="card-premium p-4 sm:p-6 bg-white/95 backdrop-blur-sm border border-slate-300 border-l-4 border-l-red-500 rounded-2xl sm:rounded-3xl shadow-xs">
+                        <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-wider mb-0.5 inline-flex items-center gap-1">
+                            High Priority <Flame size={12} className="text-red-500" />
+                        </p>
                         <p className="text-2xl sm:text-4xl font-black text-red-500">{highPriorityCount}</p>
                     </div>
-                    <div className="card-premium p-4 sm:p-6 bg-white border-l-4 border-emerald-500 rounded-2xl sm:rounded-3xl shadow-xs">
-                        <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-wider mb-0.5">AI Resolved</p>
+                    <div className="card-premium p-4 sm:p-6 bg-white/95 backdrop-blur-sm border border-slate-300 border-l-4 border-l-emerald-500 rounded-2xl sm:rounded-3xl shadow-xs">
+                        <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-wider mb-0.5">Resolved</p>
                         <p className="text-2xl sm:text-4xl font-black text-emerald-500">{resolvedCount}</p>
                     </div>
-                    <div className="card-premium p-4 sm:p-6 bg-white border-l-4 border-purple-500 rounded-2xl sm:rounded-3xl shadow-xs">
+                    <div className="card-premium p-4 sm:p-6 bg-white/95 backdrop-blur-sm border border-slate-300 border-l-4 border-l-purple-500 rounded-2xl sm:rounded-3xl shadow-xs">
                         <p className="text-[9px] sm:text-[10px] font-black text-slate-400 uppercase tracking-wider mb-0.5">Audit Flags</p>
                         <p className="text-2xl sm:text-4xl font-black text-purple-600">{fraudAuditComplaints.length}</p>
                     </div>
@@ -112,7 +144,7 @@ const AdminPage = () => {
                     title="Cross-Department Performance Scoreboard & Rankings" 
                 />
 
-                {/* 🚨 AI Anti-Fraud / Suspicious Closure Watchlist */}
+                {/* 🚨 Anti-Fraud / Suspicious Closure Watchlist */}
                 {fraudAuditComplaints.length > 0 && (
                     <div className="card-premium p-5 sm:p-8 bg-red-50/60 border border-red-200 rounded-2xl sm:rounded-3xl mb-8 sm:mb-12 shadow-xs">
                         <div className="flex items-center gap-3 mb-4 sm:mb-6">
@@ -120,9 +152,9 @@ const AdminPage = () => {
                                 <ShieldAlert size={20} />
                             </div>
                             <div>
-                                <h2 className="text-lg sm:text-xl font-black text-slate-900">AI Anti-Fraud Watchlist</h2>
+                                <h2 className="text-lg sm:text-xl font-black text-slate-900">Anti-Fraud Watchlist</h2>
                                 <p className="text-[11px] sm:text-xs text-red-700 font-bold uppercase tracking-wider">
-                                    {fraudAuditComplaints.length} tickets where AI rejected fake worker resolution
+                                    {fraudAuditComplaints.length} tickets where verification rejected improper resolution
                                 </p>
                             </div>
                         </div>
@@ -139,7 +171,7 @@ const AdminPage = () => {
                                         </div>
                                         <h4 className="text-xs sm:text-sm font-bold text-slate-900 mb-2">{c.title}</h4>
                                         <div className="p-2.5 bg-red-50 border border-red-200 rounded-xl text-[11px] text-red-900 font-medium mb-3">
-                                            ⚠️ <strong>AI Verdict:</strong> {c.verificationVerdict || 'Incomplete resolution detected in uploaded photo.'}
+                                            ⚠️ <strong>Audit Verdict:</strong> {c.verificationVerdict || 'Incomplete resolution detected in uploaded photo.'}
                                         </div>
                                         {c.status === 'Resolved' || c.resolutionImageUrl ? (
                                             <BeforeAfterSlider 

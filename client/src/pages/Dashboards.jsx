@@ -18,7 +18,6 @@ import {
     ChevronUp,
     ChevronDown,
     Flame,
-    Sparkles,
     ShieldAlert
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -146,7 +145,7 @@ const ComplaintCard = ({ c, isAuthority = false, onUpdateStatus, onOpenResolve, 
                             onClick={() => onOpenResolve(c)}
                             className="w-full py-2.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-black uppercase tracking-wider flex items-center justify-center gap-2 shadow-md shadow-emerald-600/20 transition-all"
                         >
-                            <Sparkles size={14} /> Resolve with AI Proof
+                            <CheckCircle2 size={14} /> Complete & Submit Proof
                         </button>
                     </div>
                 )}
@@ -308,12 +307,7 @@ export const AuthorityDashboard = () => {
                                 {user.department} <span className="text-brand-orange">Division.</span>
                             </h1>
                             <div className="flex gap-4 mb-4">
-                                <button 
-                                    onClick={() => setViewMode('list')}
-                                    className={`px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${viewMode === 'list' ? 'bg-brand-blue text-white shadow-lg' : 'bg-white text-slate-400 border border-slate-100'}`}
-                                >
-                                    Work Order Feed
-                                </button>
+                                
                                 <button 
                                     onClick={() => setViewMode('trend')}
                                     className={`px-6 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all ${viewMode === 'trend' ? 'bg-orange-500 text-white shadow-lg' : 'bg-white text-slate-400 border border-slate-100'}`}

@@ -27,11 +27,6 @@ const AuthorityHome = () => {
                 {/* 1. Hero Banner - Exact Match to Reference Image 1 */}
                 <div className="relative rounded-3xl bg-white border border-slate-200/80 shadow-xs p-6 sm:p-8 lg:p-10 overflow-hidden">
                     <div className="relative z-10 max-w-2xl">
-                        {/* Authority Access Badge */}
-                        <div className="inline-flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-[10px] sm:text-xs font-black uppercase tracking-wider mb-4 border border-blue-200/60 shadow-2xs">
-                            <ShieldCheck size={14} className="text-blue-600" /> OFFICIAL AUTHORITY ACCESS
-                        </div>
-
                         {/* Title: Simple, clear, understandable terminology replacing "Command Terminal" */}
                         <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-slate-900 leading-[1.08] mb-3">
                             Department <br />

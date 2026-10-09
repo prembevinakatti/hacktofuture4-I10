@@ -15,7 +15,7 @@ import {
   LayoutDashboard,
   Layers,
   User,
-  Sparkles,
+  FileText,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import VoiceCallButton from "./VoiceCallButton";
@@ -74,6 +74,12 @@ const Navbar = () => {
                       Raise Report
                     </Link>
                     <Link
+                      to="/complaints"
+                      className={`nav-link font-bold px-3 py-2 rounded-xl transition-all ${isActive("/complaints") ? "text-brand-blue bg-blue-50/80" : ""}`}
+                    >
+                      All Complaints
+                    </Link>
+                    <Link
                       to="/rewards"
                       className={`flex items-center gap-2 px-3 py-1.5 bg-orange-50 text-brand-orange rounded-xl font-bold border border-orange-200 hover:bg-orange-100 transition-colors text-xs ${isActive("/rewards") ? "ring-2 ring-brand-orange/30" : ""}`}
                     >
@@ -94,6 +100,12 @@ const Navbar = () => {
                     >
                       Department Feed
                     </Link>
+                    <Link
+                      to="/complaints"
+                      className={`nav-link font-bold px-3 py-2 rounded-xl transition-all ${isActive("/complaints") ? "text-brand-blue bg-blue-50/80" : ""}`}
+                    >
+                      All Complaints
+                    </Link>
                   </>
                 ) : (
                   <>
@@ -108,6 +120,12 @@ const Navbar = () => {
                       className={`nav-link font-bold px-3 py-2 rounded-xl transition-all ${isActive("/home") ? "text-brand-blue bg-blue-50/80" : ""}`}
                     >
                       Overview
+                    </Link>
+                    <Link
+                      to="/complaints"
+                      className={`nav-link font-bold px-3 py-2 rounded-xl transition-all ${isActive("/complaints") ? "text-brand-blue bg-blue-50/80" : ""}`}
+                    >
+                      All Complaints
                     </Link>
                   </>
                 )}
@@ -134,24 +152,14 @@ const Navbar = () => {
             ) : (
               <div className="flex items-center gap-2 lg:gap-3">
                 {/* <VoiceCallButton /> */}
+                
                 <Link
-                  to="/login"
-                  className="flex items-center gap-1.5 px-3 py-2 text-xs text-slate-700 font-bold hover:text-brand-blue transition-colors"
+                  to="/complaints"
+                  className={`nav-link font-bold px-3 py-2 rounded-xl transition-all text-slate-700 hover:text-brand-blue ${isActive("/complaints") ? "text-brand-blue bg-blue-50/80" : ""}`}
                 >
-                  <LogIn size={15} /> Citizen Login
+                  All Complaints
                 </Link>
-                <Link
-                  to="/department/login"
-                  className="flex items-center gap-1.5 px-3.5 py-2 bg-amber-500/10 text-amber-700 border border-amber-500/30 rounded-xl text-xs font-bold hover:bg-amber-500/20 shadow-sm transition-all"
-                >
-                  🏢 Department Portal
-                </Link>
-                <Link
-                  to="/admin/login"
-                  className="flex items-center gap-1.5 px-3.5 py-2 bg-slate-900 text-white rounded-xl text-xs font-bold hover:bg-slate-800 shadow transition-all"
-                >
-                  🏛️ Super Admin
-                </Link>
+
                 <Link
                   to="/register"
                   className="flex items-center gap-1.5 px-4 py-2 bg-brand-blue text-white rounded-xl text-xs font-bold shadow-lg shadow-blue-500/20 hover:bg-blue-600 transition-all"
@@ -279,6 +287,14 @@ const Navbar = () => {
                         </>
                       )}
 
+                      <Link
+                        to="/complaints"
+                        onClick={() => setIsMobileMenuOpen(false)}
+                        className={`p-3.5 rounded-xl font-bold text-sm flex items-center gap-3 ${isActive("/complaints") ? "bg-slate-900 text-white" : "text-slate-700 bg-slate-50"}`}
+                      >
+                        <FileText size={18} className="text-brand-blue" /> All Civic Complaints
+                      </Link>
+
                       <button
                         onClick={handleLogout}
                         className="w-full p-3.5 mt-2 rounded-xl font-bold text-sm text-red-600 bg-red-50 hover:bg-red-100 flex items-center justify-center gap-2 transition-colors"
@@ -289,6 +305,17 @@ const Navbar = () => {
                   </>
                 ) : (
                   <div className="grid grid-cols-1 gap-2.5 pt-2">
+                    <Link
+                      to="/complaints"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="p-3.5 rounded-xl font-bold text-sm text-slate-800 bg-blue-50/60 border border-blue-200/80 flex items-center justify-between"
+                    >
+                      <span className="flex items-center gap-2.5">
+                        <FileText size={18} className="text-brand-blue" />
+                        All Public Complaints
+                      </span>
+                      <span className="text-xs text-brand-blue font-bold">Live Board →</span>
+                    </Link>
                     <Link
                       to="/login"
                       onClick={() => setIsMobileMenuOpen(false)}
@@ -316,7 +343,7 @@ const Navbar = () => {
                       className="p-3.5 rounded-xl font-bold text-sm text-amber-800 bg-amber-50 border border-amber-200 flex items-center justify-between"
                     >
                       <span className="flex items-center gap-2.5">
-                        🏢 Department Official Portal
+                        <Building2 size={16} className="text-amber-700" /> Department Official Portal
                       </span>
                       <span className="text-xs text-amber-700">Enter →</span>
                     </Link>
@@ -326,7 +353,7 @@ const Navbar = () => {
                       className="p-3.5 rounded-xl font-bold text-sm text-white bg-slate-900 flex items-center justify-between"
                     >
                       <span className="flex items-center gap-2.5">
-                        🏛️ Super Admin Matrix
+                        <ShieldCheck size={16} className="text-slate-200" /> Super Admin Matrix
                       </span>
                       <span className="text-xs text-slate-400">Access →</span>
                     </Link>
@@ -416,10 +443,17 @@ const Navbar = () => {
             <>
               <Link
                 to="/"
-                className={`flex flex-col items-center gap-1 py-1 px-3 rounded-xl transition-all ${isActive("/") ? "text-brand-blue font-black" : "text-slate-400 font-bold"}`}
+                className={`flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition-all ${isActive("/") ? "text-brand-blue font-black" : "text-slate-400 font-bold"}`}
               >
                 <HomeIcon size={20} />
                 <span className="text-[10px]">Home</span>
+              </Link>
+              <Link
+                to="/complaints"
+                className={`flex flex-col items-center gap-1 py-1 px-2.5 rounded-xl transition-all ${isActive("/complaints") ? "text-brand-blue font-black" : "text-slate-400 font-bold"}`}
+              >
+                <FileText size={20} />
+                <span className="text-[10px]">Tracker</span>
               </Link>
               <Link
                 to="/report"

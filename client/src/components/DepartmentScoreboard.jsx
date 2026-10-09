@@ -15,7 +15,7 @@ export const DepartmentScoreboard = ({ scores = [], highlightedDept = null, titl
     if (!scores || scores.length === 0) return null;
 
     return (
-        <div className="card-premium p-4 sm:p-8 bg-white border border-slate-100 shadow-xl rounded-2xl sm:rounded-3xl mb-8 sm:mb-12">
+        <div className="card-premium p-5 sm:p-8 bg-white/95 backdrop-blur-sm border border-slate-300 shadow-md rounded-2xl sm:rounded-3xl mb-8 sm:mb-12">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 sm:gap-4 mb-6 sm:mb-8">
                 <div>
                     <div className="flex items-center gap-1.5 text-brand-orange text-[10px] sm:text-xs font-black uppercase tracking-wider mb-1">
@@ -23,7 +23,7 @@ export const DepartmentScoreboard = ({ scores = [], highlightedDept = null, titl
                     </div>
                     <h2 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight">{title}</h2>
                 </div>
-                <div className="px-3 py-1.5 sm:px-4 sm:py-2 bg-slate-50 border border-slate-200 rounded-xl text-[11px] sm:text-xs text-slate-500 font-medium">
+                <div className="px-3 py-1.5 sm:px-4 sm:py-2 bg-slate-50 border border-slate-300 rounded-xl text-[11px] sm:text-xs text-slate-600 font-bold">
                     Formula: <strong>45% Resolution</strong> + <strong>35% On-Time SLA</strong> + <strong>20% AI Quality</strong>
                 </div>
             </div>
@@ -39,8 +39,8 @@ export const DepartmentScoreboard = ({ scores = [], highlightedDept = null, titl
                             key={s.department}
                             className={`p-4 sm:p-6 rounded-2xl sm:rounded-3xl border transition-all relative overflow-hidden flex flex-col justify-between ${
                                 isHighlighted 
-                                    ? 'bg-blue-50/60 border-brand-blue ring-2 ring-brand-blue/30 shadow-lg' 
-                                    : 'bg-slate-50/70 border-slate-100 hover:bg-white hover:shadow-md'
+                                    ? 'bg-blue-50/70 border-brand-blue ring-2 ring-brand-blue/30 shadow-md' 
+                                    : 'bg-white border-slate-300 hover:border-brand-blue/80 hover:shadow-md shadow-xs'
                             }`}
                         >
                             {/* Department Header & Grade */}
@@ -71,7 +71,7 @@ export const DepartmentScoreboard = ({ scores = [], highlightedDept = null, titl
                                             {s.performanceScore}<span className="text-xs text-slate-400 font-bold">/100</span>
                                         </span>
                                     </div>
-                                    <div className="w-full h-2 sm:h-2.5 bg-slate-200 rounded-full overflow-hidden">
+                                    <div className="w-full h-2 sm:h-2.5 bg-slate-100 rounded-full overflow-hidden border border-slate-200">
                                         <div 
                                             className={`h-full rounded-full transition-all duration-1000 ${
                                                 isGradeA 
@@ -86,36 +86,36 @@ export const DepartmentScoreboard = ({ scores = [], highlightedDept = null, titl
                                 </div>
 
                                 {/* Counts Breakdown */}
-                                <div className="grid grid-cols-4 gap-1 pt-2 pb-1.5 my-2 text-center bg-white/90 rounded-xl border border-slate-200/70 p-1.5">
+                                <div className="grid grid-cols-4 gap-1 pt-2 pb-1.5 my-2 text-center bg-slate-50/80 rounded-xl border border-slate-200 p-1.5">
                                     <div>
                                         <p className="text-[7px] sm:text-[8px] font-black text-slate-400 uppercase">Reported</p>
                                         <p className="text-xs sm:text-sm font-black text-slate-900">{s.total}</p>
                                     </div>
                                     <div>
-                                        <p className="text-[7px] sm:text-[8px] font-black text-amber-500 uppercase">Active</p>
+                                        <p className="text-[7px] sm:text-[8px] font-black text-amber-600 uppercase">Active</p>
                                         <p className="text-xs sm:text-sm font-black text-amber-600">{s.inProgress}</p>
                                     </div>
                                     <div>
-                                        <p className="text-[7px] sm:text-[8px] font-black text-blue-500 uppercase">Assigned</p>
+                                        <p className="text-[7px] sm:text-[8px] font-black text-blue-600 uppercase">Assigned</p>
                                         <p className="text-xs sm:text-sm font-black text-blue-600">{s.assigned}</p>
                                     </div>
                                     <div>
-                                        <p className="text-[7px] sm:text-[8px] font-black text-emerald-500 uppercase">Solved</p>
+                                        <p className="text-[7px] sm:text-[8px] font-black text-emerald-600 uppercase">Solved</p>
                                         <p className="text-xs sm:text-sm font-black text-emerald-600">{s.resolved}</p>
                                     </div>
                                 </div>
 
                                 {/* Rates Breakdown */}
                                 <div className="grid grid-cols-3 gap-1.5 mt-2 text-center">
-                                    <div className="p-1.5 sm:p-2 bg-white rounded-lg sm:rounded-xl border border-slate-100">
+                                    <div className="p-1.5 sm:p-2 bg-slate-50/60 rounded-lg sm:rounded-xl border border-slate-200">
                                         <p className="text-[8px] sm:text-[9px] font-black text-slate-400 uppercase">Resolution</p>
                                         <p className="text-[11px] sm:text-xs font-black text-slate-800">{s.resolutionRate}%</p>
                                     </div>
-                                    <div className="p-1.5 sm:p-2 bg-white rounded-lg sm:rounded-xl border border-slate-100">
+                                    <div className="p-1.5 sm:p-2 bg-slate-50/60 rounded-lg sm:rounded-xl border border-slate-200">
                                         <p className="text-[8px] sm:text-[9px] font-black text-slate-400 uppercase">SLA On-Time</p>
                                         <p className="text-[11px] sm:text-xs font-black text-slate-800">{s.slaComplianceRate}%</p>
                                     </div>
-                                    <div className="p-1.5 sm:p-2 bg-white rounded-lg sm:rounded-xl border border-slate-100">
+                                    <div className="p-1.5 sm:p-2 bg-slate-50/60 rounded-lg sm:rounded-xl border border-slate-200">
                                         <p className="text-[8px] sm:text-[9px] font-black text-slate-400 uppercase">AI Quality</p>
                                         <p className="text-[11px] sm:text-xs font-black text-slate-800">{s.aiQualityScore}%</p>
                                     </div>

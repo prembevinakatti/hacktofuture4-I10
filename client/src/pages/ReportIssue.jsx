@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
@@ -13,7 +13,6 @@ import {
     Loader2, 
     FileEdit, 
     ArrowLeft,
-    Sparkles, 
     ShieldCheck, 
     Trophy,
     Clock,
@@ -40,12 +39,17 @@ const ReportIssue = () => {
     const { user, refreshUser } = useAuth();
     const navigate = useNavigate();
 
+    const hasAutoLocatedRef = useRef(false);
+
     const CLOUDINARY_UPLOAD_PRESET = "dbmsproject";
     const CLOUDINARY_CLOUD_NAME = "dyp7pxrli";
 
     useEffect(() => {
-        // Auto-detect GPS location on mount
-        getLocation();
+        // Auto-detect GPS location once on initial mount
+        if (!hasAutoLocatedRef.current) {
+            hasAutoLocatedRef.current = true;
+            getLocation();
+        }
     }, []);
 
     const handleImageUpload = async (e) => {
@@ -80,10 +84,11 @@ const ReportIssue = () => {
 
     const getLocation = () => {
         if (!navigator.geolocation) {
-            return toast.error('Geolocation is not supported by your browser');
+            return toast.error('Geolocation is not supported by your browser', { id: 'gps-lock-toast' });
         }
         setLocating(true);
-        const gpsToast = toast.loading('Acquiring high-accuracy GPS coordinates...');
+        const GPS_TOAST_ID = 'gps-lock-toast';
+        toast.loading('Acquiring high-accuracy GPS coordinates...', { id: GPS_TOAST_ID });
 
         const options = {
             enableHighAccuracy: true,
@@ -109,7 +114,7 @@ const ReportIssue = () => {
                         lat: latitude, 
                         lng: longitude 
                     }));
-                    toast.success('GPS Address Locked! 📍', { id: gpsToast });
+                    toast.success('GPS Address Locked! 📍', { id: GPS_TOAST_ID });
                 } catch {
                     const fallback = `Coordinates: ${latitude.toFixed(6)}, ${longitude.toFixed(6)}`;
                     setFormData(prev => ({ 
@@ -118,14 +123,14 @@ const ReportIssue = () => {
                         lat: latitude, 
                         lng: longitude 
                     }));
-                    toast.success('GPS Coordinates Locked! 📍', { id: gpsToast });
+                    toast.success('GPS Coordinates Locked! 📍', { id: GPS_TOAST_ID });
                 } finally {
                     setLocating(false);
                 }
             },
             () => {
                 setLocating(false);
-                toast.error('Location permission needed. Please allow GPS access.', { id: gpsToast });
+                toast.error('Location permission needed. Please allow GPS access.', { id: GPS_TOAST_ID });
             },
             options
         );
@@ -157,8 +162,8 @@ const ReportIssue = () => {
     };
 
     return (
-        <div className="h-screen w-screen bg-[#f1f5f9] flex items-center justify-center p-3 sm:p-5 lg:p-6 overflow-hidden select-none font-sans">
-            <div className="w-full max-w-6xl h-full max-h-[840px] flex flex-col justify-between">
+        <div className="min-h-screen lg:h-screen w-full bg-[#f1f5f9] flex items-center justify-center p-3 sm:p-5 lg:p-6 pb-28 lg:pb-6 overflow-y-auto lg:overflow-hidden font-sans">
+            <div className="w-full max-w-6xl min-h-full lg:h-full lg:max-h-[840px] flex flex-col justify-between my-auto">
                 
                 {/* Top Return Breadcrumb */}
                 <div className="flex items-center justify-between pb-2 px-1">
@@ -168,15 +173,11 @@ const ReportIssue = () => {
                     >
                         <ArrowLeft size={14} /> Back to Citizen Portal
                     </button>
-                    <div className="flex items-center gap-2 text-[11px] font-black uppercase tracking-wider text-slate-500">
-                        <Sparkles size={13} className="text-sky-600" />
-                        AI Verified Civic Filing Protocol
-                    </div>
                 </div>
 
                 <AnimatePresence mode="wait">
                     {!result ? (
-                        /* Attached Dual-Pane Layout (Non-Scrollable, Skyblue & Grey Combo) */
+                        /* Attached Dual-Pane Layout */
                         <div 
                             key="form"
                             className="w-full flex-1 bg-white rounded-3xl shadow-xl border border-slate-200/80 flex flex-col lg:flex-row items-stretch overflow-hidden"
@@ -185,17 +186,11 @@ const ReportIssue = () => {
                             <div className="w-full lg:w-[48%] bg-gradient-to-br from-[#0284c7] via-[#334155] to-[#0f172a] p-6 sm:p-8 text-white flex flex-col justify-between relative overflow-hidden border-b lg:border-b-0 lg:border-r border-slate-700/60">
                                 
                                 <div className="relative z-10 space-y-4">
-                                    {/* Sky Blue & Grey Badge */}
-                                    <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-sky-500/20 backdrop-blur-md rounded-full text-[10px] font-black uppercase tracking-wider border border-sky-400/30 text-sky-200">
-                                        <Sparkles size={12} className="text-sky-300" />
-                                        SMART GRIEVANCE GUIDELINES
-                                    </div>
-
                                     {/* Headline */}
                                     <div>
                                         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black tracking-tight leading-[1.12]">
                                             Report Civic Issues. <br />
-                                            <span className="text-sky-300">Fast & AI Routed.</span>
+                                            <span className="text-sky-300">Fast & Direct Routing.</span>
                                         </h1>
                                         <p className="mt-2 text-xs sm:text-[13px] text-slate-300 leading-relaxed font-medium">
                                             Follow these smart submission steps. Every report is automatically classified, assigned to the concerned ward, and tracked under municipal SLA rules.
@@ -215,7 +210,7 @@ const ReportIssue = () => {
                                                     <span className="text-[10px] font-normal text-sky-300">(Recommended)</span>
                                                 </h4>
                                                 <p className="text-[10px] text-slate-300 mt-0.5 leading-snug">
-                                                    Capture a clear photo showing the hazard, road pothole, or street light for instant AI neural validation.
+                                                    Capture a clear photo showing the hazard, road pothole, or street light for automated visual validation.
                                                 </p>
                                             </div>
                                         </div>
@@ -424,7 +419,7 @@ const ReportIssue = () => {
                                         {loading ? (
                                             <>
                                                 <Loader2 size={16} className="animate-spin" />
-                                                <span>Analyzing with AI Matrix...</span>
+                                                <span>Analyzing Submission...</span>
                                             </>
                                         ) : (
                                             <>
@@ -449,7 +444,7 @@ const ReportIssue = () => {
                                 Report Successfully Logged!
                             </h2>
                             <p className="text-slate-400 font-bold uppercase text-[10px] tracking-wider mb-6">
-                                Dispatched via JanSetu AI Neural Routing
+                                Dispatched via JanSetu Official Routing
                             </p>
                             
                             <div className="grid grid-cols-2 gap-3 w-full text-left mb-6">
@@ -458,7 +453,7 @@ const ReportIssue = () => {
                                     <p className="text-sm font-black text-sky-600 truncate">{result.department}</p>
                                 </div>
                                 <div className="p-3.5 bg-slate-50 rounded-xl border border-slate-100">
-                                    <p className="text-[10px] font-black text-slate-400 uppercase mb-0.5">AI Priority Rating</p>
+                                    <p className="text-[10px] font-black text-slate-400 uppercase mb-0.5">Priority Rating</p>
                                     <p className="text-sm font-black text-amber-600">{result.priority}</p>
                                 </div>
                             </div>

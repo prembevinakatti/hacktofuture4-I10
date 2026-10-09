@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
-import { MessageCircle, X, Send, Bot, User, Sparkles, Mic, MicOff } from 'lucide-react';
+import { MessageCircle, MessageSquare, Headphones, X, Send, User, Mic, MicOff } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
 import { API_BASE_URL } from '../api';
@@ -94,13 +94,13 @@ const Chatbot = () => {
                             <div className="absolute top-0 right-0 w-32 h-32 bg-brand-blue/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
                             <div className="flex items-center gap-3 relative z-10">
                                 <div className="w-10 h-10 bg-brand-blue rounded-xl flex items-center justify-center shadow-lg shadow-blue-500/40">
-                                    <Sparkles size={20} className="text-white" />
+                                    <Headphones size={20} className="text-white" />
                                 </div>
                                 <div>
-                                    <h3 className="font-black text-base sm:text-lg tracking-tight">Jan<span className="text-brand-orange">Setu</span> AI</h3>
+                                    <h3 className="font-black text-base sm:text-lg tracking-tight">Jan<span className="text-brand-orange">Setu</span> Civic Desk</h3>
                                     <div className="flex items-center gap-1.5">
                                         <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
-                                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Live Civic Assistant</span>
+                                        <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Live Civic Support</span>
                                     </div>
                                 </div>
                             </div>
@@ -195,7 +195,7 @@ const Chatbot = () => {
                         ? 'bg-white text-slate-900 border border-slate-200' 
                         : 'bg-gradient-to-r from-blue-600 to-indigo-600 text-white shadow-blue-500/30'
                 }`}
-                aria-label="Toggle JanSetu AI Assistant"
+                aria-label="Toggle JanSetu Civic Desk"
             >
                 <AnimatePresence mode="wait">
                     {isOpen ? (

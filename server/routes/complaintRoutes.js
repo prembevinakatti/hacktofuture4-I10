@@ -8,9 +8,15 @@ const {
   getDepartmentComplaints, 
   updateComplaintStatus,
   resolveComplaintWithAI,
-  getDepartmentScores
+  getDepartmentScores,
+  getPublicComplaintsAndStats,
+  getPublicComplaintById
 } = require('../controllers/complaintController');
 const { protect, authorize } = require('../middleware/authMiddleware');
+
+// 🌐 Public Civic Transparency & Complaints Hub (No Login Required)
+router.get('/public', getPublicComplaintsAndStats);
+router.get('/public/:id', getPublicComplaintById);
 
 router.post('/', protect, authorize('citizen'), submitComplaint);
 router.get('/my', protect, authorize('citizen'), getMyComplaints);

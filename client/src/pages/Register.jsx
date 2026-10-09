@@ -9,7 +9,6 @@ import {
     Mail, 
     Key, 
     ArrowRight, 
-    Sparkles, 
     Award, 
     CheckCircle2, 
     Shield, 
@@ -41,7 +40,7 @@ const Register = () => {
 
     return (
         <div 
-            className="min-h-[calc(100vh-4rem)] sm:min-h-[calc(100vh-5rem)] w-full flex items-center justify-center p-3 sm:p-6 bg-cover bg-center bg-no-repeat relative overflow-hidden"
+            className="min-h-[calc(100vh-4rem)] sm:min-h-[calc(100vh-5rem)] w-full flex items-center justify-center p-3 sm:p-6 pb-24 sm:pb-8 bg-cover bg-center bg-no-repeat relative overflow-y-auto"
             style={{ 
                 backgroundImage: "url('/citizen_auth_bg.jpg')"
             }}
@@ -58,11 +57,6 @@ const Register = () => {
                 {/* LEFT INFO CARD: Citizen Blue Theme */}
                 <div className="w-full md:w-1/2 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 p-6 sm:p-8 text-white flex flex-col justify-between relative overflow-hidden">
                     <div className="relative z-10 space-y-4">
-                        {/* Role Badge */}
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/15 backdrop-blur-xs rounded-full text-[10px] font-black uppercase tracking-wider border border-white/20">
-                            <Sparkles size={12} className="text-blue-200" /> CITIZEN ONBOARDING
-                        </div>
-
                         {/* Title & Description */}
                         <div>
                             <h2 className="text-2xl sm:text-3xl font-black tracking-tight leading-tight">

@@ -8,11 +8,11 @@ import {
     Mail, 
     Key, 
     ArrowRight, 
-    Sparkles, 
     ShieldCheck, 
     Trophy, 
     Camera, 
-    CheckCircle2 
+    CheckCircle2,
+    Building2 
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { API_BASE_URL } from '../api';
@@ -26,21 +26,39 @@ const Login = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setLoading(true);
-        try {
-            const { data } = await axios.post(`${API_BASE_URL}/api/auth/login`, formData);
-            login(data);
-            toast.success(`Welcome back, ${data.name}`);
-            navigate('/home');
-        } catch (err) {
-            toast.error(err.response?.data?.message || 'Login failed');
-        } finally {
-            setLoading(false);
+        const endpoints = [
+            `${API_BASE_URL}/api/auth/login`,
+            `http://localhost:5000/api/auth/login`
+        ];
+
+        let success = false;
+        let lastError = 'Login failed';
+
+        for (const url of endpoints) {
+            try {
+                const { data } = await axios.post(url, {
+                    email: formData.email.trim(),
+                    password: formData.password
+                });
+                login(data);
+                toast.success(`Welcome back, ${data.name}`);
+                navigate('/home');
+                success = true;
+                break;
+            } catch (err) {
+                lastError = err.response?.data?.message || err.message || lastError;
+            }
         }
+
+        if (!success) {
+            toast.error(lastError);
+        }
+        setLoading(false);
     };
 
     return (
         <div 
-            className="min-h-[calc(100vh-4rem)] sm:min-h-[calc(100vh-5rem)] w-full flex items-center justify-center p-3 sm:p-6 bg-cover bg-center bg-no-repeat relative overflow-hidden"
+            className="min-h-[calc(100vh-4rem)] sm:min-h-[calc(100vh-5rem)] w-full flex items-center justify-center p-3 sm:p-6 pb-24 sm:pb-8 bg-cover bg-center bg-no-repeat relative overflow-y-auto"
             style={{ 
                 backgroundImage: "url('/citizen_auth_bg.jpg')"
             }}
@@ -57,11 +75,6 @@ const Login = () => {
                 {/* LEFT INFO CARD: Citizen Blue Theme */}
                 <div className="w-full md:w-1/2 bg-gradient-to-br from-blue-600 via-blue-700 to-indigo-800 p-6 sm:p-8 text-white flex flex-col justify-between relative overflow-hidden">
                     <div className="relative z-10 space-y-4">
-                        {/* Role Badge */}
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/15 backdrop-blur-xs rounded-full text-[10px] font-black uppercase tracking-wider border border-white/20">
-                            <Sparkles size={12} className="text-blue-200" /> CITIZEN CIVIC PORTAL
-                        </div>
-
                         {/* Title & Description */}
                         <div>
                             <h2 className="text-2xl sm:text-3xl font-black tracking-tight leading-tight">
@@ -174,12 +187,12 @@ const Login = () => {
                             New citizen? <Link to="/register" className="text-brand-blue font-bold hover:underline">Create account</Link>
                         </p>
                         <div className="flex justify-center items-center gap-3 text-[11px] text-slate-400 font-bold pt-0.5">
-                            <Link to="/department/login" className="hover:text-amber-600 transition-colors">
-                                🏢 Department Login
+                            <Link to="/department/login" className="hover:text-amber-600 transition-colors inline-flex items-center gap-1">
+                                <Building2 size={12} /> Department Login
                             </Link>
                             <span>•</span>
-                            <Link to="/admin/login" className="hover:text-slate-900 transition-colors">
-                                🏛️ Admin Matrix
+                            <Link to="/admin/login" className="hover:text-slate-900 transition-colors inline-flex items-center gap-1">
+                                <ShieldCheck size={12} /> Admin Matrix
                             </Link>
                         </div>
                     </div>

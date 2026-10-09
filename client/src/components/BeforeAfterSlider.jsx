@@ -1,5 +1,5 @@
 import React, { useState, useRef } from 'react';
-import { ShieldCheck, AlertTriangle, CheckCircle2, Sparkles } from 'lucide-react';
+import { ShieldCheck, AlertTriangle, CheckCircle2 } from 'lucide-react';
 
 const BeforeAfterSlider = ({ 
     beforeImage, 
@@ -128,14 +128,14 @@ const renderAuditBox = (status, score, verdict, isFlagged) => {
                         <>
                             <ShieldCheck size={15} className="text-emerald-600 flex-shrink-0" />
                             <span className="text-[11px] sm:text-xs font-black text-emerald-800 uppercase tracking-wider truncate">
-                                AI Verified Resolution
+                                Verified Resolution
                             </span>
                         </>
                     ) : (
                         <>
                             <AlertTriangle size={15} className="text-red-600 flex-shrink-0" />
                             <span className="text-[11px] sm:text-xs font-black text-red-800 uppercase tracking-wider truncate">
-                                AI Audit Warning
+                                Quality Audit Warning
                             </span>
                         </>
                     )}
@@ -147,7 +147,7 @@ const renderAuditBox = (status, score, verdict, isFlagged) => {
                 )}
             </div>
             <p className={`text-[11px] sm:text-xs font-medium leading-relaxed ${isPassed ? 'text-emerald-950' : 'text-red-950'}`}>
-                {verdict || (isPassed ? 'The fix was inspected and verified by AI.' : 'Issue unresolved or flagged for audit.')}
+                {verdict || (isPassed ? 'The fix was inspected and verified.' : 'Issue unresolved or flagged for audit.')}
             </p>
         </div>
     );

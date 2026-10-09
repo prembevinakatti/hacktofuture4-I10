@@ -11,7 +11,6 @@ import {
     User, 
     ArrowRight, 
     ShieldCheck, 
-    Sparkles, 
     IdCard, 
     CheckCircle2,
     Users,
@@ -78,7 +77,7 @@ const DepartmentRegister = () => {
 
     return (
         <div 
-            className="min-h-[calc(100vh-4rem)] sm:min-h-[calc(100vh-5rem)] w-full flex items-center justify-center p-3 sm:p-6 bg-cover bg-center bg-no-repeat relative overflow-hidden"
+            className="min-h-[calc(100vh-4rem)] sm:min-h-[calc(100vh-5rem)] w-full flex items-center justify-center p-3 sm:p-6 pb-24 sm:pb-8 bg-cover bg-center bg-no-repeat relative overflow-y-auto"
             style={{ 
                 backgroundImage: "url('/department_auth_bg.png')"
             }}
@@ -95,11 +94,6 @@ const DepartmentRegister = () => {
                 {/* LEFT INFO CARD: Department Orange Theme */}
                 <div className="w-full md:w-1/2 bg-gradient-to-br from-amber-500 via-orange-600 to-amber-700 p-6 sm:p-8 text-white flex flex-col justify-between relative overflow-hidden">
                     <div className="relative z-10 space-y-4">
-                        {/* Role Badge */}
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur-xs rounded-full text-[10px] font-black uppercase tracking-wider border border-white/25">
-                            <Sparkles size={12} className="text-amber-100" /> OFFICIAL ENROLLMENT
-                        </div>
-
                         {/* Title & Description */}
                         <div>
                             <h2 className="text-2xl sm:text-3xl font-black tracking-tight leading-tight">

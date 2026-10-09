@@ -81,7 +81,9 @@ const ExecutiveView = () => {
                         <p className="text-4xl font-black text-slate-900">{allComplaints.length}</p>
                     </div>
                     <div className="card-premium p-8 border-l-8 border-red-500 bg-white shadow-xl">
-                        <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-2">High Priority 🚨</p>
+                        <p className="text-[10px] font-black text-slate-300 uppercase tracking-widest mb-2 inline-flex items-center gap-1">
+                            High Priority <Flame size={12} className="text-red-500" />
+                        </p>
                         <p className="text-4xl font-black text-red-500">{getPriorityCount('High')}</p>
                     </div>
                     <div className="card-premium p-8 border-l-8 border-brand-orange bg-white shadow-xl">

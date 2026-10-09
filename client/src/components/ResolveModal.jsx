@@ -8,8 +8,7 @@ import {
     AlertTriangle, 
     Loader2, 
     UploadCloud, 
-    CheckCircle2, 
-    Sparkles 
+    CheckCircle2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { API_BASE_URL } from '../api';
@@ -107,7 +106,7 @@ const ResolveModal = ({ complaint, isOpen, onClose, onSuccess, token }) => {
                         </div>
                         <div>
                             <h2 className="text-base sm:text-lg font-black text-slate-900 leading-tight">Resolve Complaint</h2>
-                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">AI Anti-Fraud Verification</p>
+                            <p className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Quality Audit & Verification</p>
                         </div>
                     </div>
                     <button 
@@ -172,7 +171,7 @@ const ResolveModal = ({ complaint, isOpen, onClose, onSuccess, token }) => {
                                     </label>
                                 </div>
                                 <span className="absolute bottom-2.5 left-2.5 bg-emerald-600 text-white text-[9px] sm:text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-lg shadow">
-                                    ✓ Ready for AI Scan
+                                    ✓ Photo Attached
                                 </span>
                             </div>
                         ) : (
@@ -244,11 +243,11 @@ const ResolveModal = ({ complaint, isOpen, onClose, onSuccess, token }) => {
                     >
                         {verifying ? (
                             <>
-                                <Loader2 className="animate-spin" size={14} /> AI Scanning...
+                                <Loader2 className="animate-spin" size={14} /> Verifying Proof...
                             </>
                         ) : (
                             <>
-                                <Sparkles size={14} /> Verify & Close
+                                <CheckCircle2 size={14} /> Verify & Close Grievance
                             </>
                         )}
                     </button>

@@ -280,6 +280,100 @@ const getDepartmentScores = async (req, res) => {
   }
 };
 
+/**
+ * Public Complaints & Transparency Hub (No Login Required)
+ * Returns complaints with department stats and global counts
+ */
+const getPublicComplaintsAndStats = async (req, res) => {
+  try {
+    const { department, status, priority, search } = req.query;
+    let query = {};
+
+    if (department && department !== 'All') {
+      query.department = department;
+    }
+    if (status && status !== 'All') {
+      query.status = status;
+    }
+    if (priority && priority !== 'All') {
+      query.priority = priority;
+    }
+    if (search && search.trim()) {
+      const regex = new RegExp(search.trim(), 'i');
+      query.$or = [
+        { title: regex },
+        { text: regex },
+        { location: regex },
+        { category: regex }
+      ];
+    }
+
+    const filteredComplaints = await Complaint.find(query).sort({ createdAt: -1 });
+
+    // Global aggregations for the transparency dashboard header
+    const allComplaints = await Complaint.find({});
+    const total = allComplaints.length;
+    const resolved = allComplaints.filter(c => c.status === 'Resolved').length;
+    const inProgress = allComplaints.filter(c => c.status === 'In Progress').length;
+    const assigned = allComplaints.filter(c => c.status === 'Assigned').length;
+    const pending = allComplaints.filter(c => c.status === 'Pending').length;
+    const highPriority = allComplaints.filter(c => c.priority === 'High').length;
+    const resolutionRate = total > 0 ? Math.round((resolved / total) * 100) : 0;
+
+    // Department breakdown
+    const depts = ['Sanitation', 'Water Supply', 'Public Works', 'Electric Board', 'Police', 'General'];
+    const deptStats = depts.map(dept => {
+      const deptList = allComplaints.filter(c => c.department === dept);
+      const dTotal = deptList.length;
+      const dResolved = deptList.filter(c => c.status === 'Resolved').length;
+      const dActive = deptList.filter(c => c.status === 'In Progress' || c.status === 'Assigned').length;
+      const dPending = deptList.filter(c => c.status === 'Pending').length;
+      const dRate = dTotal > 0 ? Math.round((dResolved / dTotal) * 100) : 0;
+      return {
+        department: dept,
+        total: dTotal,
+        resolved: dResolved,
+        inProgress: dActive,
+        pending: dPending,
+        resolutionRate: dRate
+      };
+    });
+
+    res.json({
+      success: true,
+      data: {
+        complaints: filteredComplaints.map(formatComplaint),
+        stats: {
+          total,
+          resolved,
+          inProgress: inProgress + assigned,
+          pending,
+          highPriority,
+          resolutionRate,
+          deptStats
+        }
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+/**
+ * Public Complaint Details by ID (No Login Required)
+ */
+const getPublicComplaintById = async (req, res) => {
+  try {
+    const complaint = await Complaint.findById(req.params.id);
+    if (!complaint) {
+      return res.status(404).json({ success: false, message: 'Complaint not found' });
+    }
+    res.json({ success: true, data: formatComplaint(complaint) });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 module.exports = { 
   submitComplaint, 
   getMyComplaints, 
@@ -288,7 +382,9 @@ module.exports = {
   getDepartmentComplaints, 
   updateComplaintStatus,
   resolveComplaintWithAI,
-  getDepartmentScores
+  getDepartmentScores,
+  getPublicComplaintsAndStats,
+  getPublicComplaintById
 };
 
 

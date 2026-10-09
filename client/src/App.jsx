@@ -17,6 +17,7 @@ import AdminPage from './pages/AdminPage';
 import AdminLogin from './pages/AdminLogin';
 import DepartmentLogin from './pages/DepartmentLogin';
 import DepartmentRegister from './pages/DepartmentRegister';
+import CivicComplaintsHub from './pages/CivicComplaintsHub';
 import Navbar from './components/Navbar';
 import Chatbot from './components/Chatbot';
 import PWAInstallPrompt from './components/PWAInstallPrompt';
@@ -43,6 +44,11 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={!user ? <LandingPage /> : <Navigate to="/home" />} />
+        
+        {/* 🌐 Common Civic Complaints & Transparency Hub (Accessible for all roles without login) */}
+        <Route path="/complaints" element={<CivicComplaintsHub />} />
+        <Route path="/transparency" element={<CivicComplaintsHub />} />
+        <Route path="/public-dashboard" element={<CivicComplaintsHub />} />
         
         {/* Citizen Auth Routes */}
         <Route path="/login" element={!user ? <Login /> : <Navigate to="/home" />} />
@@ -91,6 +97,10 @@ function App() {
         {/* 👤 Citizen Portal Routes */}
         <Route 
           path="/citizen" 
+          element={user?.role === 'citizen' ? <CitizenPage /> : <Navigate to="/login" />} 
+        />
+        <Route 
+          path="/track" 
           element={user?.role === 'citizen' ? <CitizenPage /> : <Navigate to="/login" />} 
         />
         <Route 

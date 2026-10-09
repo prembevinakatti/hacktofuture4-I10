@@ -10,14 +10,14 @@ import {
     Mail, 
     ArrowRight, 
     ShieldCheck, 
-    Sparkles, 
     Zap, 
     Droplet, 
     Trash2, 
     Construction, 
     CheckCircle2,
     Clock,
-    UserPlus
+    UserPlus,
+    User
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -39,32 +39,38 @@ const DepartmentLogin = () => {
         setLoading(true);
         const loginToast = toast.loading('Connecting to Department Operational Matrix...');
 
-        try {
-            const { data } = await axios.post(`${API_BASE_URL}/api/auth/admin-login`, formData);
-            
-            if (data.role !== 'authority' && data.role !== 'admin') {
-                throw new Error('This gateway is exclusively for Department Officers & Authorities.');
-            }
+        const endpoints = [
+            `${API_BASE_URL}/api/auth/admin-login`,
+            `${API_BASE_URL}/api/auth/login`,
+            `http://localhost:5000/api/auth/admin-login`,
+            `http://localhost:5000/api/auth/login`
+        ];
 
-            login(data);
-            toast.success(`Welcome, Officer ${data.name.split(' ')[0]} (${data.department || 'Officer'})`, { id: loginToast });
-            navigate('/department');
-        } catch (err) {
+        let success = false;
+        let lastError = 'Authentication failed';
+
+        for (const url of endpoints) {
             try {
-                const { data } = await axios.post(`${API_BASE_URL}/api/auth/login`, formData);
-                if (data.role !== 'authority' && data.role !== 'admin') {
-                    throw new Error('Access Denied: Only Department Authorities and Admins are permitted.');
+                const { data } = await axios.post(url, {
+                    email: formData.email.trim(),
+                    password: formData.password
+                });
+                if (data && (data.role === 'authority' || data.role === 'admin')) {
+                    login(data);
+                    toast.success(`Welcome, Officer ${data.name.split(' ')[0]} (${data.department || 'Authority'})`, { id: loginToast });
+                    navigate('/department');
+                    success = true;
+                    break;
                 }
-                login(data);
-                toast.success(`Welcome, Officer ${data.name.split(' ')[0]} (${data.department || 'Authority'})`, { id: loginToast });
-                navigate('/department');
-            } catch (innerErr) {
-                const errorMsg = innerErr.response?.data?.message || err.response?.data?.message || err.message || 'Authentication failed';
-                toast.error(errorMsg, { id: loginToast });
+            } catch (err) {
+                lastError = err.response?.data?.message || err.message || lastError;
             }
-        } finally {
-            setLoading(false);
         }
+
+        if (!success) {
+            toast.error(lastError, { id: loginToast });
+        }
+        setLoading(false);
     };
 
     const handleQuickPreset = (preset) => {
@@ -77,7 +83,7 @@ const DepartmentLogin = () => {
 
     return (
         <div 
-            className="min-h-[calc(100vh-4rem)] sm:min-h-[calc(100vh-5rem)] w-full flex items-center justify-center p-3 sm:p-6 bg-cover bg-center bg-no-repeat relative overflow-hidden"
+            className="min-h-[calc(100vh-4rem)] sm:min-h-[calc(100vh-5rem)] w-full flex items-center justify-center p-3 sm:p-6 pb-24 sm:pb-8 bg-cover bg-center bg-no-repeat relative overflow-y-auto"
             style={{ 
                 backgroundImage: "url('/department_auth_bg.png')"
             }}
@@ -94,11 +100,6 @@ const DepartmentLogin = () => {
                 {/* LEFT INFO CARD: Department Orange Theme */}
                 <div className="w-full md:w-1/2 bg-gradient-to-br from-amber-500 via-orange-600 to-amber-700 p-6 sm:p-8 text-white flex flex-col justify-between relative overflow-hidden">
                     <div className="relative z-10 space-y-4">
-                        {/* Role Badge */}
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-white/20 backdrop-blur-xs rounded-full text-[10px] font-black uppercase tracking-wider border border-white/25">
-                            <Building2 size={12} className="text-amber-100" /> MUNICIPAL LINE OFFICERS
-                        </div>
-
                         {/* Title & Description */}
                         <div>
                             <h2 className="text-2xl sm:text-3xl font-black tracking-tight leading-tight">
@@ -118,7 +119,7 @@ const DepartmentLogin = () => {
                                 </div>
                                 <div>
                                     <h4 className="text-xs font-bold text-white">Live Operations Dispatch</h4>
-                                    <p className="text-[10px] text-amber-100">Access incoming grievances routed by AI directly to your department.</p>
+                                    <p className="text-[10px] text-amber-100">Access incoming grievances routed directly to your department.</p>
                                 </div>
                             </div>
 
@@ -137,8 +138,8 @@ const DepartmentLogin = () => {
                                     <ShieldCheck size={14} />
                                 </div>
                                 <div>
-                                    <h4 className="text-xs font-bold text-white">Dual AI Resolution Audit</h4>
-                                    <p className="text-[10px] text-amber-100">Automated before/after photographic proof verification and fraud prevention.</p>
+                                    <h4 className="text-xs font-bold text-white">Quality Resolution Audit</h4>
+                                    <p className="text-[10px] text-amber-100">Standard before/after photographic proof verification and fraud prevention.</p>
                                 </div>
                             </div>
                         </div>
@@ -175,7 +176,7 @@ const DepartmentLogin = () => {
                         {/* 1-Click Quick Department Selectors */}
                         <div className="mb-3.5">
                             <p className="text-[10px] font-black text-slate-400 uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                                <Sparkles size={11} className="text-amber-600" /> Demo Quick Preset:
+                                Demo Quick Preset:
                             </p>
                             <div className="grid grid-cols-4 gap-1.5">
                                 {DEPARTMENT_PRESETS.map((preset) => {
@@ -255,12 +256,12 @@ const DepartmentLogin = () => {
                             <UserPlus size={14} /> Register New Department Official Account
                         </Link>
                         <div className="flex justify-center items-center gap-3 text-[11px] text-slate-400 font-bold pt-1">
-                            <Link to="/login" className="hover:text-blue-600 transition-colors">
-                                👤 Citizen Portal
+                            <Link to="/login" className="hover:text-blue-600 transition-colors inline-flex items-center gap-1">
+                                <User size={12} /> Citizen Portal
                             </Link>
                             <span>•</span>
-                            <Link to="/admin/login" className="hover:text-slate-900 transition-colors">
-                                🏛️ Executive Admin
+                            <Link to="/admin/login" className="hover:text-slate-900 transition-colors inline-flex items-center gap-1">
+                                <ShieldCheck size={12} /> Executive Admin
                             </Link>
                         </div>
                     </div>

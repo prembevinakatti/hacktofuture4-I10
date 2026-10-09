@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Download, X, Wifi, WifiOff, Smartphone, ShieldCheck, Sparkles } from 'lucide-react';
+import { Download, X, Wifi, WifiOff, Smartphone, ShieldCheck } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 const PWAInstallPrompt = () => {

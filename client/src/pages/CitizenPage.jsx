@@ -20,8 +20,7 @@ import {
     Menu,
     X,
     LayoutGrid,
-    List,
-    Sparkles
+    List
 } from 'lucide-react';
 import BeforeAfterSlider from '../components/BeforeAfterSlider';
 import toast from 'react-hot-toast';
@@ -269,18 +268,12 @@ const CitizenPage = () => {
             </aside>
 
             {/* Main Content Area */}
-            <main className="flex-1 min-w-0 p-4 pt-20 sm:p-6 lg:p-8 space-y-6 overflow-y-auto relative z-10">
+            <main className="flex-1 min-w-0 p-3 sm:p-6 lg:p-8 pt-16 sm:pt-6 pb-28 md:pb-8 space-y-6 overflow-y-auto relative z-10">
                 
                 {/* 1. Header / Hero Banner - Correctly Aligned with Full Visibility for Person in Image */}
                 <div className="relative rounded-3xl bg-white/95 backdrop-blur-xl border border-blue-100/90 shadow-sm p-5 sm:p-6 lg:p-7 overflow-hidden flex flex-col md:flex-row items-center justify-between gap-5 sm:gap-6">
                     {/* Left Content Column */}
                     <div className="w-full md:w-[42%] lg:w-[38%] shrink-0 z-10 space-y-2">
-                        {/* Pill Badge */}
-                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50/90 border border-blue-200/60 text-blue-700 text-[10px] sm:text-[11px] font-black uppercase tracking-wider shadow-2xs">
-                            <Sparkles size={12} className="text-blue-600" />
-                            24/7 CITIZEN RELIEF PLATFORM
-                        </div>
-
                         {/* Welcome Heading */}
                         <h1 className="text-2xl sm:text-3xl lg:text-4xl font-black text-slate-900 tracking-tight leading-tight">
                             Welcome, <span className="text-[#1d4ed8]">{user?.name || 'Sneha'}</span>
@@ -384,7 +377,7 @@ const CitizenPage = () => {
                             </div>
                         </div>
                         <div className="text-[10px] sm:text-[11px] text-blue-100 font-medium pt-1.5 border-t border-white/15 flex items-center justify-between">
-                            <span>Direct AI submission</span>
+                            <span>Direct priority submission</span>
                             <ArrowRight size={13} className="group-hover:translate-x-1 transition-transform" />
                         </div>
                     </div>
@@ -399,7 +392,7 @@ const CitizenPage = () => {
                             <span className="w-1.5 h-6 bg-blue-600 rounded-full"></span>
                             <div>
                                 <h2 className="text-lg sm:text-xl font-black text-slate-900 tracking-tight flex items-center gap-2">
-                                    <span>🏆</span> My Complaint Activity
+                                    <Trophy size={18} className="text-amber-500" /> My Complaint Activity
                                 </h2>
                                 <p className="text-xs text-slate-500 font-medium">
                                     Real-time status updates and 24-day SLA tracking across municipal departments.
